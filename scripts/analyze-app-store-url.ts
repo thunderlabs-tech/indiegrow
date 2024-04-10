@@ -2,20 +2,44 @@ import puppeteer from "puppeteer";
 
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
-await page.setViewport({ width: 1280, height: 1280 });
-const website_url =
+await page.setViewport({ width: 2560, height: 1280 });
+const appstoreUrl =
   "https://apps.apple.com/us/app/solarwatch-sunrise-sunset-time/id1191365122?ign-itscg=30200&ign-itsct=apps_box_link";
-await page.goto(website_url, { waitUntil: "networkidle0" });
-await page.screenshot({
-  path: "screenshots/screenshot.jpg",
-  fullPage: true,
-});
+const localPath = appstoreUrl.replace(/\W/g, "-");
+const screenShotPath = `screenshots/${localPath}.png`;
+
+console.log("Analyzing App Store URL: ", appstoreUrl);
+await page.goto(appstoreUrl, { waitUntil: "networkidle0" });
 
 const descriptionSelector =
   "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(4) > div > div > div";
-const element = await page.$(descriptionSelector);
+const descriptionElement = await page.$(descriptionSelector);
+if (!descriptionElement) {
+  throw new Error(
+    `Could not find description element with selector: ${descriptionSelector}`
+  );
+}
+const description = await page.evaluate(
+  (e) => e.textContent,
+  descriptionElement
+);
 
-const elementText = await page.evaluate((e) => e.textContent, element);
-console.log("Extracted element:", elementText);
+console.log("Extracted description: ", description);
+
+// await page.screenshot({
+//   path: screenShotPath,
+//   fullPage: true,
+// });
+
+const screenShotsElement = await page.$(
+  "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(3) > div:nth-child(2) > div"
+);
+if (!screenShotsElement) {
+  throw new Error(`Could not find screenshots element`);
+}
+await screenShotsElement.screenshot({
+  path: screenShotPath,
+});
+console.log("Screenshot saved at: ", screenShotPath);
 
 await browser.close();
