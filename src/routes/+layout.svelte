@@ -41,7 +41,7 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<div class="layout-docs page-padding flex items-start gap-10">
+	<div class="layout-docs page-padding flex items-start gap-10 justify-center">
 		<div class="layout-docs-content page-container-aside w-full max-w-4xl">
 			<slot />
 		</div>

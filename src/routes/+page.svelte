@@ -5,8 +5,7 @@
 
 	let url = '';
 
-	let appstoreContent: ExtractionResult | null;
-	appstoreContent = {
+	let appstoreContent: ExtractionResult | null = {
 		content: `Discover the power of the sun with SolarWatch - the ultimate companion for outdoor enthusiasts and photographers!
 
 	Plan your day with confidence using accurate sunrise, sunset, and twilight times, and never miss a perfect moment again with customizable solar alarms. SolarWatch's AR mode and map overlays make it easy to find the best lighting for your photos, while the app's widgets keep you informed at a glance.
@@ -24,6 +23,8 @@
 			'https://cdn.discordapp.com/attachments/1227294623190220820/1227495007972233266/image.png?ex=66289ccf&is=661627cf&hm=8ca2032cd389827c601872f5d1e26c919ae0231422e595d66f395dac81ccb80d&'
 		// screenshotUrl: ''
 	};
+
+	appstoreContent = null;
 
 	let prompt = `Act as a product marketing expert.
 You will begiven the contents of an App Store page for an app and an image with the screenshots.
@@ -85,9 +86,9 @@ Don't use any other encoding for the result.
 	}
 </script>
 
-<div class="container h-full mx-auto flex">
+<div class="container h-full mx-auto flex p-6">
 	<div class="space-y-10 flex flex-col">
-		<h1 class="h1">Improve your App Store presence for free</h1>
+		<h1 class="h1">Improve your App Store presence</h1>
 		<div class="space-y-2 w-full">
 			<div class="justify-center space-x-2">
 				<form on:submit={getContent}>
@@ -119,26 +120,24 @@ Don't use any other encoding for the result.
 				{/if}
 				{#if appstoreContent?.content}
 					<form on:submit={analyze} class="">
-						<div class="card p-4 space-y-2">
-							<label>
-								<span>Content:</span>
-								<textarea bind:value={appstoreContent.content} class="input" rows="10"></textarea>
-							</label>
-							<label>
-								<span>Screenshot:</span>
+						<label>
+							<span>Content:</span>
+							<textarea bind:value={appstoreContent.content} class="textarea" rows="10"></textarea>
+						</label>
+						<label>
+							<span>Screenshot:</span>
 
-								{#if appstoreContent.screenshotUrl?.length > 0}
-									<img src={appstoreContent.screenshotUrl} alt="Screenshot" />
-								{/if}
-								<input type="text" value={appstoreContent.screenshotUrl} class="input" />
-							</label>
+							{#if appstoreContent.screenshotUrl?.length > 0}
+								<img src={appstoreContent.screenshotUrl} alt="Screenshot" />
+							{/if}
+							<input type="text" value={appstoreContent.screenshotUrl} class="input" />
+						</label>
 
-							<label>
-								<span>Analysis Prompt:</span>
-								<textarea bind:value={prompt} class="input" rows="10"></textarea>
-							</label>
-							<button class="btn variant-filled-secondary">Analyze</button>
-						</div>
+						<label>
+							<span>Analysis Prompt:</span>
+							<textarea bind:value={prompt} class="textarea" rows="10"></textarea>
+						</label>
+						<button class="btn variant-filled-secondary">Analyze</button>
 					</form>
 
 					{#if loadingAnalysis}
@@ -155,8 +154,11 @@ Don't use any other encoding for the result.
 						</span>
 					{/if}
 					{#if analysisResult?.analysis}
-						<h2>LLM Analysis Result:</h2>
-						<p>{@html analysisResult.analysis}</p>
+						<div class="space-y-4 card">
+							<h2>LLM Analysis Result:</h2>
+
+							<p>{@html analysisResult.analysis}</p>
+						</div>
 					{/if}
 				{/if}
 			</div>
