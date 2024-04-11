@@ -92,8 +92,8 @@ Don't use any other encoding for the result.
 		<div class="space-y-2 w-full">
 			<div class="justify-center space-x-2">
 				<form on:submit={getContent}>
-					<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-						<div class="input-group-shim">AppStore:</div>
+					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+						<!-- <div class="input-group-shim">AppStore:</div> -->
 						<input
 							bind:value={url}
 							class="input"
