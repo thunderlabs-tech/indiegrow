@@ -24,7 +24,7 @@
 		// screenshotUrl: ''
 	};
 
-	appstoreContent = null;
+	// appstoreContent = null;
 
 	let prompt = `Act as a product marketing expert.
 You will begiven the contents of an App Store page for an app and an image with the screenshots.
