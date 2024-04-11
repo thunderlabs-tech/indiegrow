@@ -3,7 +3,7 @@ import puppeteer from "puppeteer";
 
 export type ExtractionResult = {
   content: string;
-  screenShotPath: string;
+  screenshotUrl: string
 };
 
 export async function extractAppStoreContent(appStoreUrl: string): Promise<ExtractionResult> {
@@ -11,7 +11,6 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
   const page = await browser.newPage();
   await page.setViewport({ width: 2560, height: 1280 });
   const localPath = appStoreUrl.replace(/\W/g, "-");
-  const screenShotPath = `static/screenshots/${localPath}.png`;
 
   console.log("Analyzing App Store URL: ", appStoreUrl);
   await page.goto(appStoreUrl, { waitUntil: "networkidle0" });
@@ -24,12 +23,13 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
       `Could not find description element with selector: ${descriptionSelector}`
     );
   }
-  const content = await page.evaluate((e) => e.textContent, descriptionElement);
+  let content = await page.evaluate((e) => e.textContent, descriptionElement);
   if (!content) {
     throw new Error(
       `No description found for selector: ${descriptionSelector}`
     );
   }
+  content = content.trim();
 
   console.log("Extracted content: ", content);
 
@@ -39,10 +39,12 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
   if (!screenShotsElement) {
     throw new Error(`Could not find screenshots element`);
   }
-  await screenShotsElement.screenshot({
-    path: screenShotPath,
+  const screenshot = await screenShotsElement.screenshot({
+    encoding: 'base64',
   });
-  await browser.close();
-  console.log("Screenshot saved at: ", screenShotPath);
-  return { content, screenShotPath };
+
+
+  const screenshotUrl = `data:image/png;base64,${screenshot}`
+
+  return { content, screenshotUrl};
 }

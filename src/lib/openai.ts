@@ -1,11 +1,10 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
-import { readFileSync } from "fs";
 
 // load the environment variables from .env file
 dotenv.config();
 
-export const prompt = `
+export const analysisPrompt = `
 Act as a product marketing expert.
 You will begiven the contents of an App Store page for an app and an image with the screenshots.
 Analyze the app-store presense and answer the following questions:
@@ -15,14 +14,18 @@ Analyze the app-store presense and answer the following questions:
 - Who is the target group?
 `;
 
+
+export type AnalysisResult = {
+  analysis: string;
+}
+
 export async function analyzetWithLLM(
   prompt: string,
   content: string,
-  screenshotPath: string
-): Promise<string | null> {
+  screenshotUrl: string
+): Promise<AnalysisResult | null> {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-  // encode the image at screenshotPath as base64
-  const imgData = readFileSync(screenshotPath).toString("base64");
+  console.log("Analyzing with LLM...");
 
   const response = await openai.chat.completions.create({
     model: "gpt-4-turbo",
@@ -46,7 +49,7 @@ export async function analyzetWithLLM(
           {
             type: "image_url",
             image_url: {
-              url: `data:image/jpeg;base64,${imgData}`,
+              url: screenshotUrl,
             },
           },
         ],
@@ -54,5 +57,13 @@ export async function analyzetWithLLM(
     ],
   });
   const result = response.choices[0];
-  return result.message.content;
+  const analysis= result.message.content;
+  console.log("Analysis with LLM completed: ", analysis)
+
+  if (!analysis) {
+    console.error("Failed to analyze with LLM");
+    return null;
+  }
+
+  return {analysis};
 }

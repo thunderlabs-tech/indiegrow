@@ -23,10 +23,8 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 </script>
 
-<!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
-		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">IndieGrow</strong>
@@ -43,6 +41,9 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<!-- Page Route Content -->
-	<slot />
+	<div class="layout-docs page-padding flex items-start gap-10">
+		<div class="layout-docs-content page-container-aside w-full max-w-4xl">
+			<slot />
+		</div>
+	</div>
 </AppShell>
