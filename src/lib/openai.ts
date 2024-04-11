@@ -5,7 +5,7 @@ import { readFileSync } from "fs";
 // load the environment variables from .env file
 dotenv.config();
 
-const prompt = `
+export const prompt = `
 Act as a product marketing expert.
 You will begiven the contents of an App Store page for an app and an image with the screenshots.
 Analyze the app-store presense and answer the following questions:
@@ -16,6 +16,7 @@ Analyze the app-store presense and answer the following questions:
 `;
 
 export async function analyzetWithLLM(
+  prompt: string,
   content: string,
   screenshotPath: string
 ): Promise<string | null> {
