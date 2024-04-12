@@ -120,13 +120,15 @@ Don't use any other encoding for the result.
 					</span>
 				{/if}
 				{#if appstoreContent?.content}
+					<h2 class="h2 mt-4 mb-2">Current App Store content</h2>
+
 					<form on:submit={analyze} class="" transition:fade={{ duration: 1000 }}>
 						<label>
-							<span>Content:</span>
+							<span>Description:</span>
 							<textarea bind:value={appstoreContent.content} class="textarea" rows="10"></textarea>
 						</label>
 						<label>
-							<span>Screenshot:</span>
+							<span>Screenshots:</span>
 
 							{#if appstoreContent.screenshotUrl?.length > 0}
 								<img src={appstoreContent.screenshotUrl} alt="Screenshot" />
@@ -134,6 +136,7 @@ Don't use any other encoding for the result.
 							<input type="text" value={appstoreContent.screenshotUrl} class="input" />
 						</label>
 
+						<h2 class="h2 mt-4 mb-2">AI Analysis</h2>
 						<label>
 							<span>Analysis Prompt:</span>
 							<textarea bind:value={prompt} class="textarea" rows="10"></textarea>
@@ -156,7 +159,7 @@ Don't use any other encoding for the result.
 					{/if}
 					{#if analysisResult?.analysis}
 						<div class="space-y-4 card" transition:fade={{ duration: 1000 }}>
-							<h2>LLM Analysis Result:</h2>
+							<h2 class="h2 mt-4 mb-2">Analysis result</h2>
 
 							<p>{@html analysisResult.analysis}</p>
 						</div>
