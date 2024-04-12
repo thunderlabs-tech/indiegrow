@@ -10,9 +10,9 @@ const config = {
 	preprocess: [vitePreprocess()],
 
 	kit: {
-    adapter: adapter({
-      runtime: 'nodejs20.x',
-    }),
+		adapter: adapter({
+		runtime: 'nodejs20.x',
+		}),
 	}
 };
 export default config;
