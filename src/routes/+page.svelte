@@ -139,7 +139,7 @@ Don't use any other encoding for the result.
 						<h2 class="h2 mt-4 mb-2">AI Analysis</h2>
 						<label>
 							<span>Analysis Prompt:</span>
-							<textarea bind:value={prompt} class="textarea" rows="10"></textarea>
+							<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
 						</label>
 						<button class="btn variant-filled-secondary">Analyze</button>
 					</form>
