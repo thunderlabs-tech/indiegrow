@@ -42,6 +42,7 @@
     "dotenv": "^16.4.5",
     "highlight.js": "11.9.0",
     "openai": "^4.33.0",
+    "puppeteer": "^22.6.4",
     "puppeteer-core": "^22.6.3"
   }
 }
