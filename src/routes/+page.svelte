@@ -2,6 +2,7 @@
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import type { ExtractionResult } from '$lib/appstore';
 	import type { AnalysisResult } from '$lib/openai';
+	import { fade } from 'svelte/transition';
 
 	let url = '';
 
@@ -119,7 +120,7 @@ Don't use any other encoding for the result.
 					</span>
 				{/if}
 				{#if appstoreContent?.content}
-					<form on:submit={analyze} class="">
+					<form on:submit={analyze} class="" transition:fade={{ duration: 1000 }}>
 						<label>
 							<span>Content:</span>
 							<textarea bind:value={appstoreContent.content} class="textarea" rows="10"></textarea>
@@ -154,7 +155,7 @@ Don't use any other encoding for the result.
 						</span>
 					{/if}
 					{#if analysisResult?.analysis}
-						<div class="space-y-4 card">
+						<div class="space-y-4 card" transition:fade={{ duration: 1000 }}>
 							<h2>LLM Analysis Result:</h2>
 
 							<p>{@html analysisResult.analysis}</p>
