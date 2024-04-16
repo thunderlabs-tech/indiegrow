@@ -28,13 +28,13 @@ export type ExtractionResult = {
 };
 
 export async function extractAppStoreContent(appStoreUrl: string): Promise<ExtractionResult> {
+  console.log("Analyzing App Store URL: ", appStoreUrl);
   const browser = await getBrowser()
 
 
   const page = await browser.newPage();
   await page.setViewport({ width: 2560, height: 1280 });
 
-  console.log("Analyzing App Store URL: ", appStoreUrl);
   await page.goto(appStoreUrl, { waitUntil: "networkidle0" });
 
   const descriptionSelector =
@@ -64,6 +64,10 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
   const screenshot = await screenShotsElement.screenshot({
     encoding: 'base64',
   });
+
+
+  // close the browser so we don't leak memory
+  await browser.close();
 
 
   const screenshotUrl = `data:image/png;base64,${screenshot}`
