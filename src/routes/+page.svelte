@@ -51,6 +51,7 @@
 			}
 
 			loadingAnalysis = true;
+			errorString = undefined;
 
 			let payload: AnalysisRequest = {
 				appStoreInfo,
