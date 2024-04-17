@@ -1,4 +1,4 @@
-import {extractAppStoreContent} from '$lib/appstore';
+import {scrapeAppstore } from '$lib/scrapeAppstore.js';
 
 import { json } from '@sveltejs/kit';
 
@@ -6,7 +6,7 @@ import { json } from '@sveltejs/kit';
 export async function POST({ request }) {
 	const { url } = await request.json();
 
-	const result = await extractAppStoreContent(url);
+	const result = await scrapeAppstore(url);
 
 	return json(result);
 }

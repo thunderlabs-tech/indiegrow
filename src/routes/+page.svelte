@@ -1,31 +1,12 @@
 <script lang="ts">
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import type { ExtractionResult } from '$lib/appstore';
+	import { type AppStoreInfo } from '$lib/scrapeAppstore';
 	import type { AnalysisResult } from '$lib/openai';
 	import { fade } from 'svelte/transition';
 
 	let url = '';
 
-	let appstoreContent: ExtractionResult | null = {
-		content: `Discover the power of the sun with SolarWatch - the ultimate companion for outdoor enthusiasts and photographers!
-
-	Plan your day with confidence using accurate sunrise, sunset, and twilight times, and never miss a perfect moment again with customizable solar alarms. SolarWatch's AR mode and map overlays make it easy to find the best lighting for your photos, while the app's widgets keep you informed at a glance.
-
-	Whether you're hiking, camping, or simply enjoying nature, SolarWatch helps you live in harmony with the sun's natural rhythm. Picture yourself capturing breathtaking sunsets and golden hour moments with ease - all thanks to SolarWatch's powerful features.
-
-	- Accurate sun-tracking for your location
-	- AR mode and map overlays for perfect photo planning
-	- Convenient widgets for your Home Screen, Lock Screen, and Watch
-	- Customizable solar alarms for key moments
-	- Plan sunlight exposure for your home or office
-
-	Join over 500 thousand satisfied users and download SolarWatch today!`,
-		screenshotUrl:
-			'https://cdn.discordapp.com/attachments/1227294623190220820/1227495007972233266/image.png?ex=66289ccf&is=661627cf&hm=8ca2032cd389827c601872f5d1e26c919ae0231422e595d66f395dac81ccb80d&'
-		// screenshotUrl: ''
-	};
-
-	appstoreContent = null;
+	let appStoreInfo: AppStoreInfo | null = null;
 
 	let prompt = `Act as a product marketing expert.
 You will begiven the contents of an App Store page for an app and an image with the screenshots.
@@ -41,20 +22,20 @@ Don't use any other encoding for the result.
 `;
 
 	let loadingContent = false;
-	async function getContent() {
+	async function scrape() {
 		try {
 			loadingContent = true;
-			const response = await fetch('/api/extract', {
-				method: 'POST',
-				body: JSON.stringify({
-					url
-				}),
-				headers: {
-					'content-type': 'application/json'
-				}
-			});
 
-			appstoreContent = (await response.json()) as ExtractionResult;
+			const response = await fetch('/api/scrape', {
+				method: 'POST',
+				body: JSON.stringify({ url }),
+				headers: { 'content-type': 'application/json' }
+			});
+			appStoreInfo = (await response.json()) as AppStoreInfo;
+
+			appStoreInfo.screenshot = appStoreInfo.screenshot.filter((url: string) => {
+				return url.match(/300x0w/);
+			});
 		} catch (error) {
 			console.error('Error extracting entities:', error);
 		} finally {
@@ -70,7 +51,7 @@ Don't use any other encoding for the result.
 			const response = await fetch('/api/analyze', {
 				method: 'POST',
 				body: JSON.stringify({
-					...appstoreContent,
+					...appStoreInfo,
 					prompt
 				}),
 				headers: {
@@ -92,7 +73,7 @@ Don't use any other encoding for the result.
 		<h1 class="h1">Improve your App Store presence</h1>
 		<div class="space-y-2 w-full">
 			<div class="justify-center space-x-2">
-				<form on:submit={getContent}>
+				<form on:submit={scrape}>
 					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
 						<!-- <div class="input-group-shim">AppStore:</div> -->
 						<input
@@ -119,22 +100,21 @@ Don't use any other encoding for the result.
 						<span class="text-sm ml-2 text-primary-500 flex-1">Loading app store content...</span>
 					</span>
 				{/if}
-				{#if appstoreContent?.content}
+				{#if appStoreInfo?.description}
 					<h2 class="h2 mt-4 mb-2">Current App Store content</h2>
 
 					<form on:submit={analyze} class="" transition:fade={{ duration: 1000 }}>
 						<label>
 							<span>Description:</span>
-							<textarea bind:value={appstoreContent.content} class="textarea" rows="10"></textarea>
+							<textarea bind:value={appStoreInfo.description} class="textarea" rows="10"></textarea>
 						</label>
-						<label>
-							<span>Screenshots:</span>
+						<span>Screenshots:</span>
 
-							{#if appstoreContent.screenshotUrl?.length > 0}
-								<img src={appstoreContent.screenshotUrl} alt="Screenshot" />
-							{/if}
-							<input type="text" value={appstoreContent.screenshotUrl} class="input" />
-						</label>
+						<div class="flex gap-2">
+							{#each appStoreInfo.screenshot as screenshot}
+								<img src={screenshot} alt="Screenshot" />
+							{/each}
+						</div>
 
 						<h2 class="h2 mt-4 mb-2">AI Analysis</h2>
 						<label>

@@ -1,33 +1,31 @@
 
-// import puppeteer from "puppeteer";
-// async function getBrowser() {
-//   return puppeteer.launch({
-//     headless: true,
-//   });
-// }
+import puppeteer from "puppeteer";
+import type { AppStoreInfo } from "./scrapeAppstore";
 
-
-import chromium  from '@sparticuz/chromium-min';
-import puppeteer from "puppeteer-core";
 async function getBrowser() {
-    return puppeteer.launch({
-      args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(
-        `https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar`
-      ),
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
-    });
+  return puppeteer.launch({
+    headless: true,
+  });
 }
 
 
-export type ExtractionResult = {
-  content: string;
-  screenshotUrl: string
-};
+// import chromium  from '@sparticuz/chromium-min';
+// import puppeteer from "puppeteer-core";
+// async function getBrowser() {
+//     return puppeteer.launch({
+//       args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+//       defaultViewport: chromium.defaultViewport,
+//       executablePath: await chromium.executablePath(
+//         `https://github.com/Sparticuz/chromium/releases/download/v123.0.1/chromium-v123.0.1-pack.tar`
+//       ),
+//       headless: chromium.headless,
+//       ignoreHTTPSErrors: true,
+//     });
+// }
 
-export async function extractAppStoreContent(appStoreUrl: string): Promise<ExtractionResult> {
+
+
+export async function extractAppStoreContentWithBrowser(appStoreUrl: string): Promise<AppStoreInfo> {
   console.log("Analyzing App Store URL: ", appStoreUrl);
   const browser = await getBrowser()
 
@@ -45,15 +43,15 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
       `Could not find description element with selector: ${descriptionSelector}`
     );
   }
-  let content = await page.evaluate((e) => e.textContent, descriptionElement);
-  if (!content) {
+  let description = await page.evaluate((e) => e.textContent, descriptionElement);
+  if (!description) {
     throw new Error(
       `No description found for selector: ${descriptionSelector}`
     );
   }
-  content = content.trim();
+  description = description.trim();
 
-  console.log("Extracted content: ", content);
+  console.log("Extracted content: ", description);
 
   const screenShotsElement = await page.$(
     "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(3) > div:nth-child(2) > div"
@@ -65,12 +63,11 @@ export async function extractAppStoreContent(appStoreUrl: string): Promise<Extra
     encoding: 'base64',
   });
 
-
   // close the browser so we don't leak memory
   await browser.close();
 
-
   const screenshotUrl = `data:image/png;base64,${screenshot}`
 
-  return { content, screenshotUrl};
+  return { description, screenshot: [screenshotUrl]};
 }
+

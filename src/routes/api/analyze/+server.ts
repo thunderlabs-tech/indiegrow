@@ -1,4 +1,3 @@
-import {extractAppStoreContent} from '$lib/appstore';
 import { analyzetWithLLM } from '$lib/openai.js';
 
 import { json } from '@sveltejs/kit';
