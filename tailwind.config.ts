@@ -17,16 +17,8 @@ export default {
 			themes: {
 				preset: [
 					{
-						name: 'crimson',
-						enhancements: true,
-					},
-					{
 						name: 'skeleton',
-						enhancements: true,
-					},
-					{
-						name: 'rocket',
-						enhancements: true,
+						// enhancements: true,
 					},
 				],
 			},
