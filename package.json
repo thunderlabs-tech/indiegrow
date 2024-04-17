@@ -41,9 +41,6 @@
     "@sveltejs/adapter-vercel": "^5.2.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.5",
-    "highlight.js": "11.9.0",
-    "openai": "^4.33.0",
-    "puppeteer": "^22.6.4",
-    "puppeteer-core": "^22.6.3"
+    "openai": "^4.33.0"
   }
 }

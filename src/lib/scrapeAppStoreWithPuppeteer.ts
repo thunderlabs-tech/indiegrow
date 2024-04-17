@@ -1,14 +1,16 @@
 
-import puppeteer from "puppeteer";
 import type { AppStoreInfo } from "./scrapeAppstore";
 
-async function getBrowser() {
-  return puppeteer.launch({
-    headless: true,
-  });
-}
+// works locally on osx
+// import puppeteer from "puppeteer";
+// async function getBrowser() {
+//   return puppeteer.launch({
+//     headless: true,
+//   });
+// }
 
 
+// works on heroku, but not vercel cloud
 // import chromium  from '@sparticuz/chromium-min';
 // import puppeteer from "puppeteer-core";
 // async function getBrowser() {
@@ -25,49 +27,49 @@ async function getBrowser() {
 
 
 
-export async function extractAppStoreContentWithBrowser(appStoreUrl: string): Promise<AppStoreInfo> {
-  console.log("Analyzing App Store URL: ", appStoreUrl);
-  const browser = await getBrowser()
+// export async function extractAppStoreContentWithBrowser(appStoreUrl: string): Promise<AppStoreInfo> {
+//   console.log("Analyzing App Store URL: ", appStoreUrl);
+//   const browser = await getBrowser()
 
 
-  const page = await browser.newPage();
-  await page.setViewport({ width: 2560, height: 1280 });
+//   const page = await browser.newPage();
+//   await page.setViewport({ width: 2560, height: 1280 });
 
-  await page.goto(appStoreUrl, { waitUntil: "networkidle0" });
+//   await page.goto(appStoreUrl, { waitUntil: "networkidle0" });
 
-  const descriptionSelector =
-    "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(4) > div > div > div";
-  const descriptionElement = await page.$(descriptionSelector);
-  if (!descriptionElement) {
-    throw new Error(
-      `Could not find description element with selector: ${descriptionSelector}`
-    );
-  }
-  let description = await page.evaluate((e) => e.textContent, descriptionElement);
-  if (!description) {
-    throw new Error(
-      `No description found for selector: ${descriptionSelector}`
-    );
-  }
-  description = description.trim();
+//   const descriptionSelector =
+//     "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(4) > div > div > div";
+//   const descriptionElement = await page.$(descriptionSelector);
+//   if (!descriptionElement) {
+//     throw new Error(
+//       `Could not find description element with selector: ${descriptionSelector}`
+//     );
+//   }
+//   let description = await page.evaluate((e) => e.textContent, descriptionElement);
+//   if (!description) {
+//     throw new Error(
+//       `No description found for selector: ${descriptionSelector}`
+//     );
+//   }
+//   description = description.trim();
 
-  console.log("Extracted content: ", description);
+//   console.log("Extracted content: ", description);
 
-  const screenShotsElement = await page.$(
-    "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(3) > div:nth-child(2) > div"
-  );
-  if (!screenShotsElement) {
-    throw new Error(`Could not find screenshots element`);
-  }
-  const screenshot = await screenShotsElement.screenshot({
-    encoding: 'base64',
-  });
+//   const screenShotsElement = await page.$(
+//     "body > div.ember-view > main > div.animation-wrapper.is-visible > section:nth-child(3) > div:nth-child(2) > div"
+//   );
+//   if (!screenShotsElement) {
+//     throw new Error(`Could not find screenshots element`);
+//   }
+//   const screenshot = await screenShotsElement.screenshot({
+//     encoding: 'base64',
+//   });
 
-  // close the browser so we don't leak memory
-  await browser.close();
+//   // close the browser so we don't leak memory
+//   await browser.close();
 
-  const screenshotUrl = `data:image/png;base64,${screenshot}`
+//   const screenshotUrl = `data:image/png;base64,${screenshot}`
 
-  return { description, screenshot: [screenshotUrl]};
-}
+//   return { description, screenshot: [screenshotUrl]};
+// }
 
