@@ -21,7 +21,7 @@ export type AppStoreInfo = {
 };
 
 export async function scrapeAppstore(appStoreUrl: string): Promise<AppStoreInfo> {
-  const response = await fetch(appStoreUrl, {mode: 'no-cors'});
+  const response = await fetch(appStoreUrl );
   const html = await response.text()
   const $ = load(html);
   const metaDataJson = $(`[name=schema:software-application]`).html();

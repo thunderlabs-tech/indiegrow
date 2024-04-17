@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import { type AppStoreInfo } from '$lib/scrapeAppstore';
-	import { analysisPrompt, type AnalysisResult } from '$lib/analysis';
+	import { analysisPrompt, type AnalysisResult, type AnalysisRequest } from '$lib/analysis';
 	import { fade } from 'svelte/transition';
 
 	let url = '';
@@ -9,7 +9,12 @@
 	let appStoreInfo: AppStoreInfo | null = null;
 
 	let prompt = analysisPrompt;
+	let assistantId = 'asst_fo8tifPDDG95lmaJwbbdZfc8';
+
+	let tabSet = 'use-assistant';
+
 	let loadingContent = false;
+	let errorString: string | undefined = undefined;
 	async function scrape() {
 		try {
 			loadingContent = true;
@@ -29,23 +34,51 @@
 
 	let loadingAnalysis = false;
 	let analysisResult: AnalysisResult | null = null;
-	async function analyze() {
+
+	async function analyzeWithPrompt() {
+		return analyze(false);
+	}
+
+	async function analyzeWithAssistant() {
+		return analyze(true);
+	}
+
+	async function analyze(useAssistant: boolean) {
 		try {
+			if (!appStoreInfo) {
+				console.error('No app store info');
+				return;
+			}
+
 			loadingAnalysis = true;
+
+			let payload: AnalysisRequest = {
+				appStoreInfo,
+				assistantId: undefined,
+				prompt: undefined
+			};
+
+			if (useAssistant) {
+				payload.assistantId = assistantId;
+			} else {
+				payload.prompt = prompt;
+			}
+
 			const response = await fetch('/api/analyze', {
 				method: 'POST',
-				body: JSON.stringify({
-					appStoreInfo,
-					prompt
-				}),
+				body: JSON.stringify(payload),
 				headers: {
 					'content-type': 'application/json'
 				}
 			});
 
 			analysisResult = (await response.json()) as AnalysisResult;
+			if (analysisResult.error) {
+				errorString = analysisResult.error;
+			}
 		} catch (error) {
-			console.error('Error extracting entities:', error);
+			console.error('Error running analysis:', error);
+			errorString = error.toString();
 		} finally {
 			loadingAnalysis = false;
 		}
@@ -87,7 +120,7 @@
 				{#if appStoreInfo?.description}
 					<h2 class="h2 mt-4 mb-2">Current App Store content</h2>
 
-					<form on:submit={analyze} class="" transition:fade={{ duration: 1000 }}>
+					<form class="" transition:fade={{ duration: 1000 }}>
 						<label>
 							<span>Category:</span>
 							<input type="text" bind:value={appStoreInfo.applicationCategory} class="input" />
@@ -109,11 +142,40 @@
 						</div>
 
 						<h2 class="h2 mt-4 mb-2">AI Analysis</h2>
-						<label>
-							<span>Analysis Prompt:</span>
-							<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
-						</label>
-						<button class="btn variant-filled-secondary">Analyze</button>
+
+						<TabGroup>
+							<Tab bind:group={tabSet} name="use-assistant" value={'use-assistant'}>
+								<span>Use assistant</span>
+							</Tab>
+							<Tab bind:group={tabSet} name="use-prompt" value={'use-prompt'}>Use prompt</Tab>
+							<svelte:fragment slot="panel">
+								{#if tabSet === 'use-assistant'}
+									<span class="bg-warning-800 mt-2 mb-2"
+										>Assistant doesn't support screenshots yet!</span
+									>
+									<label>
+										<span>Assistant Id:</span>
+										<input
+											type="text"
+											bind:value={assistantId}
+											class="input"
+											placeholder="Assistant ID"
+										/>
+									</label>
+									<button on:click={analyzeWithAssistant} class="btn variant-filled-secondary mt-2"
+										>Use assistant
+									</button>
+								{:else if tabSet === 'use-prompt'}
+									<label>
+										<span>Prompt:</span>
+										<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
+									</label>
+									<button on:click={analyzeWithPrompt} class="btn variant-filled-secondary mt-2"
+										>Use prompt</button
+									>
+								{/if}
+							</svelte:fragment>
+						</TabGroup>
 					</form>
 
 					{#if loadingAnalysis}
@@ -135,6 +197,9 @@
 							<p>{@html analysisResult.analysis}</p>
 						</div>
 						<p>LLM time: {analysisResult.time} seconds</p>
+					{/if}
+					{#if errorString}
+						<div class="bg-error-800 text-white p-2 mt-2">{errorString}</div>
 					{/if}
 				{/if}
 			</div>

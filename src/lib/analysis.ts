@@ -1,6 +1,14 @@
+import type { AppStoreInfo } from "./scrapeAppstore";
+
+export type AnalysisRequest = {
+	prompt?: string;
+	assistantId?: string;
+	appStoreInfo: AppStoreInfo;
+};
 
 export type AnalysisResult = {
   analysis: string;
+  error: string|undefined;
   time: number;
 }
 
