@@ -11,6 +11,7 @@ import type { AppStoreInfo } from "./scrapeAppstore";
 
 
 // works on heroku, but not vercel cloud
+// needs buildpack: heroku buildpacks:remove  jontewks/puppeteer --app indiegrow
 // import chromium  from '@sparticuz/chromium-min';
 // import puppeteer from "puppeteer-core";
 // async function getBrowser() {
