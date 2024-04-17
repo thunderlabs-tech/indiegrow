@@ -1,26 +1,14 @@
 <script lang="ts">
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { type AppStoreInfo } from '$lib/scrapeAppstore';
-	import type { AnalysisResult } from '$lib/openai';
+	import { analysisPrompt, type AnalysisResult } from '$lib/analysis';
 	import { fade } from 'svelte/transition';
 
 	let url = '';
 
 	let appStoreInfo: AppStoreInfo | null = null;
 
-	let prompt = `Act as a product marketing expert.
-You will begiven the contents of an App Store page for an app and an image with the screenshots.
-Analyze the app-store presense and answer the following questions:
-- What is the app about?
-- What are the key features?
-- What are the benefits?
-- Who is the target group?
-
-
-Return the result in form of text with simple html markup.
-Don't use any other encoding for the result.
-`;
-
+	let prompt = analysisPrompt;
 	let loadingContent = false;
 	async function scrape() {
 		try {
@@ -32,10 +20,6 @@ Don't use any other encoding for the result.
 				headers: { 'content-type': 'application/json' }
 			});
 			appStoreInfo = (await response.json()) as AppStoreInfo;
-
-			appStoreInfo.screenshot = appStoreInfo.screenshot.filter((url: string) => {
-				return url.match(/300x0w/);
-			});
 		} catch (error) {
 			console.error('Error extracting entities:', error);
 		} finally {
@@ -51,7 +35,7 @@ Don't use any other encoding for the result.
 			const response = await fetch('/api/analyze', {
 				method: 'POST',
 				body: JSON.stringify({
-					...appStoreInfo,
+					appStoreInfo,
 					prompt
 				}),
 				headers: {

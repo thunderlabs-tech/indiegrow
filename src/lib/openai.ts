@@ -1,59 +1,52 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
+import type { AppStoreInfo } from "./scrapeAppstore";
+import type { ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam } from "openai/resources/index.mjs";
+import type { AnalysisResult } from "./analysis";
 
 // load the environment variables from .env file
 dotenv.config();
 
-export const analysisPrompt = `
-Act as a product marketing expert.
-You will begiven the contents of an App Store page for an app and an image with the screenshots.
-Analyze the app-store presense and answer the following questions:
-- What is the app about?
-- What are the key features?
-- What are the benefits?
-- Who is the target group?
-`;
-
-
-export type AnalysisResult = {
-  analysis: string;
-}
 
 export async function analyzetWithLLM(
   prompt: string,
-  content: string,
-  screenshotUrl: string
+  info: AppStoreInfo,
 ): Promise<AnalysisResult | null> {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   console.log("Analyzing with LLM...");
+  const t0 = Date.now();
 
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo",
-    messages: [
-      {
-        role: "system",
-        content: [
-          {
-            type: "text",
-            text: prompt,
-          },
-        ],
-      },
-      {
+
+  const promptMessage : ChatCompletionSystemMessageParam = {
+    role: "system",
+    content: prompt,
+  };
+
+  const userMessage : ChatCompletionUserMessageParam = {
         role: "user",
         content: [
           {
             type: "text",
-            text: `Appstore description: ${content}`,
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url: screenshotUrl,
-            },
+            text: `Appstore description: ${info.description}`,
           },
         ],
-      },
+   }
+
+   info.screenshot.forEach((screenshot) => {
+      userMessage.content.push({
+        type: "image_url",
+        image_url: {
+          url: screenshot,
+        },
+      });
+   });
+
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-turbo",
+    messages: [
+      promptMessage,
+      userMessage,
     ],
   });
   const result = response.choices[0];
@@ -62,8 +55,10 @@ export async function analyzetWithLLM(
 
   if (!analysis) {
     console.error("Failed to analyze with LLM");
+    console.log("LLM time: ", (Date.now() - t0)/1000, "s");
     return null;
   }
 
+  console.log("LLM time: ", (Date.now() - t0)/1000, "s");
   return {analysis};
 }

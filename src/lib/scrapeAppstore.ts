@@ -32,6 +32,12 @@ export async function scrapeAppstore(appStoreUrl: string): Promise<AppStoreInfo>
 
  const info = JSON.parse(metaDataJson.toString()) as AppStoreInfo;
 
+ // filter for iPhone screenshots only
+ info.screenshot = info.screenshot.filter((url: string) => {
+  return url.match(/300x0w/);
+});
+
+//  info.screenshot = [info.screenshot[info.screenshot.length - 1]];
 
 return info;
 }
