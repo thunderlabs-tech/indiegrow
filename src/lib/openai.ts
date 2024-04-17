@@ -22,12 +22,20 @@ export async function analyzetWithLLM(
     content: prompt,
   };
 
+
+  const textInfo = {
+    name: info.name,
+    description: info.description,
+    applicationCategory: info.applicationCategory,
+    datePublished: info.datePublished,
+    operatingSystem: info.operatingSystem,
+  }
   const userMessage : ChatCompletionUserMessageParam = {
         role: "user",
         content: [
           {
             type: "text",
-            text: `Appstore description: ${info.description}`,
+            text: `Appstore info: """${JSON.stringify(textInfo)}"""`,
           },
         ],
    }
@@ -53,12 +61,12 @@ export async function analyzetWithLLM(
   const analysis= result.message.content;
   console.log("Analysis with LLM completed: ", analysis)
 
+  const time = (Date.now() - t0)/1000
+  console.log("LLM time: ", time, "s");
   if (!analysis) {
     console.error("Failed to analyze with LLM");
-    console.log("LLM time: ", (Date.now() - t0)/1000, "s");
     return null;
   }
 
-  console.log("LLM time: ", (Date.now() - t0)/1000, "s");
-  return {analysis};
+  return {analysis, time};
 }

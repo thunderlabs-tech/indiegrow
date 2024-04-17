@@ -89,8 +89,16 @@
 
 					<form on:submit={analyze} class="" transition:fade={{ duration: 1000 }}>
 						<label>
+							<span>Category:</span>
+							<input type="text" bind:value={appStoreInfo.applicationCategory} class="input" />
+						</label>
+						<label>
+							<span>Name:</span>
+							<input type="text" bind:value={appStoreInfo.name} class="input" />
+						</label>
+						<label>
 							<span>Description:</span>
-							<textarea bind:value={appStoreInfo.description} class="textarea" rows="10"></textarea>
+							<textarea bind:value={appStoreInfo.description} class="textarea" rows="10" />
 						</label>
 						<span>Screenshots:</span>
 
@@ -122,11 +130,11 @@
 						</span>
 					{/if}
 					{#if analysisResult?.analysis}
+						<h2 class="h2 mt-4 mb-2">Analysis result</h2>
 						<div class="space-y-4 card" transition:fade={{ duration: 1000 }}>
-							<h2 class="h2 mt-4 mb-2">Analysis result</h2>
-
 							<p>{@html analysisResult.analysis}</p>
 						</div>
+						<p>LLM time: {analysisResult.time} seconds</p>
 					{/if}
 				{/if}
 			</div>

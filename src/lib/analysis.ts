@@ -1,11 +1,12 @@
 
 export type AnalysisResult = {
   analysis: string;
+  time: number;
 }
 
 export const analysisPrompt = `
-Act as a product marketing expert.
-You will begiven the contents of an App Store page for an app and an image with the screenshots.
+Act as a product marketing expert knowledgable in App Store Optimization (ASO).
+You will begiven the App Store info for an app as a JSON object delimeted by """ and screenshot images.
 Analyze the app-store presense and answer the following questions:
 - What is the app about?
 - What are the key features?
