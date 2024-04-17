@@ -85,10 +85,10 @@
 	}
 </script>
 
-<div class="container h-full mx-auto flex p-6">
-	<div class="space-y-10 flex flex-col">
+<div class="container mx-auto flex h-full p-6">
+	<div class="flex flex-col space-y-10">
 		<h1 class="h1">Improve your App Store presence</h1>
-		<div class="space-y-2 w-full">
+		<div class="w-full space-y-2">
 			<div class="justify-center space-x-2">
 				<form on:submit={scrape}>
 					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
@@ -99,7 +99,7 @@
 							type="text"
 							placeholder="Enter your appstore URL"
 						/>
-						<button class="btn variant-filled-secondary">Start </button>
+						<button class="variant-filled-secondary btn">Start </button>
 					</div>
 				</form>
 			</div>
@@ -114,11 +114,11 @@
 							strokeLinecap="butt"
 							width="w-5"
 						/>
-						<span class="text-sm ml-2 text-primary-500 flex-1">Loading app store content...</span>
+						<span class="ml-2 flex-1 text-sm text-primary-500">Loading app store content...</span>
 					</span>
 				{/if}
 				{#if appStoreInfo?.description}
-					<h2 class="h2 mt-4 mb-2">Current App Store content</h2>
+					<h2 class="h2 mb-2 mt-4">Current App Store content</h2>
 
 					<form class="" transition:fade={{ duration: 1000 }}>
 						<label>
@@ -141,7 +141,7 @@
 							{/each}
 						</div>
 
-						<h2 class="h2 mt-4 mb-2">AI Analysis</h2>
+						<h2 class="h2 mb-2 mt-4">AI Analysis</h2>
 
 						<TabGroup>
 							<Tab bind:group={tabSet} name="use-assistant" value={'use-assistant'}>
@@ -150,7 +150,7 @@
 							<Tab bind:group={tabSet} name="use-prompt" value={'use-prompt'}>Use prompt</Tab>
 							<svelte:fragment slot="panel">
 								{#if tabSet === 'use-assistant'}
-									<span class="bg-warning-800 mt-2 mb-2"
+									<span class="mb-2 mt-2 bg-warning-800"
 										>Assistant doesn't support screenshots yet!</span
 									>
 									<label>
@@ -162,7 +162,7 @@
 											placeholder="Assistant ID"
 										/>
 									</label>
-									<button on:click={analyzeWithAssistant} class="btn variant-filled-secondary mt-2"
+									<button on:click={analyzeWithAssistant} class="variant-filled-secondary btn mt-2"
 										>Use assistant
 									</button>
 								{:else if tabSet === 'use-prompt'}
@@ -170,7 +170,7 @@
 										<span>Prompt:</span>
 										<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
 									</label>
-									<button on:click={analyzeWithPrompt} class="btn variant-filled-secondary mt-2"
+									<button on:click={analyzeWithPrompt} class="variant-filled-secondary btn mt-2"
 										>Use prompt</button
 									>
 								{/if}
@@ -188,18 +188,18 @@
 								strokeLinecap="butt"
 								width="w-5"
 							/>
-							<span class="text-sm ml-2 text-primary-500 flex-1">Loading analysis...</span>
+							<span class="ml-2 flex-1 text-sm text-primary-500">Loading analysis...</span>
 						</span>
 					{/if}
 					{#if analysisResult?.analysis}
-						<h2 class="h2 mt-4 mb-2">Analysis result</h2>
-						<div class="space-y-4 card" transition:fade={{ duration: 1000 }}>
+						<h2 class="h2 mb-2 mt-4">Analysis result</h2>
+						<div class="card space-y-4" transition:fade={{ duration: 1000 }}>
 							<p>{@html analysisResult.analysis}</p>
 						</div>
 						<p>LLM time: {analysisResult.time} seconds</p>
 					{/if}
 					{#if errorString}
-						<div class="bg-error-800 text-white p-2 mt-2">{errorString}</div>
+						<div class="mt-2 bg-error-800 p-2 text-white">{errorString}</div>
 					{/if}
 				{/if}
 			</div>

@@ -1,4 +1,4 @@
-import {scrapeAppstore } from '$lib/scrapeAppstore.js';
+import { scrapeAppstore } from '$lib/scrapeAppstore.js';
 
 import { json } from '@sveltejs/kit';
 

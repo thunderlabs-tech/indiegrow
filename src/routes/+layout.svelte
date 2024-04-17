@@ -16,7 +16,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
-					class="btn btn-sm variant-ghost-surface"
+					class="variant-ghost-surface btn btn-sm"
 					href="https://discord.gg/EXqV7W8MtY"
 					target="_blank"
 					rel="noreferrer"
@@ -26,7 +26,7 @@
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
-	<div class="layout-docs page-padding flex items-start gap-10 justify-center">
+	<div class="layout-docs page-padding flex items-start justify-center gap-10">
 		<div class="layout-docs-content page-container-aside w-full max-w-4xl">
 			<slot />
 		</div>

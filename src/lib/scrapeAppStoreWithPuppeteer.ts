@@ -1,5 +1,4 @@
-
-import type { AppStoreInfo } from "./scrapeAppstore";
+import type { AppStoreInfo } from './scrapeAppstore';
 
 // works locally on osx
 // import puppeteer from "puppeteer";
@@ -8,7 +7,6 @@ import type { AppStoreInfo } from "./scrapeAppstore";
 //     headless: true,
 //   });
 // }
-
 
 // works on heroku, but not vercel cloud
 // needs buildpack: heroku buildpacks:remove  jontewks/puppeteer --app indiegrow
@@ -26,12 +24,9 @@ import type { AppStoreInfo } from "./scrapeAppstore";
 //     });
 // }
 
-
-
 // export async function extractAppStoreContentWithBrowser(appStoreUrl: string): Promise<AppStoreInfo> {
 //   console.log("Analyzing App Store URL: ", appStoreUrl);
 //   const browser = await getBrowser()
-
 
 //   const page = await browser.newPage();
 //   await page.setViewport({ width: 2560, height: 1280 });
@@ -73,4 +68,3 @@ import type { AppStoreInfo } from "./scrapeAppstore";
 
 //   return { description, screenshot: [screenshotUrl]};
 // }
-

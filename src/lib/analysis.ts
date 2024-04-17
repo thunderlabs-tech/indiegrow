@@ -1,4 +1,4 @@
-import type { AppStoreInfo } from "./scrapeAppstore";
+import type { AppStoreInfo } from './scrapeAppstore';
 
 export type AnalysisRequest = {
 	prompt?: string;
@@ -7,10 +7,10 @@ export type AnalysisRequest = {
 };
 
 export type AnalysisResult = {
-  analysis: string;
-  error: string|undefined;
-  time: number;
-}
+	analysis: string;
+	error: string | undefined;
+	time: number;
+};
 
 export const analysisPrompt = `Act as a product marketing expert knowledgable in App Store Optimization (ASO).
 You will begiven the App Store info for an app as a JSON object delimeted by """ and screenshot images.
