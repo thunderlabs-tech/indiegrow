@@ -1,8 +1,17 @@
 <script lang="ts">
 	import { ProgressRadial, TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import { type AppStoreInfo } from '$lib/scrapeAppstore';
-	import { analysisPrompt, type AnalysisResult, type AnalysisRequest } from '$lib/analysis';
+	import {
+		analysisPrompt,
+		type AnalysisResult,
+		analyzetWithLLM,
+		analyzetWithAssistant
+	} from '$lib/analysis';
 	import { fade } from 'svelte/transition';
+	import { page } from '$app/stores';
+	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
+
+	console.log($page);
 
 	let url = '';
 
@@ -53,28 +62,15 @@
 			loadingAnalysis = true;
 			errorString = undefined;
 
-			let payload: AnalysisRequest = {
-				appStoreInfo,
-				assistantId: undefined,
-				prompt: undefined
-			};
+			const openai = openAiBrowserClient($page.url.origin);
 
 			if (useAssistant) {
-				payload.assistantId = assistantId;
+				analysisResult = await analyzetWithAssistant(openai, assistantId, appStoreInfo);
 			} else {
-				payload.prompt = prompt;
+				analysisResult = await analyzetWithLLM(openai, prompt, appStoreInfo);
 			}
 
-			const response = await fetch('/api/analyze', {
-				method: 'POST',
-				body: JSON.stringify(payload),
-				headers: {
-					'content-type': 'application/json'
-				}
-			});
-
-			analysisResult = (await response.json()) as AnalysisResult;
-			if (analysisResult.error) {
+			if (analysisResult?.error) {
 				errorString = analysisResult.error;
 			}
 		} catch (error) {

@@ -1,10 +1,10 @@
-import type { AppStoreInfo } from './scrapeAppstore';
+import OpenAI from 'openai';
+import type {
+	ChatCompletionSystemMessageParam,
+	ChatCompletionUserMessageParam
+} from 'openai/resources/index.mjs';
 
-export type AnalysisRequest = {
-	prompt?: string;
-	assistantId?: string;
-	appStoreInfo: AppStoreInfo;
-};
+import type { AppStoreInfo } from './scrapeAppstore';
 
 export type AnalysisResult = {
 	analysis: string;
@@ -38,3 +38,111 @@ Your goal is to bring this app to the top of the AppStore. Use any means necessa
 Return the result in the form of text with simple html markup. Make sure it's formatted in an easily readable form.
 Don't use any other encoding for the result.
 `;
+
+function appStoreInfoAsString(info: AppStoreInfo): string {
+	return JSON.stringify({
+		name: info.name,
+		description: info.description,
+		applicationCategory: info.applicationCategory,
+		datePublished: info.datePublished,
+		operatingSystem: info.operatingSystem
+	});
+}
+
+export async function analyzetWithLLM(
+	openai: OpenAI,
+	prompt: string,
+	info: AppStoreInfo
+): Promise<AnalysisResult | null> {
+	const t0 = Date.now();
+
+	try {
+		console.log(`Analyzing with LLM-Prompt: ${prompt} `);
+
+		const promptMessage: ChatCompletionSystemMessageParam = {
+			role: 'system',
+			content: prompt
+		};
+
+		const userMessage: ChatCompletionUserMessageParam = {
+			role: 'user',
+			content: [
+				{
+					type: 'text',
+					text: `Appstore info: """${appStoreInfoAsString(info)}"""`
+				}
+			]
+		};
+
+		info.screenshot.forEach((screenshot) => {
+			userMessage.content.push({
+				type: 'image_url',
+				image_url: {
+					url: screenshot
+				}
+			});
+		});
+
+		const messages = [promptMessage, userMessage];
+		console.log('sending messages: ', messages);
+
+		const response = await openai.chat.completions.create({
+			model: 'gpt-4-turbo',
+
+			max_tokens: 1024,
+			messages
+		});
+		const result = response.choices[0];
+		const analysis = result.message.content;
+
+		const time = (Date.now() - t0) / 1000;
+		if (!analysis) {
+			const error = 'Failed to analyze with LLM - no analysis returned';
+			console.error(error);
+			return { error };
+		}
+		return { analysis, time, error: undefined };
+	} catch (error) {
+		console.error('Failed to analyze with LLM', error);
+		console.error(error);
+		return { error };
+	} finally {
+		const time = (Date.now() - t0) / 1000;
+		console.log('LLM time: ', time, 's');
+	}
+}
+
+export async function analyzetWithAssistant(
+	openai: OpenAI,
+	assistantId: string,
+	info: AppStoreInfo
+): Promise<AnalysisResult | null> {
+	console.log(`Analyzing with LLM-Assistant: ${assistantId}...`);
+	const t0 = Date.now();
+
+	const thread = await openai.beta.threads.create();
+
+	const message = await openai.beta.threads.messages.create(thread.id, {
+		role: 'user',
+		content: `Appstore info: """${appStoreInfoAsString(info)}"""`
+	});
+
+	let run = await openai.beta.threads.runs.createAndPoll(thread.id, {
+		assistant_id: assistantId
+	});
+
+	let analysis = '';
+	if (run.status === 'completed') {
+		const messages = await openai.beta.threads.messages.list(run.thread_id);
+
+		const responseMessage = messages.data[0];
+		analysis = responseMessage.content[0].text.value;
+	} else {
+		console.log(run.status);
+	}
+
+	const time = (Date.now() - t0) / 1000;
+	console.log('LLM time: ', time, 's');
+
+	return { analysis, time, error: undefined };
+}
