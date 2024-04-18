@@ -11,8 +11,6 @@
 	import { page } from '$app/stores';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 
-	console.log($page);
-
 	let url = '';
 
 	let appStoreInfo: AppStoreInfo | null = null;
