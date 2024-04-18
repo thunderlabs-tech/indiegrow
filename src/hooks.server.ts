@@ -16,7 +16,7 @@ llmProxy.use(
 			[`^/llm`]: ''
 		},
 		headers: {
-			Authorization: 'Bearer ' + process.env.PUBLIC_OPENAI_API_KEY
+			Authorization: 'Bearer ' + process.env.OPENAI_API_KEY
 		}
 	})
 );
