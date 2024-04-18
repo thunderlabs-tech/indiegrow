@@ -7,16 +7,4 @@ dotenv.config();
 
 export default defineConfig({
 	plugins: [sveltekit()]
-	// server: {
-	// 	proxy: {
-	// 		'/llm/v1': {
-	// 			target: 'https://api.openai.com',
-	// 			changeOrigin: true,
-	// 			rewrite: (path) => path.replace(/^\/llm/, ''),
-	// 			headers: {
-	// 				Authorization: 'Bearer ' + process.env.OPENAI_API_KEY
-	// 			}
-	// 		}
-	// 	}
-	// }
 });
