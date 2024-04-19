@@ -69,9 +69,8 @@ Be as concise and concrete as possible.
 		refined: "Refined Description",
 		explanation: "Explanation for the change"
 	},
-}
+} `;
 
-`;
 export const refinedResponse = {
 	name: {
 		refined: 'Neighborhood Connect: Secure Local Chat',
@@ -100,14 +99,13 @@ function appStoreInfoAsString(info: AppStoreInfo): string {
 		operatingSystem: info.operatingSystem
 	});
 }
-export async function analyzetWithLLMStreaming(
+
+export async function refineWithLLMStreaming(
 	openai: OpenAI,
 	prompt: string,
 	info: AppStoreInfo
 ): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
-	const t0 = Date.now();
-
-	console.log(`Analyzing with LLM-Prompt: ${prompt} `);
+	console.log(`Refining with LLM-Prompt: ${prompt} `);
 
 	const promptMessage: ChatCompletionSystemMessageParam = {
 		role: 'system',
