@@ -1,6 +1,8 @@
 import { load } from 'cheerio';
 
 export type AppStoreInfo = {
+	'@context': string;
+	'@type': string;
 	name: string;
 	description: string;
 	image: string;
@@ -15,8 +17,9 @@ export type AppStoreInfo = {
 	screenshot: string[];
 	offers: {
 		'@type': string;
-		price: string;
+		price: number;
 		priceCurrency: string;
+		category: string;
 	};
 };
 
