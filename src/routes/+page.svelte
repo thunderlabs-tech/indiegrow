@@ -6,13 +6,14 @@
 		analysisPrompt,
 		type AnalysisResult,
 		analyzetWithLLM,
+		analyzetWithLLMStreaming,
 		analyzetWithAssistant,
 		refinementPrompt,
 		refinedResponse
 	} from '$lib/analysis';
 	import { fade } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
+	import { parse } from 'best-effort-json-parser';
 
 	let url: string | undefined =
 		'https://apps.apple.com/tt/app/connected-living-messenger/id1543400123?platform=iphone';
@@ -76,6 +77,7 @@
 	}
 
 	let loadingAnalysis = false;
+	let loadingRefinements = false;
 	let analysisResult: AnalysisResult | null = null;
 
 	async function analyzeWithPrompt() {
@@ -84,6 +86,44 @@
 
 	async function analyzeWithAssistant() {
 		return analyze(true);
+	}
+
+	async function refine() {
+		loadingRefinements = true;
+		try {
+			if (!appStoreInfo) {
+				console.error('No app store info');
+				return;
+			}
+
+			loadingAnalysis = true;
+			errorString = undefined;
+
+			const openai = openAiBrowserClient();
+			const stream = await analyzetWithLLMStreaming(openai, prompt, appStoreInfo);
+
+			let partialResult = '';
+			for await (const chunk of stream) {
+				const chunkDelta: string = chunk.choices[0]?.delta?.content || '';
+				partialResult += chunkDelta;
+				if (partialResult.length > 10) {
+					try {
+						const newRefinements = parse(partialResult);
+						refinements = newRefinements;
+					} catch (error) {
+						console.error('Error parsing partial result:', error);
+					}
+				}
+				console.log('Partial result:', partialResult);
+			}
+
+			// refinements = JSON.parse(partialResult);
+		} catch (error) {
+			console.error('Error running analysis:', error);
+			errorString = error.toString();
+		} finally {
+			loadingRefinements = false;
+		}
 	}
 
 	async function analyze(useAssistant: boolean) {
@@ -96,7 +136,7 @@
 			loadingAnalysis = true;
 			errorString = undefined;
 
-			const openai = openAiBrowserClient($page.url.origin);
+			const openai = openAiBrowserClient();
 
 			if (useAssistant) {
 				analysisResult = await analyzetWithAssistant(openai, assistantId, appStoreInfo);
@@ -152,9 +192,20 @@
 				{/if}
 				{#if appStoreInfo?.description}
 					<h2 class="h2 mb-2 mt-4">App Store Content</h2>
-					<button on:click={analyzeWithPrompt} class="variant-filled-secondary btn mt-2"
-						>Refine</button
-					>
+					<button on:click={refine} class="variant-filled-secondary btn mt-2">Refine</button>
+					{#if loadingRefinements}
+						<span class="flex">
+							<ProgressRadial
+								value={undefined}
+								stroke={100}
+								meter="stroke-primary-500"
+								track="stroke-primary-500/30"
+								strokeLinecap="butt"
+								width="w-5"
+							/>
+							<span class="ml-2 flex-1 text-sm text-primary-500">Loading refinements...</span>
+						</span>
+					{/if}
 					<!-- <label >
 						<span>Prompt:</span>
 						<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
@@ -210,40 +261,44 @@
 							<Screenshots screenshotUrls={appStoreInfo.screenshot} />
 						</div>
 
-						<h2 class="h2 mb-2 mt-4">Refinement</h2>
-						<TabGroup>
-							<Tab bind:group={tabSet} name="use-prompt" value={'use-prompt'}>Use prompt</Tab>
-							<Tab bind:group={tabSet} name="use-assistant" value={'use-assistant'}>
-								<span>Use assistant</span>
-							</Tab>
-							<svelte:fragment slot="panel">
-								{#if tabSet === 'use-assistant'}
-									<span class="mb-2 mt-2 bg-warning-800"
-										>Assistant doesn't support screenshots yet!</span
-									>
-									<label>
-										<span>Assistant Id:</span>
-										<input
-											type="text"
-											bind:value={assistantId}
-											class="input"
-											placeholder="Assistant ID"
-										/>
-									</label>
-									<button on:click={analyzeWithAssistant} class="variant-filled-secondary btn mt-2"
-										>Use assistant
-									</button>
-								{:else if tabSet === 'use-prompt'}
-									<label>
-										<span>Prompt:</span>
-										<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
-									</label>
-									<button on:click={analyzeWithPrompt} class="variant-filled-secondary btn mt-2"
-										>Use prompt</button
-									>
-								{/if}
-							</svelte:fragment>
-						</TabGroup>
+						<div class="invisible">
+							<h2 class="h2 mb-2 mt-4">Refinement</h2>
+							<TabGroup>
+								<Tab bind:group={tabSet} name="use-prompt" value={'use-prompt'}>Use prompt</Tab>
+								<Tab bind:group={tabSet} name="use-assistant" value={'use-assistant'}>
+									<span>Use assistant</span>
+								</Tab>
+								<svelte:fragment slot="panel">
+									{#if tabSet === 'use-assistant'}
+										<span class="mb-2 mt-2 bg-warning-800"
+											>Assistant doesn't support screenshots yet!</span
+										>
+										<label>
+											<span>Assistant Id:</span>
+											<input
+												type="text"
+												bind:value={assistantId}
+												class="input"
+												placeholder="Assistant ID"
+											/>
+										</label>
+										<button
+											on:click={analyzeWithAssistant}
+											class="variant-filled-secondary btn mt-2"
+											>Use assistant
+										</button>
+									{:else if tabSet === 'use-prompt'}
+										<label>
+											<span>Prompt:</span>
+											<textarea bind:value={prompt} class="textarea" rows="20"></textarea>
+										</label>
+										<button on:click={analyzeWithPrompt} class="variant-filled-secondary btn mt-2"
+											>Use prompt</button
+										>
+									{/if}
+								</svelte:fragment>
+							</TabGroup>
+						</div>
 					</div>
 
 					{#if loadingAnalysis}

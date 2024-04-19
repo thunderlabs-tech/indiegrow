@@ -5,6 +5,7 @@ import type {
 } from 'openai/resources/index.mjs';
 
 import type { AppStoreInfo } from './scrapeAppstore';
+import type { Stream } from 'openai/streaming.mjs';
 
 export type AnalysisResult = {
 	analysis: string;
@@ -99,6 +100,53 @@ function appStoreInfoAsString(info: AppStoreInfo): string {
 		operatingSystem: info.operatingSystem
 	});
 }
+export async function analyzetWithLLMStreaming(
+	openai: OpenAI,
+	prompt: string,
+	info: AppStoreInfo
+): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
+	const t0 = Date.now();
+
+	console.log(`Analyzing with LLM-Prompt: ${prompt} `);
+
+	const promptMessage: ChatCompletionSystemMessageParam = {
+		role: 'system',
+		content: prompt
+	};
+
+	const userMessage: ChatCompletionUserMessageParam = {
+		role: 'user',
+		content: [
+			{
+				type: 'text',
+				text: `Appstore info: """${appStoreInfoAsString(info)}"""`
+			}
+		]
+	};
+
+	info.screenshot.forEach((screenshot) => {
+		userMessage.content.push({
+			type: 'image_url',
+			image_url: {
+				url: screenshot
+			}
+		});
+	});
+
+	const messages = [promptMessage, userMessage];
+	console.log('sending messages: ', messages);
+
+	const stream = await openai.chat.completions.create({
+		model: 'gpt-4-turbo',
+		response_format: {
+			type: 'json_object'
+		},
+		max_tokens: 1024,
+		stream: true,
+		messages
+	});
+	return stream;
+}
 
 export async function analyzetWithLLM(
 	openai: OpenAI,
@@ -145,6 +193,7 @@ export async function analyzetWithLLM(
 			max_tokens: 1024,
 			messages
 		});
+
 		const result = response.choices[0];
 		const analysis = result.message.content;
 
