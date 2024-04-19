@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Screenshots from '$lib/components/Screenshots.svelte';
 	import { ProgressRadial, TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import { type AppStoreInfo } from '$lib/scrapeAppstore';
 	import {
@@ -115,7 +116,7 @@
 				{#if appStoreInfo?.description}
 					<h2 class="h2 mb-2 mt-4">Current App Store content</h2>
 
-					<form class="" transition:fade={{ duration: 1000 }}>
+					<div class="card" transition:fade={{ duration: 1000 }}>
 						<label>
 							<span>Category:</span>
 							<input type="text" bind:value={appStoreInfo.applicationCategory} class="input" />
@@ -130,14 +131,9 @@
 						</label>
 						<span>Screenshots:</span>
 
-						<div class="flex gap-2">
-							{#each appStoreInfo.screenshot as screenshot}
-								<img src={screenshot} alt="Screenshot" />
-							{/each}
-						</div>
+						<Screenshots screenshotUrls={appStoreInfo.screenshot} />
 
 						<h2 class="h2 mb-2 mt-4">AI Analysis</h2>
-
 						<TabGroup>
 							<Tab bind:group={tabSet} name="use-assistant" value={'use-assistant'}>
 								<span>Use assistant</span>
@@ -171,7 +167,7 @@
 								{/if}
 							</svelte:fragment>
 						</TabGroup>
-					</form>
+					</div>
 
 					{#if loadingAnalysis}
 						<span class="flex">
