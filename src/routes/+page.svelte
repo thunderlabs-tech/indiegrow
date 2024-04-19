@@ -20,6 +20,7 @@
 	suggestions = undefined;
 
 	let loadingContent = false;
+	let showRefinementPrompt = false;
 	let showAnalaysisHelpers = false;
 
 	async function scrape() {
@@ -103,6 +104,19 @@
 					<button on:click={refine} class="variant-filled-secondary btn mb-4 mt-4 flex"
 						>Make improvement suggestions</button
 					>
+					<SlideToggle name="refinementPrompt" bind:checked={showRefinementPrompt} size="sm">
+						Show prompt
+					</SlideToggle>
+
+					{#if showRefinementPrompt}
+						<textarea
+							class="textarea"
+							rows="20"
+							bind:value={prompt}
+							placeholder="Enter your prompt"
+						/>
+					{/if}
+
 					{#if loadingRefinements}
 						<span class="flex">
 							<ProgressRadial
@@ -181,8 +195,8 @@
 					</div>
 
 					<div class="card mt-4 p-2">
-						<SlideToggle name="helpers" bind:checked={showAnalaysisHelpers}>
-							Analysis Helpers
+						<SlideToggle name="helpers" bind:checked={showAnalaysisHelpers} size="sm">
+							Show analysis helpers
 						</SlideToggle>
 
 						{#if showAnalaysisHelpers}
@@ -196,6 +210,11 @@
 </div>
 
 <style lang="postcss">
+	h3 {
+		font-size: 24px;
+		margin-top: 1em;
+		margin-bottom: 0.3em;
+	}
 	.appstore-content {
 		font-size: 18px;
 		line-height: 1.4;
@@ -204,6 +223,8 @@
 		/* white-space: normal; */
 		white-space: pre-line;
 		margin-bottom: 15px;
+		margin-top: 3px;
+		padding: 8px;
 	}
 	pre.current {
 		background-color: theme('colors.secondary.800');
@@ -216,5 +237,7 @@
 	.explanation {
 		background-color: theme('colors.primary.800');
 		font-size: 16px;
+		margin-top: 3px;
+		padding: 8px;
 	}
 </style>

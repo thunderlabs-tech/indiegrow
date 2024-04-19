@@ -55,7 +55,6 @@ For the name: consider a name that is concise, descriptive, and includes relevan
 Try to keep the current name and only add descriptive parts to it.
 
 For the category only consider existing categories in the Apple App Store.
-Don't use any markup in the refined versions - only text.
 
 For screenshots analyze if the screenshots cover all important features and if the text is always readable.
 
@@ -80,7 +79,10 @@ Be as concise and concrete as possible.
 		suggestion: "Refined Description",
 		explanation: "Explanation for the change"
 	},
-} `;
+}
+Don't use any markdown markup in the response - only text.
+Always be very concise.
+`;
 
 export const refinedResponse = {
 	name: {
