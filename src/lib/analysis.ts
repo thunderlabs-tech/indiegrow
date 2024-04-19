@@ -47,8 +47,8 @@ Your goal is to refine the app-store content of the app to improve its visibilit
 
 1. Look at the app-store info and provide refined versions of the following parts:
 - name
-- description
 - category
+- description
 For the category only consider existing categories in the Apple App Store.
 Don't use any markup in the refined versions - only text.
 
@@ -61,14 +61,14 @@ Be as concise and concrete as possible.
 		refined: "Refined Name",
 		explanation: "Explanation for the change"
 	},
-	description: {
-		refined: "Refined Description",
-		explanation: "Explanation for the change"
-	},
 	category: {
 		refined: "Refined Category",
 		explanation: "Explanation for the change"
 	}
+	description: {
+		refined: "Refined Description",
+		explanation: "Explanation for the change"
+	},
 }
 
 `;
