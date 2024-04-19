@@ -16,8 +16,8 @@
 
 	let prompt = refinementPrompt;
 
-	let refinements = refinedResponse;
-	refinements = undefined;
+	let suggestions = refinedResponse;
+	suggestions = undefined;
 
 	let loadingContent = false;
 	let showAnalaysisHelpers = false;
@@ -57,7 +57,7 @@
 
 			for await (const item of entityStream) {
 				console.log(item);
-				refinements = item?.data;
+				suggestions = item?.data;
 			}
 		} catch (error) {
 			console.error('Error running analysis:', error);
@@ -101,7 +101,9 @@
 				{/if}
 				{#if appStoreInfo?.description}
 					<h2 class="h2 mb-2 mt-4">App Store Content</h2>
-					<button on:click={refine} class="variant-filled-secondary btn mt-2">Refine</button>
+					<button on:click={refine} class="variant-filled-secondary btn mt-2 flex"
+						>Make refinement suggestions</button
+					>
 					{#if loadingRefinements}
 						<span class="flex">
 							<ProgressRadial
@@ -121,27 +123,27 @@
 						<div class="card p-2">
 							Current:
 							<pre class="current">{appStoreInfo.name}</pre>
-							{#if refinements?.name?.refined}
-								Refined:
-								<pre class="refined" transition:fade>{refinements.name.refined}</pre>
+							{#if suggestions?.name?.suggestion}
+								Suggestion:
+								<pre class="suggestion" transition:fade>{suggestions.name.suggestion}</pre>
 							{/if}
-							{#if refinements?.name?.explanation}
+							{#if suggestions?.name?.explanation}
 								Explanation:
-								<p class="explanation" transition:fade>{refinements.name.explanation}</p>
+								<p class="explanation" transition:fade>{suggestions.name.explanation}</p>
 							{/if}
 						</div>
 						<h3>Category:</h3>
 						<div class="card p-2">
 							Current:
 							<pre class="current">{appStoreInfo.applicationCategory}</pre>
-							{#if refinements?.category?.refined}
-								Refined:
-								<pre class="refined" transition:fade>{refinements.category.refined}</pre>
+							{#if suggestions?.category?.suggestion}
+								Suggestion:
+								<pre class="suggestion" transition:fade>{suggestions.category.suggestion}</pre>
 							{/if}
-							{#if refinements?.category?.explanation}
+							{#if suggestions?.category?.explanation}
 								Explanation:
 								<p class="explanation" transition:fade>
-									{refinements.category.explanation}
+									{suggestions.category.explanation}
 								</p>
 							{/if}
 						</div>
@@ -149,22 +151,33 @@
 						<div class="card p-2">
 							Current:
 							<pre class="current">{appStoreInfo.description}</pre>
-							{#if refinements?.description?.refined}
-								Refined:
-								<pre class="refined" transition:fade>{refinements.description.refined}</pre>
+							{#if suggestions?.description?.suggestion}
+								Suggestion:
+								<pre class="suggestion" transition:fade>{suggestions.description.suggestion}</pre>
 							{/if}
-							{#if refinements?.description?.explanation}
+							{#if suggestions?.description?.explanation}
 								Explanation:
 								<p class="explanation" transition:fade>
-									{refinements.description.explanation}
+									{suggestions.description.explanation}
 								</p>
 							{/if}
 						</div>
 						<h3>Screenshots:</h3>
 
+						Current:
 						<div class="card p-2">
 							<Screenshots screenshotUrls={appStoreInfo.screenshot} />
 						</div>
+						{#if suggestions?.screenshots?.suggestion}
+							Suggestion:
+							<pre class="suggestion" transition:fade>{suggestions.screenshots.suggestion}</pre>
+						{/if}
+						{#if suggestions?.screenshots?.explanation}
+							Explanation:
+							<p class="explanation" transition:fade>
+								{suggestions.screenshots.explanation}
+							</p>
+						{/if}
 					</div>
 
 					<div class="card mt-4 p-2">
@@ -196,7 +209,7 @@
 		background-color: theme('colors.secondary.800');
 	}
 
-	pre.refined {
+	pre.suggestion {
 		background-color: theme('colors.secondary.500');
 	}
 

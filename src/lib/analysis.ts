@@ -45,12 +45,16 @@ You will begiven the App Store info for an app as a JSON object delimeted by """
 
 Your goal is to refine the app-store content of the app to improve its visibility and thus the traffic increase.
 
-1. Look at the app-store info and provide refined versions of the following parts:
+1. Look at the app-store info and provide refined versions of the following parts as suggestions:
 - name
 - category
 - description
+- screenshots
+
 For the category only consider existing categories in the Apple App Store.
 Don't use any markup in the refined versions - only text.
+
+For screenshots analyze if the screenshots cover all important features and if the text is always readable.
 
 2. Provide explanations for each of the changes you made and how they could improve the visibility and thus the traffic increase.
 Be as concise and concrete as possible.
@@ -58,35 +62,44 @@ Be as concise and concrete as possible.
 3. Respond with a JSON object with your refinements and the explanations using the following schema:
 {
 	name: {
-		refined: "Refined Name",
+		suggestion: "Refined Name",
 		explanation: "Explanation for the change"
 	},
 	category: {
-		refined: "Refined Category",
+		suggestion: "Refined Category",
 		explanation: "Explanation for the change"
 	}
 	description: {
-		refined: "Refined Description",
+		suggestion: "Refined Description",
+		explanation: "Explanation for the change"
+	},
+	screenshots: {
+		suggestion: "Refined Description",
 		explanation: "Explanation for the change"
 	},
 } `;
 
 export const refinedResponse = {
 	name: {
-		refined: 'Neighborhood Connect: Secure Local Chat',
+		suggestion: 'Neighborhood Connect: Secure Local Chat',
 		explanation:
 			"The refined name 'Neighborhood Connect: Secure Local Chat' directly conveys the app's primary function of fostering communication among local neighbors, emphasizing both the social connection and security aspect. This change should attract users specifically searching for community-based communication tools."
 	},
 	description: {
-		refined:
+		suggestion:
 			'Neighborhood Connect is your private communication hub for local community interaction. Connect securely with neighbors in your apartment complex or building through private messages or group chats. Use it to exchange help, borrow items, share surplus food, and more, all without sharing personal contact details.\n\nFeatures include:\n- Private and group messaging without sharing personal numbers\n- Public channels for community discussions\n- Automatic message translation in German and English\n- Personal profiles visible to neighbors only\n- Comprehensive building directory for easy contact\n\nTo join, simply install and enter an invite code from an existing neighbor or start a new community with our assistance.\n\nOur mission: Strengthen urban community ties, reduce waste, and combat isolation. Learn more about how Neighborhood Connect can improve your local living experience at https://connectedliving.chat/mission',
 		explanation:
 			'The revised description is more concise and uses bullet points for clearer readability, emphasizing key features and benefits quickly. This avoids overwhelming the user with information and makes important features more noticeable, which might encourage downloads.'
 	},
 	category: {
-		refined: 'Lifestyle',
+		suggestion: 'Lifestyle',
 		explanation:
 			"Changing the category from 'Social Networking' to 'Lifestyle' can expand the app's reach. The 'Lifestyle' category can attract users interested in community living enhancements and local sustainability initiatives. This category might engage a different audience potentially interested in the app's community and sustainability goals."
+	},
+	screenshots: {
+		suggestion: 'Increase the font size of the text in the screenshots for better readability',
+		explanation:
+			"The text in the screenshots is crucial for conveying the app's features and benefits. By increasing the font size, users can easily read and understand the app's functionality, leading to higher engagement and potential downloads."
 	}
 };
 
