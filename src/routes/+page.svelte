@@ -100,9 +100,8 @@
 					</span>
 				{/if}
 				{#if appStoreInfo?.description}
-					<h2 class="h2 mb-2 mt-4">App Store Content</h2>
-					<button on:click={refine} class="variant-filled-secondary btn mt-2 flex"
-						>Make refinement suggestions</button
+					<button on:click={refine} class="variant-filled-secondary btn mb-4 mt-4 flex"
+						>Make improvement suggestions</button
 					>
 					{#if loadingRefinements}
 						<span class="flex">
@@ -114,9 +113,10 @@
 								strokeLinecap="butt"
 								width="w-5"
 							/>
-							<span class="ml-2 flex-1 text-sm text-primary-500">Loading refinements...</span>
+							<span class="ml-2 flex-1 text-sm text-primary-500">Loading suggestions...</span>
 						</span>
 					{/if}
+					<h2 class="h2 mb-2 mt-4">App Store Content</h2>
 
 					<div class="appstore-content" transition:fade={{ duration: 1000 }}>
 						<h3>Name:</h3>

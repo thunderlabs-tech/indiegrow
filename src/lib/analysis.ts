@@ -51,6 +51,9 @@ Your goal is to refine the app-store content of the app to improve its visibilit
 - description
 - screenshots
 
+For the name: consider a name that is concise, descriptive, and includes relevant keywords.
+Try to keep the current name and only add descriptive parts to it.
+
 For the category only consider existing categories in the Apple App Store.
 Don't use any markup in the refined versions - only text.
 
