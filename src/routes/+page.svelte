@@ -8,11 +8,10 @@
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
-	let url: string | undefined = exampleUrl;
-	url = undefined;
+	import { project } from '$lib/store';
+	console.log($project.url);
 
-	let appStoreInfo: AppStoreInfo | undefined = exampleAppStoreInfo;
-	appStoreInfo = null;
+	const appStoreInfo = $project.appStoreInfo;
 
 	let prompt = refinementPrompt;
 
@@ -29,11 +28,12 @@
 
 			const response = await fetch('/api/scrape', {
 				method: 'POST',
-				body: JSON.stringify({ url }),
+				body: JSON.stringify({ url: $project.url }),
 				headers: { 'content-type': 'application/json' }
 			});
-			appStoreInfo = (await response.json()) as AppStoreInfo;
-			console.log(appStoreInfo);
+			$project.appStoreInfo = (await response.json()) as AppStoreInfo;
+
+			console.log($project.appStoreInfo);
 		} catch (error) {
 			console.error('Error extracting entities:', error);
 		} finally {
@@ -75,9 +75,8 @@
 			<div class="justify-center space-x-2">
 				<form on:submit={scrape}>
 					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
-						<!-- <div class="input-group-shim">AppStore:</div> -->
 						<input
-							bind:value={url}
+							bind:value={$project.url}
 							class="input"
 							type="text"
 							placeholder="Enter your appstore URL"
@@ -136,7 +135,7 @@
 						<h3>Name:</h3>
 						<div class="card p-2">
 							Current:
-							<pre class="current">{appStoreInfo.name}</pre>
+							<pre class="current">{$project.appStoreInfo?.name}</pre>
 							{#if suggestions?.name?.suggestion}
 								Suggestion:
 								<pre class="suggestion" transition:fade>{suggestions.name.suggestion}</pre>
@@ -149,7 +148,7 @@
 						<h3>Category:</h3>
 						<div class="card p-2">
 							Current:
-							<pre class="current">{appStoreInfo.applicationCategory}</pre>
+							<pre class="current">{$project.appStoreInfo?.applicationCategory}</pre>
 							{#if suggestions?.category?.suggestion}
 								Suggestion:
 								<pre class="suggestion" transition:fade>{suggestions.category.suggestion}</pre>
@@ -164,7 +163,7 @@
 						<h3>Description:</h3>
 						<div class="card p-2">
 							Current:
-							<pre class="current">{appStoreInfo.description}</pre>
+							<pre class="current">{$project.appStoreInfo?.description}</pre>
 							{#if suggestions?.description?.suggestion}
 								Suggestion:
 								<pre class="suggestion" transition:fade>{suggestions.description.suggestion}</pre>
@@ -180,7 +179,7 @@
 
 						Current:
 						<div class="card p-2">
-							<Screenshots screenshotUrls={appStoreInfo.screenshot} />
+							<Screenshots screenshotUrls={$project.appStoreInfo.screenshot} />
 						</div>
 						{#if suggestions?.screenshots?.suggestion}
 							Suggestion:
@@ -200,7 +199,7 @@
 						</SlideToggle>
 
 						{#if showAnalaysisHelpers}
-							<AnalysisHelpers {appStoreInfo} />
+							<AnalysisHelpers />
 						{/if}
 					</div>
 				{/if}

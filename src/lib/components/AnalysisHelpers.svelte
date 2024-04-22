@@ -7,10 +7,10 @@
 	} from '$lib/analysis';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import type { AppStoreInfo } from '$lib/scrapeAppstore';
+	import { project } from '$lib/store';
 	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { fade } from 'svelte/transition';
 
-	export let appStoreInfo: AppStoreInfo;
 	let prompt = analysisPrompt;
 	let assistantId = 'asst_fo8tifPDDG95lmaJwbbdZfc8';
 	let tabSet: 'use-prompt' | 'use-assistant' = 'use-prompt';
