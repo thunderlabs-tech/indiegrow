@@ -84,17 +84,6 @@ Don't use any markdown markup in the response - only text.
 Always be very concise.
 `;
 
-export interface ImprovementSuggestion {
-	suggestion: string;
-	explanation: string;
-}
-export interface ImprovementSuggestions {
-	name: ImprovementSuggestion;
-	description: ImprovementSuggestion;
-	category: ImprovementSuggestion;
-	screenshots: ImprovementSuggestion;
-}
-
 function appStoreInfoAsString(info: AppStoreInfo): string {
 	return JSON.stringify({
 		name: info.name,

@@ -1,27 +1,5 @@
 import { load } from 'cheerio';
 
-export type AppStoreInfo = {
-	'@context': string;
-	'@type': string;
-	name: string;
-	description: string;
-	image: string;
-	applicationCategory: string;
-	datePublished: string;
-	operatingSystem: string;
-	author: {
-		'@type': string;
-		name: string;
-		url: string;
-	};
-	screenshot: string[];
-	offers: {
-		'@type': string;
-		price: number;
-		priceCurrency: string;
-		category: string;
-	};
-};
 export const exampleUrl =
 	'https://apps.apple.com/tt/app/connected-living-messenger/id1543400123?platform=iphone';
 

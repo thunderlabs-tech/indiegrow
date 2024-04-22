@@ -1,0 +1,50 @@
+export type AppStoreInfo = {
+	'@context': string;
+	'@type': string;
+	name: string;
+	description: string;
+	image: string;
+	applicationCategory: string;
+	datePublished: string;
+	operatingSystem: string;
+	author: {
+		'@type': string;
+		name: string;
+		url: string;
+	};
+	screenshot: string[];
+	offers: {
+		'@type': string;
+		price: number;
+		priceCurrency: string;
+		category: string;
+	};
+};
+
+export interface ImprovementSuggestion {
+	suggestion: string;
+	explanation: string;
+}
+export interface ImprovementSuggestions {
+	name: ImprovementSuggestion;
+	description: ImprovementSuggestion;
+	category: ImprovementSuggestion;
+	screenshots: ImprovementSuggestion;
+}
+
+export interface Project {
+	url: string | undefined;
+	appStoreInfo: AppStoreInfo | undefined;
+	suggestions: ImprovementSuggestions | undefined;
+}
+
+export const defaultProject: Project = {
+	url: undefined,
+	appStoreInfo: undefined,
+	suggestions: undefined
+};
+
+export interface Competitor {
+	url: string;
+	appStoreInfo: AppStoreInfo;
+}
