@@ -1,28 +1,29 @@
 <script lang="ts">
 	import Screenshots from '$lib/components/Screenshots.svelte';
 	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
-	import { exampleAppStoreInfo, type AppStoreInfo, exampleUrl } from '$lib/scrapeAppstore';
-	import { refinedResponse, refinementPrompt, refineWithLLMStreaming } from '$lib/analysis';
+	import { type AppStoreInfo } from '$lib/scrapeAppstore';
+	import {
+		refinementPrompt,
+		refineWithLLMStreaming,
+		type ImprovementSuggestions
+	} from '$lib/analysis';
 	import { fade } from 'svelte/transition';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
-	import { project } from '$lib/store';
-	console.log($project.url);
-
-	const appStoreInfo = $project.appStoreInfo;
+	import { project } from '$lib/project';
 
 	let prompt = refinementPrompt;
-
-	let suggestions = refinedResponse;
-	suggestions = undefined;
 
 	let loadingContent = false;
 	let showRefinementPrompt = false;
 	let showAnalaysisHelpers = false;
 
 	async function scrape() {
+		$project.appStoreInfo = undefined;
+		$project.suggestions = undefined;
+
 		try {
 			loadingContent = true;
 
@@ -45,20 +46,22 @@
 	async function refine() {
 		loadingRefinements = true;
 		try {
-			if (!appStoreInfo) {
+			if (!$project.appStoreInfo) {
 				console.error('No app store info');
 				return;
 			}
 
 			const openai = openAiBrowserClient();
-			const stream = await refineWithLLMStreaming(openai, prompt, appStoreInfo);
+			const stream = await refineWithLLMStreaming(openai, prompt, $project.appStoreInfo);
 
 			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
 			const entityStream = openAiHandler.process(stream);
 
 			for await (const item of entityStream) {
 				console.log(item);
-				suggestions = item?.data;
+				if (item) {
+					$project.suggestions = item.data as ImprovementSuggestions;
+				}
 			}
 		} catch (error) {
 			console.error('Error running analysis:', error);
@@ -99,7 +102,7 @@
 						<span class="ml-2 flex-1 text-sm text-primary-500">Loading app store content...</span>
 					</span>
 				{/if}
-				{#if appStoreInfo?.description}
+				{#if $project.appStoreInfo?.description}
 					<button on:click={refine} class="variant-filled-secondary btn mb-4 mt-4 flex"
 						>Make improvement suggestions</button
 					>
@@ -136,27 +139,28 @@
 						<div class="card p-2">
 							Current:
 							<pre class="current">{$project.appStoreInfo?.name}</pre>
-							{#if suggestions?.name?.suggestion}
+							{#if $project.suggestions?.name?.suggestion}
 								Suggestion:
-								<pre class="suggestion" transition:fade>{suggestions.name.suggestion}</pre>
+								<pre class="suggestion" transition:fade>{$project.suggestions.name.suggestion}</pre>
 							{/if}
-							{#if suggestions?.name?.explanation}
+							{#if $project.suggestions?.name?.explanation}
 								Explanation:
-								<p class="explanation" transition:fade>{suggestions.name.explanation}</p>
+								<p class="explanation" transition:fade>{$project.suggestions.name.explanation}</p>
 							{/if}
 						</div>
 						<h3>Category:</h3>
 						<div class="card p-2">
 							Current:
 							<pre class="current">{$project.appStoreInfo?.applicationCategory}</pre>
-							{#if suggestions?.category?.suggestion}
+							{#if $project.suggestions?.category?.suggestion}
 								Suggestion:
-								<pre class="suggestion" transition:fade>{suggestions.category.suggestion}</pre>
+								<pre class="suggestion" transition:fade>{$project.suggestions.category
+										.suggestion}</pre>
 							{/if}
-							{#if suggestions?.category?.explanation}
+							{#if $project.suggestions?.category?.explanation}
 								Explanation:
 								<p class="explanation" transition:fade>
-									{suggestions.category.explanation}
+									{$project.suggestions.category.explanation}
 								</p>
 							{/if}
 						</div>
@@ -164,14 +168,15 @@
 						<div class="card p-2">
 							Current:
 							<pre class="current">{$project.appStoreInfo?.description}</pre>
-							{#if suggestions?.description?.suggestion}
+							{#if $project.suggestions?.description?.suggestion}
 								Suggestion:
-								<pre class="suggestion" transition:fade>{suggestions.description.suggestion}</pre>
+								<pre class="suggestion" transition:fade>{$project.suggestions.description
+										.suggestion}</pre>
 							{/if}
-							{#if suggestions?.description?.explanation}
+							{#if $project.suggestions?.description?.explanation}
 								Explanation:
 								<p class="explanation" transition:fade>
-									{suggestions.description.explanation}
+									{$project.suggestions.description.explanation}
 								</p>
 							{/if}
 						</div>
@@ -179,16 +184,17 @@
 
 						Current:
 						<div class="card p-2">
-							<Screenshots screenshotUrls={$project.appStoreInfo.screenshot} />
+							<Screenshots screenshotUrls={$project.appStoreInfo?.screenshot} />
 						</div>
-						{#if suggestions?.screenshots?.suggestion}
+						{#if $project.suggestions?.screenshots?.suggestion}
 							Suggestion:
-							<pre class="suggestion" transition:fade>{suggestions.screenshots.suggestion}</pre>
+							<pre class="suggestion" transition:fade>{$project.suggestions.screenshots
+									.suggestion}</pre>
 						{/if}
-						{#if suggestions?.screenshots?.explanation}
+						{#if $project.suggestions?.screenshots?.explanation}
 							Explanation:
 							<p class="explanation" transition:fade>
-								{suggestions.screenshots.explanation}
+								{$project.suggestions.screenshots.explanation}
 							</p>
 						{/if}
 					</div>

@@ -84,29 +84,16 @@ Don't use any markdown markup in the response - only text.
 Always be very concise.
 `;
 
-export const refinedResponse = {
-	name: {
-		suggestion: 'Neighborhood Connect: Secure Local Chat',
-		explanation:
-			"The refined name 'Neighborhood Connect: Secure Local Chat' directly conveys the app's primary function of fostering communication among local neighbors, emphasizing both the social connection and security aspect. This change should attract users specifically searching for community-based communication tools."
-	},
-	description: {
-		suggestion:
-			'Neighborhood Connect is your private communication hub for local community interaction. Connect securely with neighbors in your apartment complex or building through private messages or group chats. Use it to exchange help, borrow items, share surplus food, and more, all without sharing personal contact details.\n\nFeatures include:\n- Private and group messaging without sharing personal numbers\n- Public channels for community discussions\n- Automatic message translation in German and English\n- Personal profiles visible to neighbors only\n- Comprehensive building directory for easy contact\n\nTo join, simply install and enter an invite code from an existing neighbor or start a new community with our assistance.\n\nOur mission: Strengthen urban community ties, reduce waste, and combat isolation. Learn more about how Neighborhood Connect can improve your local living experience at https://connectedliving.chat/mission',
-		explanation:
-			'The revised description is more concise and uses bullet points for clearer readability, emphasizing key features and benefits quickly. This avoids overwhelming the user with information and makes important features more noticeable, which might encourage downloads.'
-	},
-	category: {
-		suggestion: 'Lifestyle',
-		explanation:
-			"Changing the category from 'Social Networking' to 'Lifestyle' can expand the app's reach. The 'Lifestyle' category can attract users interested in community living enhancements and local sustainability initiatives. This category might engage a different audience potentially interested in the app's community and sustainability goals."
-	},
-	screenshots: {
-		suggestion: 'Increase the font size of the text in the screenshots for better readability',
-		explanation:
-			"The text in the screenshots is crucial for conveying the app's features and benefits. By increasing the font size, users can easily read and understand the app's functionality, leading to higher engagement and potential downloads."
-	}
-};
+export interface ImprovementSuggestion {
+	suggestion: string;
+	explanation: string;
+}
+export interface ImprovementSuggestions {
+	name: ImprovementSuggestion;
+	description: ImprovementSuggestion;
+	category: ImprovementSuggestion;
+	screenshots: ImprovementSuggestion;
+}
 
 function appStoreInfoAsString(info: AppStoreInfo): string {
 	return JSON.stringify({

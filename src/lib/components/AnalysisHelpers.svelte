@@ -7,7 +7,7 @@
 	} from '$lib/analysis';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import type { AppStoreInfo } from '$lib/scrapeAppstore';
-	import { project } from '$lib/store';
+	import { project } from '$lib/project';
 	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { fade } from 'svelte/transition';
 

@@ -1,12 +1,17 @@
 import { writable } from 'svelte/store';
 import type { AppStoreInfo } from './scrapeAppstore';
+import type { ImprovementSuggestions } from './analysis';
 
 interface Project {
 	url: string | undefined;
 	appStoreInfo: AppStoreInfo | undefined;
+	suggestions: ImprovementSuggestions | undefined;
 }
+
 const defaultProject: Project = {
-	url: undefined
+	url: undefined,
+	appStoreInfo: undefined,
+	suggestions: undefined
 };
 
 let current: Project;
