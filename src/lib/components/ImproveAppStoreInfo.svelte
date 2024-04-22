@@ -10,6 +10,8 @@
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
 	import { project } from '$lib/project';
+	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
+	import Screenshots from './Screenshots.svelte';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
@@ -33,7 +35,7 @@
 			for await (const item of entityStream) {
 				console.log(item);
 				if (item) {
-					$project.suggestions = item.data as ImprovementSuggestions;
+					$project.suggestions = item.data as unknown as ImprovementSuggestions;
 				}
 			}
 		} catch (error) {
@@ -43,6 +45,8 @@
 		}
 	}
 </script>
+
+<h3 class="h2 mb-2 mt-4">App Store Content</h3>
 
 <button on:click={refine} class="variant-filled-secondary btn mb-4 mt-4 flex"
 	>Make improvement suggestions</button
@@ -68,9 +72,8 @@
 		<span class="ml-2 flex-1 text-sm text-primary-500">Loading suggestions...</span>
 	</span>
 {/if}
-<h2 class="h2 mb-2 mt-4">App Store Content</h2>
 
-<div class="appstore-content" transition:fade={{ duration: 1000 }}>
+<div class="appstore-content">
 	<h3>Name:</h3>
 	<div class="card p-2">
 		Current:
@@ -141,3 +144,36 @@
 		<AnalysisHelpers />
 	{/if}
 </div>
+
+<style lang="postcss">
+	h3 {
+		font-size: 24px;
+		margin-top: 1em;
+		margin-bottom: 0.3em;
+	}
+	.appstore-content {
+		font-size: 18px;
+		line-height: 1.4;
+	}
+	pre {
+		/* white-space: normal; */
+		white-space: pre-line;
+		margin-bottom: 15px;
+		margin-top: 3px;
+		padding: 8px;
+	}
+	pre.current {
+		background-color: theme('colors.secondary.800');
+	}
+
+	pre.suggestion {
+		background-color: theme('colors.secondary.500');
+	}
+
+	.explanation {
+		background-color: theme('colors.primary.800');
+		font-size: 16px;
+		margin-top: 3px;
+		padding: 8px;
+	}
+</style>

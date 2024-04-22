@@ -1,9 +1,12 @@
 <script lang="ts">
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { type AppStoreInfo } from '$lib/scrapeAppstore';
+	import ImproveAppStoreInfo from '$lib/components/ImproveAppStoreInfo.svelte';
+	import CompetitionAnalysis from '$lib/components/CompetitionAnalysis.svelte';
 	import { project } from '$lib/project';
 
 	let loadingContent = false;
+	let tabSet: 'improve' | 'competition' = 'improve';
 
 	async function scrape() {
 		$project.appStoreInfo = undefined;
@@ -61,42 +64,21 @@
 				{/if}
 
 				{#if $project}
-					<AppStoreInfo />
+					<TabGroup>
+						<Tab bind:group={tabSet} name="improve" value={'improve'}>Improve content</Tab>
+						<Tab bind:group={tabSet} name="competition" value={'competition'}
+							>Competition analysis
+						</Tab>
+						<svelte:fragment slot="panel">
+							{#if tabSet === 'improve'}
+								<ImproveAppStoreInfo />
+							{:else if tabSet === 'competition'}
+								<CompetitionAnalysis />
+							{/if}
+						</svelte:fragment>
+					</TabGroup>
 				{/if}
 			</div>
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	h3 {
-		font-size: 24px;
-		margin-top: 1em;
-		margin-bottom: 0.3em;
-	}
-	.appstore-content {
-		font-size: 18px;
-		line-height: 1.4;
-	}
-	pre {
-		/* white-space: normal; */
-		white-space: pre-line;
-		margin-bottom: 15px;
-		margin-top: 3px;
-		padding: 8px;
-	}
-	pre.current {
-		background-color: theme('colors.secondary.800');
-	}
-
-	pre.suggestion {
-		background-color: theme('colors.secondary.500');
-	}
-
-	.explanation {
-		background-color: theme('colors.primary.800');
-		font-size: 16px;
-		margin-top: 3px;
-		padding: 8px;
-	}
-</style>
