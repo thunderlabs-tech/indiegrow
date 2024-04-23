@@ -6,7 +6,6 @@
 		type AnalysisResult
 	} from '$lib/analysis';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
-	import type { AppStoreInfo } from '$lib/scrapeAppstore';
 	import { project } from '$lib/project';
 	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { fade } from 'svelte/transition';
@@ -30,7 +29,7 @@
 
 	async function analyze(useAssistant: boolean) {
 		try {
-			if (!appStoreInfo) {
+			if (!$project.appStoreInfo) {
 				console.error('No app store info');
 				return;
 			}
@@ -41,9 +40,9 @@
 			const openai = openAiBrowserClient();
 
 			if (useAssistant) {
-				analysisResult = await analyzetWithAssistant(openai, assistantId, appStoreInfo);
+				analysisResult = await analyzetWithAssistant(openai, assistantId, $project.appStoreInfo);
 			} else {
-				analysisResult = await analyzetWithLLM(openai, prompt, appStoreInfo);
+				analysisResult = await analyzetWithLLM(openai, prompt, $project.appStoreInfo);
 			}
 
 			if (analysisResult?.error) {

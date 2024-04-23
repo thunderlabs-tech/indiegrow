@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		refinementPrompt,
-		refineWithLLMStreaming,
-		type ImprovementSuggestions
-	} from '$lib/analysis';
+	import { refinementPrompt, refineWithLLMStreaming } from '$lib/analysis';
 	import { fade } from 'svelte/transition';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';

@@ -1,4 +1,5 @@
 import { load } from 'cheerio';
+import type { AppStoreInfo, WebsiteInfo } from './types';
 
 export const exampleUrl =
 	'https://apps.apple.com/tt/app/connected-living-messenger/id1543400123?platform=iphone';
@@ -49,5 +50,27 @@ export async function scrapeAppstore(appStoreUrl: string): Promise<AppStoreInfo>
 
 	//  info.screenshot = [info.screenshot[info.screenshot.length - 1]];
 
+	return info;
+}
+
+import ogs from 'open-graph-scraper';
+
+export async function scrapeWebsite(url: string): Promise<WebsiteInfo> {
+	const fetchResponse = await fetch(url);
+	const fetchHtml = await fetchResponse.text();
+
+	const { error, html, result, response } = await ogs({ html: fetchHtml });
+
+	const info: WebsiteInfo = {
+		html: fetchHtml,
+		ogObject: result
+	};
+
+	console.log(info);
+
+	// const $ = load(fetchHtml);
+	// const title = $('[property=og:title]').text();
+	// const title = $('head > meta:nth-child(5)').text();
+	// return { title };
 	return info;
 }

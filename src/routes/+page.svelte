@@ -1,30 +1,53 @@
 <script lang="ts">
-	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
-	import { type AppStoreInfo } from '$lib/scrapeAppstore';
-	import ImproveAppStoreInfo from '$lib/components/ImproveAppStoreInfo.svelte';
-	import CompetitionAnalysis from '$lib/components/CompetitionAnalysis.svelte';
 	import { project } from '$lib/project';
-
+	import type { AppStoreInfo, WebsiteInfo } from '$lib/types';
 	let loadingContent = false;
-	let tabSet: 'improve' | 'competition' = 'improve';
 
-	async function scrape() {
+	$: nameValid = $project?.name && $project.name?.length > 2;
+	$: descriptionValid = $project?.description && $project.description?.length > 10;
+
+	function initProject() {
+		// if ($project.appStoreUrl) {
+		// 	scrapeAppStoreInfo();
+		// }
+	}
+
+	async function scrapeAppStoreInfo() {
+		loadingContent = true;
 		$project.appStoreInfo = undefined;
-		$project.suggestions = undefined;
-
 		try {
-			loadingContent = true;
-
-			const response = await fetch('/api/scrape', {
+			const response = await fetch('/api/scrape/appstore', {
 				method: 'POST',
-				body: JSON.stringify({ url: $project.url }),
+				body: JSON.stringify({ url: $project.appStoreUrl }),
 				headers: { 'content-type': 'application/json' }
 			});
-			$project.appStoreInfo = (await response.json()) as AppStoreInfo;
+			if (response.status == 200) {
+				$project.appStoreInfo = (await response.json()) as AppStoreInfo;
+			} else {
+				console.error(response);
+			}
+		} catch (error) {
+			console.error('Error scraping app store', error);
+			$project.appStoreInfo = undefined;
+		} finally {
+			loadingContent = false;
+		}
+	}
 
+	async function scrapeWebsiteInfo() {
+		loadingContent = true;
+		$project.websiteInfo = undefined;
+
+		try {
+			const response = await fetch('/api/scrape/website', {
+				method: 'POST',
+				body: JSON.stringify({ url: $project.websiteUrl }),
+				headers: { 'content-type': 'application/json' }
+			});
+			$project.websiteInfo = (await response.json()) as WebsiteInfo;
 			console.log($project.appStoreInfo);
 		} catch (error) {
-			console.error('Error extracting entities:', error);
+			console.error('Error scraping app store', error);
 		} finally {
 			loadingContent = false;
 		}
@@ -33,51 +56,60 @@
 
 <div class="container mx-auto flex h-full p-6">
 	<div class="flex flex-col space-y-10">
-		<h1 class="h1">Improve your App Store presence</h1>
+		<h1 class="h1">What's your project?</h1>
 		<div class="w-full space-y-2">
-			<div class="justify-center space-x-2">
-				<form on:submit={scrape}>
-					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
-						<input
-							bind:value={$project.url}
-							class="input"
-							type="text"
-							placeholder="Enter your appstore URL"
-						/>
-						<button class="variant-filled-secondary btn">Start </button>
-					</div>
-				</form>
-			</div>
-			<div>
-				{#if loadingContent}
-					<span class="flex">
-						<ProgressRadial
-							value={undefined}
-							stroke={100}
-							meter="stroke-primary-500"
-							track="stroke-primary-500/30"
-							strokeLinecap="butt"
-							width="w-5"
-						/>
-						<span class="ml-2 flex-1 text-sm text-primary-500">Loading app store content...</span>
-					</span>
-				{/if}
+			<div class="justify-center">
+				<form on:submit={initProject} class="space-y-2">
+					<p>Name*:</p>
+					<input
+						bind:value={$project.name}
+						class="input"
+						type="text"
+						placeholder="Name of your project"
+					/>
 
-				{#if $project}
-					<TabGroup>
-						<Tab bind:group={tabSet} name="improve" value={'improve'}>Improve content</Tab>
-						<Tab bind:group={tabSet} name="competition" value={'competition'}
-							>Competition analysis
-						</Tab>
-						<svelte:fragment slot="panel">
-							{#if tabSet === 'improve'}
-								<ImproveAppStoreInfo />
-							{:else if tabSet === 'competition'}
-								<CompetitionAnalysis />
-							{/if}
-						</svelte:fragment>
-					</TabGroup>
-				{/if}
+					<p>Description*:</p>
+					<textarea
+						bind:value={$project.description}
+						class="textarea"
+						placeholder="What is your project about? "
+					/>
+
+					<p>Website:</p>
+					<input
+						bind:value={$project.websiteUrl}
+						on:blur={scrapeWebsiteInfo}
+						type="text"
+						class="input"
+						placeholder="Website URL"
+					/>
+					{#if $project.websiteInfo !== undefined}
+						🌐 {$project.websiteInfo.ogObject.ogTitle}:
+						{$project.websiteInfo.ogObject.ogDescription}
+					{/if}
+
+					<p>App Store URL:</p>
+					<input
+						bind:value={$project.appStoreUrl}
+						on:blur={scrapeAppStoreInfo}
+						type="text"
+						class="input"
+						placeholder="App Store URL"
+					/>
+					{#if $project.appStoreInfo !== undefined}
+						📱 {$project.appStoreInfo.name}
+					{/if}
+
+					<p>
+						<button
+							class="variant-filled-primary btn btn-sm"
+							type="submit"
+							disabled={!nameValid || !descriptionValid}
+						>
+							Next
+						</button>
+					</p>
+				</form>
 			</div>
 		</div>
 	</div>

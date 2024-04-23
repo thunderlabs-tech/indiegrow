@@ -4,7 +4,7 @@ import type {
 	ChatCompletionUserMessageParam
 } from 'openai/resources/index.mjs';
 
-import type { AppStoreInfo } from './scrapeAppstore';
+import type { AppStoreInfo } from './scraping';
 import type { Stream } from 'openai/streaming.mjs';
 
 export type AnalysisResult = {

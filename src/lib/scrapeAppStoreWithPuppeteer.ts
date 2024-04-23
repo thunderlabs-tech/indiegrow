@@ -1,4 +1,4 @@
-import type { AppStoreInfo } from './scrapeAppstore';
+import type { AppStoreInfo } from './scraping';
 
 // works locally on osx
 // import puppeteer from "puppeteer";

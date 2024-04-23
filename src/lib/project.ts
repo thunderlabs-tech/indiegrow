@@ -1,15 +1,13 @@
 import { writable } from 'svelte/store';
-import type { AppStoreInfo } from './scrapeAppstore';
-import type { ImprovementSuggestions } from './analysis';
+import { emptyProject, type Project } from '$lib/types.d';
 
 let current: Project;
 
 const stored = localStorage.getItem('project');
-// console.log('stored', stored);
 if (stored !== null) {
 	current = JSON.parse(stored);
 } else {
-	current = defaultProject;
+	current = emptyProject;
 }
 
 export const project = writable<Project>(current);

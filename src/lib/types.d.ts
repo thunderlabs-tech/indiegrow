@@ -1,3 +1,10 @@
+import type { OgObject } from 'open-graph-scraper/dist/lib/types';
+
+export type WebsiteInfo = {
+	html: string;
+	ogObject: OgObject;
+};
+
 export type AppStoreInfo = {
 	'@context': string;
 	'@type': string;
@@ -33,12 +40,20 @@ export interface ImprovementSuggestions {
 }
 
 export interface Project {
-	url: string | undefined;
+	name: string | undefined;
+	description: string | undefined;
+
+	websiteUrl: string | undefined;
+	websiteInfo: WebsiteInfo | undefined;
+
+	appStoreUrl: string | undefined;
 	appStoreInfo: AppStoreInfo | undefined;
 	suggestions: ImprovementSuggestions | undefined;
 }
 
-export const defaultProject: Project = {
+export const emptyProject: Project = {
+	name: undefined,
+	description: undefined,
 	url: undefined,
 	appStoreInfo: undefined,
 	suggestions: undefined
