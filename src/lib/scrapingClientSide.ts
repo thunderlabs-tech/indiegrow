@@ -1,6 +1,6 @@
 import type { AppStoreInfo, WebsiteInfo } from './types';
 
-export async function srapeAppStoreInfo(appStoreUrl: string): Promise<AppStoreInfo> {
+export async function scrapeAppStoreInfo(appStoreUrl: string): Promise<AppStoreInfo> {
 	const response = await fetch('/api/scrape/appstore', {
 		method: 'POST',
 		body: JSON.stringify({ url: appStoreUrl }),
@@ -9,7 +9,7 @@ export async function srapeAppStoreInfo(appStoreUrl: string): Promise<AppStoreIn
 	return (await response.json()) as AppStoreInfo;
 }
 
-export async function srapeWebsiteInfo(websiteUrl: string): Promise<WebsiteInfo> {
+export async function scrapeWebsiteInfo(websiteUrl: string): Promise<WebsiteInfo> {
 	const response = await fetch('/api/scrape/website', {
 		method: 'POST',
 		body: JSON.stringify({ url: websiteUrl }),

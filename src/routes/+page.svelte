@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { project } from '$lib/project';
-	import { srapeAppStoreInfo, srapeWebsiteInfo } from '$lib/scrapingClientSide';
-
+	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	$: nameValid = $project?.name && $project.name?.length > 2;
 	$: descriptionValid = $project?.description && $project.description?.length > 10;
 
@@ -12,7 +11,7 @@
 		loadingContent = true;
 		$project.appStoreInfo = undefined;
 		try {
-			$project.appStoreInfo = await srapeAppStoreInfo($project.appStoreUrl);
+			$project.appStoreInfo = await scrapeAppStoreInfo($project.appStoreUrl);
 		} catch (error) {
 			console.error('Error scraping app store', error);
 			$project.appStoreInfo = undefined;
@@ -26,7 +25,7 @@
 		loadingContent = true;
 		$project.websiteInfo = undefined;
 		try {
-			$project.websiteInfo = await srapeWebsiteInfo($project.websiteUrl);
+			$project.websiteInfo = await scrapeWebsiteInfo($project.websiteUrl);
 		} catch (error) {
 			console.error('Error scraping app store', error);
 		} finally {

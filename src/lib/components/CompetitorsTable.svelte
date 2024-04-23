@@ -15,6 +15,7 @@
 		<td>Website</td>
 		<td>Description</td>
 		<td>Logo</td>
+		<td>App</td>
 		<td>Actions</td>
 	</tr>
 
@@ -28,6 +29,11 @@
 			<td>{ogObject?.ogDescription}</td>
 			<td>
 				<img src={image} />
+			</td>
+			<td>
+				{#if app}
+					<img class="h-8 w-8" src={app.image} alt={app.name} />
+				{/if}
 			</td>
 			<td>
 				<button class="variant-outline-warning btn btn-sm" on:click={removeCompetitor}

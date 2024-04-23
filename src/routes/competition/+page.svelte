@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { project } from '$lib/project';
 	import type { Competitor } from '$lib/types';
-	import { srapeAppStoreInfo, srapeWebsiteInfo } from '$lib/scrapingClientSide';
+	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
 
 	let competitorUrls = '';
 
+	// const appStoreUrlRegex = /https?:\/\/apps|itunes\.apple\.com\/[a-z]{2}\/app\/[^\/]+\/id\d+/i;
+	const appStoreUrlRegex =
+		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
+
 	function isAppleAppStoreUrl(url: string) {
-		const regex = /^https?:\/\/apps\.apple\.com\/[a-z]{2}\/app\/[^\/]+\/id\d+.*$/;
-		return regex.test(url);
+		return appStoreUrlRegex.test(url);
 	}
 
 	async function competitorFromUrl(url: string): Promise<Partial<Competitor> | undefined> {
@@ -16,10 +19,16 @@
 
 		if (isAppleAppStoreUrl(url)) {
 			competitor.appStoreUrl = url;
-			competitor.appStoreInfo = await srapeAppStoreInfo(url);
+			competitor.appStoreInfo = await scrapeAppStoreInfo(url);
 		} else {
 			competitor.websiteUrl = url;
-			competitor.websiteInfo = await srapeWebsiteInfo(url);
+			competitor.websiteInfo = await scrapeWebsiteInfo(url);
+
+			competitor.appStoreUrl = competitor.websiteInfo?.html.match(appStoreUrlRegex)?.[0];
+
+			if (competitor.appStoreUrl) {
+				competitor.appStoreInfo = await scrapeAppStoreInfo(competitor.appStoreUrl);
+			}
 		}
 
 		return competitor;
