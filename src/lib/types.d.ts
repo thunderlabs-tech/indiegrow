@@ -28,6 +28,14 @@ export type AppStoreInfo = {
 	};
 };
 
+export type Competitor = {
+	websiteUrl: string;
+	websiteInfo: WebsiteInfo | undefined;
+
+	appStoreUrl: string | undefined;
+	appStoreInfo: AppStoreInfo | undefined;
+};
+
 export interface ImprovementSuggestion {
 	suggestion: string;
 	explanation: string;
@@ -48,6 +56,9 @@ export interface Project {
 
 	appStoreUrl: string | undefined;
 	appStoreInfo: AppStoreInfo | undefined;
+
+	competitors: Competitor[] | undefined;
+
 	suggestions: ImprovementSuggestions | undefined;
 }
 

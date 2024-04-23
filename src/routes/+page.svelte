@@ -1,31 +1,18 @@
 <script lang="ts">
 	import { project } from '$lib/project';
-	import type { AppStoreInfo, WebsiteInfo } from '$lib/types';
-	let loadingContent = false;
+	import { srapeAppStoreInfo, srapeWebsiteInfo } from '$lib/scrapingClientSide';
 
 	$: nameValid = $project?.name && $project.name?.length > 2;
 	$: descriptionValid = $project?.description && $project.description?.length > 10;
 
-	function initProject() {
-		// if ($project.appStoreUrl) {
-		// 	scrapeAppStoreInfo();
-		// }
-	}
+	let loadingContent = false;
 
-	async function scrapeAppStoreInfo() {
+	async function updateAppStoreInfo() {
+		if (!$project.appStoreUrl) return;
 		loadingContent = true;
 		$project.appStoreInfo = undefined;
 		try {
-			const response = await fetch('/api/scrape/appstore', {
-				method: 'POST',
-				body: JSON.stringify({ url: $project.appStoreUrl }),
-				headers: { 'content-type': 'application/json' }
-			});
-			if (response.status == 200) {
-				$project.appStoreInfo = (await response.json()) as AppStoreInfo;
-			} else {
-				console.error(response);
-			}
+			$project.appStoreInfo = await srapeAppStoreInfo($project.appStoreUrl);
 		} catch (error) {
 			console.error('Error scraping app store', error);
 			$project.appStoreInfo = undefined;
@@ -34,18 +21,12 @@
 		}
 	}
 
-	async function scrapeWebsiteInfo() {
+	async function updateWebsiteInfo() {
+		if (!$project.websiteUrl) return;
 		loadingContent = true;
 		$project.websiteInfo = undefined;
-
 		try {
-			const response = await fetch('/api/scrape/website', {
-				method: 'POST',
-				body: JSON.stringify({ url: $project.websiteUrl }),
-				headers: { 'content-type': 'application/json' }
-			});
-			$project.websiteInfo = (await response.json()) as WebsiteInfo;
-			console.log($project.appStoreInfo);
+			$project.websiteInfo = await srapeWebsiteInfo($project.websiteUrl);
 		} catch (error) {
 			console.error('Error scraping app store', error);
 		} finally {
@@ -59,7 +40,7 @@
 		<h1 class="h1">What's your project?</h1>
 		<div class="w-full space-y-2">
 			<div class="justify-center">
-				<form on:submit={initProject} class="space-y-2">
+				<form class="space-y-2">
 					<p>Name*:</p>
 					<input
 						bind:value={$project.name}
@@ -78,12 +59,12 @@
 					<p>Website:</p>
 					<input
 						bind:value={$project.websiteUrl}
-						on:blur={scrapeWebsiteInfo}
+						on:blur={updateWebsiteInfo}
 						type="text"
 						class="input"
 						placeholder="Website URL"
 					/>
-					{#if $project.websiteInfo !== undefined}
+					{#if $project.websiteInfo?.ogObject !== undefined}
 						🌐 {$project.websiteInfo.ogObject.ogTitle}:
 						{$project.websiteInfo.ogObject.ogDescription}
 					{/if}
@@ -91,7 +72,7 @@
 					<p>App Store URL:</p>
 					<input
 						bind:value={$project.appStoreUrl}
-						on:blur={scrapeAppStoreInfo}
+						on:blur={updateAppStoreInfo}
 						type="text"
 						class="input"
 						placeholder="App Store URL"
@@ -101,13 +82,11 @@
 					{/if}
 
 					<p>
-						<button
-							class="variant-filled-primary btn btn-sm"
-							type="submit"
-							disabled={!nameValid || !descriptionValid}
-						>
-							Next
-						</button>
+						{#if !loadingContent && nameValid && descriptionValid}
+							<a href="/competition" class="variant-filled-primary btn btn-sm"
+								>Next: your competition
+							</a>
+						{/if}
 					</p>
 				</form>
 			</div>
