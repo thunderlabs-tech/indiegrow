@@ -2,6 +2,7 @@
 	import { project } from '$lib/project';
 	import type { Competitor } from '$lib/types';
 	import { srapeAppStoreInfo, srapeWebsiteInfo } from '$lib/scrapingClientSide';
+	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
 
 	let competitorUrls = '';
 
@@ -76,41 +77,5 @@
 {#if $project.competitors}
 	<h2>Your Competitors:</h2>
 
-	<table class="table">
-		<tr>
-			<td>Name</td>
-			<td>Website</td>
-			<td>Description</td>
-			<td>Logo</td>
-			<td>Actions</td>
-		</tr>
-
-		{#each $project.competitors as competitor, idx}
-			{@const ogObject = competitor.websiteInfo?.ogObject}
-			{@const app = competitor.appStoreInfo}
-			{@const image = (ogObject?.ogImage && ogObject.ogImage[0].url) || app?.image}
-			<tr>
-				<td>{ogObject?.ogSiteName || ogObject?.ogTitle}</td>
-				<td>{competitor.websiteUrl}</td>
-				<td>{ogObject?.ogDescription}</td>
-				<td>
-					<img src={image} />
-				</td>
-				<td>
-					<button class="variant-outline-warning btn btn-sm" on:click={removeCompetitor}
-						>Remove</button
-					>
-				</td>
-			</tr>
-		{/each}
-	</table>
+	<CompetitorsTable competitors={$project.competitors} onRemove={removeCompetitor} />
 {/if}
-
-<style lang="postcss">
-	td {
-		padding: 0.5rem;
-	}
-	tr {
-		border-bottom: 1px solid #e2e8f0;
-	}
-</style>
