@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { refinementPrompt, refineWithLLMStreaming } from '$lib/analysis';
+	import { refinementPrompt, refineWithLLMStreaming } from '$lib/aso';
 	import { fade } from 'svelte/transition';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
@@ -8,6 +8,7 @@
 	import { project } from '$lib/project';
 	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
 	import Screenshots from './Screenshots.svelte';
+	import type { ImprovementSuggestions } from '$lib/types';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
