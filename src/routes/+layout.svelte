@@ -57,7 +57,7 @@
 	</svelte:fragment>
 
 	<div class="layout-docs page-padding flex items-start justify-center gap-10">
-		<div class="layout-docs-content page-container-aside w-full max-w-4xl">
+		<div class="layout-docs-content page-container-aside w-full">
 			<slot />
 		</div>
 	</div>

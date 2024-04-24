@@ -1,17 +1,42 @@
 <script lang="ts">
 	import { project } from '$lib/project';
-	import type { Competitor } from '$lib/types';
+	import type { Competitor, ProductMarketingAnalysis } from '$lib/types';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
+	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
+	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
+	import { analyzeCompetitorWebsite, websiteAnalysisPrompt } from '$lib/competition';
 
 	let competitorUrls = '';
+	const prompt = websiteAnalysisPrompt;
 
-	// const appStoreUrlRegex = /https?:\/\/apps|itunes\.apple\.com\/[a-z]{2}\/app\/[^\/]+\/id\d+/i;
+	let analyzingCompetitors = false;
 	const appStoreUrlRegex =
 		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
 
 	function isAppleAppStoreUrl(url: string) {
 		return appStoreUrlRegex.test(url);
+	}
+
+	async function compileProductMarketingAnalaysis(competitor: Competitor) {
+		try {
+			const openai = openAiBrowserClient();
+			const stream = await analyzeCompetitorWebsite(openai, prompt, competitor);
+
+			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
+			const entityStream = openAiHandler.process(stream);
+
+			for await (const item of entityStream) {
+				console.log(item);
+				if (item) {
+					competitor.productMarketingAnalysis = item.data as unknown as ProductMarketingAnalysis;
+					competitor = competitor;
+				}
+			}
+		} catch (error) {
+			console.error('Error running analysis:', error);
+		}
 	}
 
 	async function competitorFromUrl(url: string): Promise<Partial<Competitor> | undefined> {
@@ -31,20 +56,29 @@
 			}
 		}
 
+		await compileProductMarketingAnalaysis(competitor as Competitor);
+
 		return competitor;
 	}
 
 	async function addCompetitors() {
-		const urls = competitorUrls.split(' ').filter(Boolean);
-		for (const url of urls) {
-			const competitor = await competitorFromUrl(url);
-			if (competitor) {
-				project.update((project) => {
-					project.competitors = project.competitors || [];
-					project.competitors.push(competitor as Competitor);
-					return project;
-				});
+		analyzingCompetitors = true;
+		try {
+			const urls = competitorUrls.split(' ').filter(Boolean);
+			for (const url of urls) {
+				const competitor = await competitorFromUrl(url.trim());
+				if (competitor) {
+					project.update((project) => {
+						project.competitors = project.competitors || [];
+						project.competitors.push(competitor as Competitor);
+						return project;
+					});
+				}
 			}
+		} catch (error) {
+			console.error('Error adding competitors:', error);
+		} finally {
+			analyzingCompetitors = false;
 		}
 	}
 
@@ -61,11 +95,11 @@
 	$: console.log($project.competitors);
 </script>
 
-<div class="container mx-auto flex h-full p-6">
-	<div class="flex flex-col space-y-10">
-		<h1 class="h1">Competion analysis</h1>
+<div class="h-full w-full p-6">
+	<div class="flex flex-col space-y-4">
+		<h1 class="h1">Competition analysis</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>
-		<div class="w-full space-y-2">
+		<div class="space-y-4">
 			<div class="justify-center space-x-2">
 				<form on:submit={addCompetitors}>
 					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
@@ -83,8 +117,23 @@
 	</div>
 </div>
 
-{#if $project.competitors}
-	<h2>Your Competitors:</h2>
-
-	<CompetitorsTable competitors={$project.competitors} onRemove={removeCompetitor} />
+{#if analyzingCompetitors}
+	<span class="flex">
+		<ProgressRadial
+			value={undefined}
+			stroke={100}
+			meter="stroke-primary-500"
+			track="stroke-primary-500/30"
+			strokeLinecap="butt"
+			width="w-5"
+		/>
+		<span class="ml-2 flex-1 text-sm text-primary-500">Analyzing competitors...</span>
+	</span>
 {/if}
+<div class="p-6">
+	{#if $project.competitors}
+		<h2>Your Competitors:</h2>
+
+		<CompetitorsTable competitors={$project.competitors} onRemove={removeCompetitor} />
+	{/if}
+</div>

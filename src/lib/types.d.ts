@@ -28,12 +28,23 @@ export type AppStoreInfo = {
 	};
 };
 
+export type ProductMarketingAnalysis = {
+	brandName: string;
+	oneLinePitch: string;
+	productType: string;
+	targetAudience: string;
+	keyFeatures: string;
+	keyBenefits: string;
+};
+
 export type Competitor = {
 	websiteUrl: string;
 	websiteInfo: WebsiteInfo | undefined;
 
 	appStoreUrl: string | undefined;
 	appStoreInfo: AppStoreInfo | undefined;
+
+	productMarketingAnalysis: ProductMarketingAnalysis | undefined;
 };
 
 export interface ImprovementSuggestion {
