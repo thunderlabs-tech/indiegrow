@@ -33,8 +33,9 @@ export type ProductMarketingAnalysis = {
 	oneLinePitch: string;
 	productType: string;
 	targetAudience: string;
-	keyFeatures: string;
-	keyBenefits: string;
+	keyFeatures: string[];
+	keyBenefits: string[];
+	logoUrl: string;
 };
 
 export type Competitor = {

@@ -8,9 +8,12 @@
 
 <table class="table">
 	<tr>
-		<td>Name</td>
+		<td>
+			<!-- Loading spinner... -->
+		</td>
 		<td>Logo</td>
-		<td>App</td>
+		<td>Name</td>
+		<!-- <td>App</td> -->
 		<td>One line pitch</td>
 		<td>Product Type</td>
 		<td>Target Audience</td>
@@ -25,10 +28,10 @@
 </table>
 
 <style lang="postcss">
-	td {
-		padding: 0.5rem;
-	}
 	tr {
 		border-bottom: 1px solid #e2e8f0;
+	}
+	td {
+		padding: 0.5rem;
 	}
 </style>

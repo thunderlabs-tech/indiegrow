@@ -4,6 +4,7 @@
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import Spinner from '$lib/components/Spinner.svelte';
 
 	let competitorUrls = '';
 
@@ -11,12 +12,20 @@
 	const appStoreUrlRegex =
 		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
 
+	function sanitizeUrl(url: string): string {
+		let sanitized = url.trim();
+		sanitized = sanitized.startsWith('http') ? sanitized : `https://${sanitized}`;
+		return sanitized;
+	}
+
 	function isAppleAppStoreUrl(url: string) {
 		return appStoreUrlRegex.test(url);
 	}
 
-	async function competitorFromUrl(url: string): Promise<Partial<Competitor> | undefined> {
+	async function competitorFromUrl(rawUrl: string): Promise<Partial<Competitor> | undefined> {
 		const competitor: Partial<Competitor> = {};
+
+		const url = sanitizeUrl(rawUrl);
 
 		if (isAppleAppStoreUrl(url)) {
 			competitor.appStoreUrl = url;
@@ -92,17 +101,7 @@
 </div>
 
 {#if analyzingCompetitors}
-	<span class="flex">
-		<ProgressRadial
-			value={undefined}
-			stroke={100}
-			meter="stroke-primary-500"
-			track="stroke-primary-500/30"
-			strokeLinecap="butt"
-			width="w-5"
-		/>
-		<span class="ml-2 flex-1 text-sm text-primary-500">Analyzing competitors...</span>
-	</span>
+	<Spinner text="Loading competitors..." />
 {/if}
 <div class="p-6">
 	{#if $project.competitors}

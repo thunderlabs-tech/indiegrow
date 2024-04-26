@@ -11,8 +11,9 @@ export const exampleProductMarketingAnalysis: ProductMarketingAnalysis = {
 	oneLinePitch: 'Computers for everyone',
 	productType: 'Hardware, Software',
 	targetAudience: 'Everyone',
-	keyFeatures: 'Portable computing, integrated operating system',
-	keyBenefits: 'Safe, easy to use, high quality'
+	keyFeatures: ['Portable computing', 'integrated operating system'],
+	keyBenefits: ['Safe', 'easy to use', 'high quality'],
+	logoUrl: 'https://example.com/logo.png'
 };
 
 export const websiteAnalysisPrompt = `Act as a product marketing manager doing competitive analysis.
@@ -25,6 +26,14 @@ Focus on the following aspects during your analysis:
 - target audience
 - key features
 - key benefits
+- logo url
+
+
+For the brand name only use the name of the brand, don't include any tld or other information.
+
+Be as brief as possible in the analysis. Use substantive rather than verbs.
+
+For key features and key benefits look at the top 3 only and return arrays of strings.
 
 Encode each of the analysis aspects into the response as a field in a JSON object.
 Return only the JSON object as the result.
