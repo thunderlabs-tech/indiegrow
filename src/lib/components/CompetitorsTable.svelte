@@ -19,6 +19,7 @@
 		<td>Target Audience</td>
 		<td>Key Benefits</td>
 		<td>Key Features</td>
+		<td>Positioning</td>
 		<td>Actions</td>
 	</tr>
 

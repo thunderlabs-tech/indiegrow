@@ -13,7 +13,7 @@ export const exampleProductMarketingAnalysis: ProductMarketingAnalysis = {
 	targetAudience: 'Everyone',
 	keyFeatures: ['Portable computing', 'integrated operating system'],
 	keyBenefits: ['Safe', 'easy to use', 'high quality'],
-	logoUrl: 'https://example.com/logo.png'
+	positioning: "Apple's products are known for their high quality and ease of use."
 };
 
 export const websiteAnalysisPrompt = `Act as a product marketing manager doing competitive analysis.
@@ -26,7 +26,7 @@ Focus on the following aspects during your analysis:
 - target audience
 - key features
 - key benefits
-- logo url
+- positioning
 
 
 For the brand name only use the name of the brand, don't include any tld or other information.

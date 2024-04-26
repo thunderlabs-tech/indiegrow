@@ -146,6 +146,15 @@
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
+	<td>
+		{#if pma?.positioning}
+			<span transition:effect>
+				<i>{pma.positioning}</i>
+			</span>
+		{:else}
+			<div class="placeholder animate-pulse" />
+		{/if}
+	</td>
 
 	<td>
 		<button class="variant-outline-warning btn btn-sm" on:click={onRemove}>Remove</button>

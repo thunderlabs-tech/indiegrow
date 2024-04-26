@@ -35,7 +35,7 @@ export type ProductMarketingAnalysis = {
 	targetAudience: string;
 	keyFeatures: string[];
 	keyBenefits: string[];
-	logoUrl: string;
+	positioning: string;
 };
 
 export type Competitor = {
