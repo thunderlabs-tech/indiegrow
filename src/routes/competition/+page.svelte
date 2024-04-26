@@ -3,7 +3,6 @@
 	import type { Competitor } from '$lib/types';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import Spinner from '$lib/components/Spinner.svelte';
 
 	let competitorUrls = '';
@@ -75,7 +74,7 @@
 		}
 	}
 
-	$: console.log($project.competitors);
+	// $: console.log($project.competitors);
 </script>
 
 <div class="h-full w-full p-6">

@@ -28,7 +28,6 @@
 				if (item) {
 					pma = item.data as unknown as ProductMarketingAnalysis;
 				}
-				console.log(pma);
 			}
 		} catch (error) {
 			console.error('Error running analysis:', error);
@@ -44,7 +43,24 @@
 	const ogObject = competitor.websiteInfo?.ogObject;
 	$: name = pma?.brandName || ogObject?.ogSiteName || ogObject?.ogTitle;
 	const app = competitor.appStoreInfo;
-	const imageUrl = pma?.logoUrl || (ogObject?.ogImage && ogObject.ogImage[0].url) || app?.image;
+	const imageUrl =
+		pma?.logoUrl ||
+		(app?.image && appStoreIconUrl(app.image)) ||
+		(ogObject?.ogImage && ogObject.ogImage[0].url);
+
+	// https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/35/43/ba/3543ba37-6e39-6f10-5527-4611f6295f93/AppIcon-1x_U007epad-85-220.png/540x540bb.jpg
+	//is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/270x270.png
+
+	function appStoreIconUrl(imgUrl: string): string {
+		// transform the url from the following format: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/1200x630wa.png
+		// to the following: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/270x270.png
+		const parts = imgUrl.split('/');
+		parts.pop();
+		const size = 270;
+		const newLastPart = `${size}x${size}.png`;
+		parts.push(newLastPart);
+		return parts.join('/');
+	}
 
 	const effect = fade;
 </script>
@@ -56,14 +72,31 @@
 		{/if}
 	</td>
 	<td>
-		<img src={imageUrl} alt="logo" class="w-24" />
+		<!-- <img src={imageUrl} alt="logo" class="w-24" /> -->
+		<a
+			href={competitor.appStoreUrl}
+			style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+			><img
+				src={imageUrl}
+				alt="Connected Living Messenger"
+				style="width: 85px; height:85px;  border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+			/></a
+		>
 	</td>
 	<td><a href={competitor.websiteUrl} class="anchor">{name}</a></td>
-	<!-- <td>
+	<td>
 		{#if app}
-			<img class="h-8 w-8" src={app.image} alt={app.name} />
+			<a
+				href={competitor.appStoreUrl}
+				style="display: inline-block; overflow: hidden; border-radius: 13px; width: 80px;"
+				><img
+					src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1617321600"
+					alt="Download on the App Store"
+					style="border-radius: 20px;  height: 83px;"
+				/></a
+			>
 		{/if}
-	</td> -->
+	</td>
 	<td>
 		{#if pma?.oneLinePitch}
 			<span transition:effect>
