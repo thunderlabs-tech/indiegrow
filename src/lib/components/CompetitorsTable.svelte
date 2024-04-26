@@ -13,7 +13,8 @@
 		</td>
 		<td>Logo</td>
 		<td>Name</td>
-		<td>Apps</td>
+		<!-- <td>Apps</td> -->
+		<td>Screenshots</td>
 		<td>One line pitch</td>
 		<td>Product Type</td>
 		<td>Target Audience</td>

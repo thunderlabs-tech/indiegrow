@@ -72,19 +72,21 @@
 		{/if}
 	</td>
 	<td>
-		<!-- <img src={imageUrl} alt="logo" class="w-24" /> -->
-		<a
-			href={competitor.appStoreUrl}
-			style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
-			><img
-				src={imageUrl}
-				alt="Connected Living Messenger"
-				style="width: 85px; height:85px;  border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
-			/></a
-		>
+		<p class="mt-2">
+			<a
+				href={competitor.appStoreUrl}
+				style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+			>
+				<img
+					src={imageUrl}
+					alt={name}
+					style="width: 85px; height:85px;  border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+				/></a
+			>
+		</p>
 	</td>
 	<td><a href={competitor.websiteUrl} class="anchor">{name}</a></td>
-	<td>
+	<!-- <td>
 		{#if app}
 			<a
 				href={competitor.appStoreUrl}
@@ -95,6 +97,19 @@
 					style="border-radius: 20px;  height: 83px;"
 				/></a
 			>
+		{/if}
+	</td> -->
+	<td>
+		{#if app?.screenshot}
+			<span transition:effect>
+				<div class="grid h-24 w-48 grid-cols-[auto_1fr_auto] items-center gap-0">
+					<div class="flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth pb-2">
+						{#each app.screenshot as url}
+							<img class="h-24 rounded-container-token" alt="screenshot" src={url} loading="lazy" />
+						{/each}
+					</div>
+				</div>
+			</span>
 		{/if}
 	</td>
 	<td>
