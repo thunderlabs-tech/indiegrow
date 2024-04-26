@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { project } from '$lib/project';
-	import type { Competitor, ProductMarketingAnalysis } from '$lib/types';
+	import type { Competitor } from '$lib/types';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
-	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
-	import { analyzeCompetitorWebsite, websiteAnalysisPrompt } from '$lib/competition';
 
 	let competitorUrls = '';
-	const prompt = websiteAnalysisPrompt;
 
 	let analyzingCompetitors = false;
 	const appStoreUrlRegex =
@@ -17,26 +13,6 @@
 
 	function isAppleAppStoreUrl(url: string) {
 		return appStoreUrlRegex.test(url);
-	}
-
-	async function compileProductMarketingAnalaysis(competitor: Competitor) {
-		try {
-			const openai = openAiBrowserClient();
-			const stream = await analyzeCompetitorWebsite(openai, prompt, competitor);
-
-			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
-			const entityStream = openAiHandler.process(stream);
-
-			for await (const item of entityStream) {
-				console.log(item);
-				if (item) {
-					competitor.productMarketingAnalysis = item.data as unknown as ProductMarketingAnalysis;
-					competitor = competitor;
-				}
-			}
-		} catch (error) {
-			console.error('Error running analysis:', error);
-		}
 	}
 
 	async function competitorFromUrl(url: string): Promise<Partial<Competitor> | undefined> {
@@ -55,8 +31,6 @@
 				competitor.appStoreInfo = await scrapeAppStoreInfo(competitor.appStoreUrl);
 			}
 		}
-
-		await compileProductMarketingAnalaysis(competitor as Competitor);
 
 		return competitor;
 	}
