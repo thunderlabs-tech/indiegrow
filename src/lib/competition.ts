@@ -50,6 +50,17 @@ export async function analyzeCompetitorWebsite(
 
 	const websiteInfo = competitor.websiteInfo;
 
+	let text: string | undefined = undefined;
+	if (websiteInfo?.text && websiteInfo.text.length > 0) {
+		text = websiteInfo.text;
+	} else {
+		text = websiteInfo?.ogObject?.ogDescription;
+	}
+
+	if (!text) {
+		throw new Error('No text found on the website');
+	}
+
 	const promptMessage: ChatCompletionSystemMessageParam = {
 		role: 'system',
 		content: prompt
@@ -60,13 +71,12 @@ export async function analyzeCompetitorWebsite(
 		content: [
 			{
 				type: 'text',
-				text: `Website content: """${websiteInfo.text}"""`
+				text: `Website content: """${text}"""`
 			}
 		]
 	};
 
 	const messages = [promptMessage, userMessage];
-	console.log('sending messages: ', messages);
 
 	const stream = await openai.chat.completions.create({
 		model: 'gpt-4-turbo',
