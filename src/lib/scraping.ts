@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 import type { AppStoreInfo, WebsiteInfo } from './types';
+import unfluff from 'unfluff';
 
 export const exampleUrl =
 	'https://apps.apple.com/tt/app/connected-living-messenger/id1543400123?platform=iphone';
@@ -61,8 +62,12 @@ export async function scrapeWebsite(url: string): Promise<WebsiteInfo> {
 
 	const { error, html, result, response } = await ogs({ html: fetchHtml });
 
+	const data = unfluff(html);
+	console.log(data);
+
 	const info: WebsiteInfo = {
 		html: fetchHtml,
+		text: data.text,
 		ogObject: result
 	};
 

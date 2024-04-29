@@ -60,7 +60,7 @@ export async function analyzeCompetitorWebsite(
 		content: [
 			{
 				type: 'text',
-				text: `Website content: """${websiteInfo.html}"""`
+				text: `Website content: """${websiteInfo.text}"""`
 			}
 		]
 	};

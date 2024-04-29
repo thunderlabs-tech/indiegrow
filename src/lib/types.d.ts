@@ -2,6 +2,7 @@ import type { OgObject } from 'open-graph-scraper/dist/lib/types';
 
 export type WebsiteInfo = {
 	html: string;
+	text: string;
 	ogObject: OgObject;
 };
 
