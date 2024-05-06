@@ -12,6 +12,8 @@
 		$project.appStoreInfo = undefined;
 		try {
 			$project.appStoreInfo = await scrapeAppStoreInfo($project.appStoreUrl);
+
+			$project.suggestions = undefined;
 		} catch (error) {
 			console.error('Error scraping app store', error);
 			$project.appStoreInfo = undefined;
