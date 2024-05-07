@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+###
+### Loads .env and .env.local and invokes the command given as args
+###
+### Usage:
+###   bin/with-env my-command
+
+# From: https://gist.github.com/mihow/9c7f559807069a03e302605691f85572?permalink_comment_id=4981050#gistcomment-4981050
+read_env() {
+  local filePath="${1:-.env}"
+
+  if [ -f "$filePath" ]; then
+    while read -r LINE; do
+      # Remove leading and trailing whitespaces, and carriage return
+      CLEANED_LINE=$(echo "$LINE" | awk '{$1=$1};1' | tr -d '\r')
+
+      if [[ $CLEANED_LINE != '#'* ]] && [[ $CLEANED_LINE == *'='* ]]; then
+        export "$CLEANED_LINE"
+      fi
+    done < "$filePath"
+  fi
+}
+
+function eval_args_as_command {
+  eval "$@"
+}
+
+function main {
+  read_env ".env"
+  read_env ".env.local"
+  eval_args_as_command "$@"
+}
+
+main "$@"

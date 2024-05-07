@@ -10,7 +10,9 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"codegen-supabase-types": "bin/with-env npx supabase gen types typescript --linked --schema public > types/supabase.ts",
+		"codegen": "npm run codegen-supabase-types"
 	},
 	"devDependencies": {
 		"@skeletonlabs/skeleton": "2.9.1",
