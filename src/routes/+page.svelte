@@ -1,10 +1,38 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { project } from '$lib/project';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	$: nameValid = $project?.name && $project.name?.length > 2;
 	$: descriptionValid = $project?.description && $project.description?.length > 10;
 
 	let loadingContent = false;
+
+	async function createProject() {
+		if (!nameValid || !descriptionValid) return;
+		const supabase = $page.data.supabase;
+
+		const newProject = {
+			user_id: $page.data.session.user.id,
+			name: $project.name,
+			description: $project.description
+
+			// website_url: $project.websiteUrl,
+			// app_store_url: $project.appStoreUrl,
+			// created_at: new Date().toISOString(),
+			// updated_at: new Date().toISOString(),
+		};
+		const insertProjectResult = await supabase
+			.from('projects')
+			.insert(newProject)
+			.select('id')
+			.single();
+
+		if (insertProjectResult.error) {
+			console.error('Failed to insert', newProject, insertProjectResult.error);
+		} else {
+			console.log('Project inserted', insertProjectResult.data);
+		}
+	}
 
 	async function updateAppStoreInfo() {
 		if (!$project.appStoreUrl) return;
@@ -84,8 +112,8 @@
 
 					<p>
 						{#if !loadingContent && nameValid && descriptionValid}
-							<a href="/competition" class="variant-filled-primary btn btn-sm"
-								>Next: your competition
+							<a on:click={createProject} class="variant-filled-primary btn btn-sm"
+								>Create project
 							</a>
 						{/if}
 					</p>
