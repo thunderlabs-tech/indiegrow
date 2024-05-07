@@ -12,14 +12,11 @@
 		const supabase = $page.data.supabase;
 
 		const newProject = {
-			user_id: $page.data.session.user.id,
+			user_id: $page.data?.session?.user.id,
 			name: $project.name,
-			description: $project.description
-
-			// website_url: $project.websiteUrl,
-			// app_store_url: $project.appStoreUrl,
-			// created_at: new Date().toISOString(),
-			// updated_at: new Date().toISOString(),
+			description: $project.description,
+			website_url: $project.websiteUrl,
+			appstore_url: $project.appStoreUrl
 		};
 		const insertProjectResult = await supabase
 			.from('projects')
