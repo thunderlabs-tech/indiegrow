@@ -6,6 +6,9 @@ export async function scrapeAppStoreInfo(appStoreUrl: string): Promise<AppStoreI
 		body: JSON.stringify({ url: appStoreUrl }),
 		headers: { 'content-type': 'application/json' }
 	});
+	if (!response.ok) {
+		throw new Error('Failed to scrape App Store info');
+	}
 	return (await response.json()) as AppStoreInfo;
 }
 
@@ -15,5 +18,8 @@ export async function scrapeWebsiteInfo(websiteUrl: string): Promise<WebsiteInfo
 		body: JSON.stringify({ url: websiteUrl }),
 		headers: { 'content-type': 'application/json' }
 	});
+	if (!response.ok) {
+		throw new Error('Failed to scrape website info');
+	}
 	return (await response.json()) as WebsiteInfo;
 }

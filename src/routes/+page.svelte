@@ -4,8 +4,9 @@
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	$: nameValid = $project?.name && $project.name?.length > 2;
 	$: descriptionValid = $project?.description && $project.description?.length > 10;
-
 	let loadingContent = false;
+
+	$: saveActive = nameValid && descriptionValid && !loadingContent;
 
 	async function createProject() {
 		if (!nameValid || !descriptionValid) return;
@@ -16,12 +17,14 @@
 			name: $project.name,
 			description: $project.description,
 			website_url: $project.websiteUrl,
-			appstore_url: $project.appStoreUrl
+			website_info: $project.websiteInfo,
+			appstore_url: $project.appStoreUrl,
+			appstore_info: $project.appStoreInfo
 		};
 		const insertProjectResult = await supabase
 			.from('projects')
 			.insert(newProject)
-			.select('id')
+			.select('*')
 			.single();
 
 		if (insertProjectResult.error) {
@@ -32,12 +35,13 @@
 	}
 
 	async function updateAppStoreInfo() {
-		if (!$project.appStoreUrl) return;
 		loadingContent = true;
 		$project.appStoreInfo = undefined;
 		try {
-			$project.appStoreInfo = await scrapeAppStoreInfo($project.appStoreUrl);
-
+			if ($project.appStoreUrl) {
+				$project.appStoreInfo = await scrapeAppStoreInfo($project.appStoreUrl);
+				console.log('App store info', $project.appStoreInfo);
+			}
 			$project.suggestions = undefined;
 		} catch (error) {
 			console.error('Error scraping app store', error);
@@ -48,7 +52,6 @@
 	}
 
 	async function updateWebsiteInfo() {
-		if (!$project.websiteUrl) return;
 		loadingContent = true;
 		$project.websiteInfo = undefined;
 		try {
@@ -108,11 +111,12 @@
 					{/if}
 
 					<p>
-						{#if !loadingContent && nameValid && descriptionValid}
-							<a on:click={createProject} class="variant-filled-primary btn btn-sm"
-								>Create project
-							</a>
-						{/if}
+						<button
+							on:click={createProject}
+							class="variant-filled-primary btn btn-sm"
+							disabled={!saveActive}
+							>Create project
+						</button>
 					</p>
 				</form>
 			</div>
