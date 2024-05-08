@@ -2,11 +2,13 @@ export const ssr = false;
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+import type { Database, Tables } from '$lib/supabase';
 
-export const load: LayoutLoad = async ({ fetch, data, depends }) => {
+export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 	depends('supabase:auth');
+	console.log('params:', params);
 
-	const supabase = createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+	const supabase = createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		global: {
 			fetch
 		},
@@ -38,5 +40,17 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 		console.log('created new anon user:', data, error);
 	}
 
-	return { supabase, session };
+	let currentProject: Tables<'projects'> | null = null;
+
+	if (params.projectId) {
+		const { data: project, error } = await supabase
+			.from('projects')
+			.select('*')
+			.eq('id', params.projectId)
+			.single();
+		console.log('setting current project:', project, error);
+		currentProject = project;
+	}
+
+	return { supabase, session, user: session?.user, currentProject };
 };

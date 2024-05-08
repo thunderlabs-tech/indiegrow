@@ -1,14 +1,11 @@
 <script lang="ts">
 	import '../app.postcss';
+	import { page } from '$app/stores';
+	import Navigation from '$lib/components/Navigation.svelte';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 
-	import Navigation from '$lib/components/Navigation.svelte';
-
-	// Floating UI for Popups
-	// import { storePopup } from '@skeletonlabs/skeleton';
-	// storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-	// import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import { initializeStores, Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
 
 	initializeStores();
@@ -17,9 +14,6 @@
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
-
-	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -37,46 +31,73 @@
 	});
 </script>
 
-<Drawer>
-	<h2 class="p-4">Navigation</h2>
-	<hr />
-	<Navigation /></Drawer
->
 <AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-64">
 	<svelte:fragment slot="header">
-		<AppBar>
+		<AppBar padding="p-2">
 			<svelte:fragment slot="lead">
-				<button class="btn btn-sm mr-4 lg:hidden" on:click={drawerOpen}>
-					<span>
-						<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
-							<rect width="100" height="20" />
-							<rect y="30" width="100" height="20" />
-							<rect y="60" width="100" height="20" />
-						</svg>
+				<span class="logo xs:text-xs xs:p-0 p-1 xl:text-xl">
+					{#if $page.data.currentProject}
+						<button class="btn btn-sm p-0 lg:hidden" on:click={drawerOpen}>
+							<span>
+								<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
+									<rect width="100" height="20" />
+									<rect y="30" width="100" height="20" />
+									<rect y="60" width="100" height="20" />
+								</svg>
+							</span>
+						</button>
+					{/if}
+					<span class="strong text-white">
+						<a href="/projects">
+							<span class="font-bold"> indiegrow </span>
+
+							{#if $page.data.currentProject}
+								<span class="">
+									&#60;{$page.data.currentProject.name}&#62;
+								</span>
+							{/if}
+							$</a
+						>
 					</span>
-				</button>
-				<strong class="text-xl uppercase">IndieGrow</strong>
+				</span>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<a
+				<!-- <a
 					class="variant-ghost-surface btn btn-sm"
 					href="https://discord.gg/EXqV7W8MtY"
 					target="_blank"
 					rel="noreferrer"
 				>
 					Discord
-				</a>
+				</a> -->
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 
 	<svelte:fragment slot="sidebarLeft">
-		<Navigation />
+		{#if $page.data.currentProject}
+			<Navigation />
+		{/if}
 	</svelte:fragment>
-
 	<div class="layout-docs page-padding flex items-start justify-center gap-10">
 		<div class="layout-docs-content page-container-aside w-full">
 			<slot />
 		</div>
 	</div>
 </AppShell>
+
+<style lang="postcss">
+	.logo {
+		background-color: none;
+		white-space: nowrap;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+			'Courier New', monospace;
+		/* color: rgb(var(--color-primary-700) / var(--tw-text-opacity)); */
+		/* background-color: rgb(var(--color-primary-500) / 0.3); */
+		border-radius: 0.25rem;
+		padding-top: 0.125rem;
+		padding-bottom: 0.125rem;
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
+	}
+</style>
