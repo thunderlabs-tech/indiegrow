@@ -11,28 +11,40 @@ export type Database = {
     Tables: {
       projects: {
         Row: {
-          created_at: string | null
+          appstore_info: Json | null
+          appstore_url: string | null
+          created_at: string
           description: string | null
           id: string
           name: string
-          updated_at: string | null
+          updated_at: string
           user_id: string
+          website_info: Json | null
+          website_url: string | null
         }
         Insert: {
-          created_at?: string | null
+          appstore_info?: Json | null
+          appstore_url?: string | null
+          created_at?: string
           description?: string | null
           id?: string
           name: string
-          updated_at?: string | null
+          updated_at?: string
           user_id: string
+          website_info?: Json | null
+          website_url?: string | null
         }
         Update: {
-          created_at?: string | null
+          appstore_info?: Json | null
+          appstore_url?: string | null
+          created_at?: string
           description?: string | null
           id?: string
           name?: string
-          updated_at?: string | null
+          updated_at?: string
           user_id?: string
+          website_info?: Json | null
+          website_url?: string | null
         }
         Relationships: [
           {
