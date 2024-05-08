@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { project } from '$lib/project';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
@@ -31,6 +32,8 @@
 			console.error('Failed to insert', newProject, insertProjectResult.error);
 		} else {
 			console.log('Project inserted', insertProjectResult.data);
+			$project = insertProjectResult.data;
+			goto(`/projects/${$project.id}`);
 		}
 	}
 
