@@ -11,7 +11,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
 		"format": "prettier --write .",
-		"codegen-supabase-types": "bin/with-env npx supabase gen types typescript --linked --schema public > types/supabase.ts",
+		"codegen-supabase-types": "bin/with-env npx supabase gen types typescript --linked --schema public > src/lib/supabase.ts",
 		"codegen": "npm run codegen-supabase-types"
 	},
 	"devDependencies": {
