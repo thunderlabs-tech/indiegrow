@@ -1,4 +1,5 @@
 import type { OgObject } from 'open-graph-scraper/dist/lib/types';
+import { Tables } from './supabase';
 
 export type WebsiteInfo = {
 	html: string;
@@ -39,15 +40,17 @@ export type ProductMarketingAnalysis = {
 	positioning: string;
 };
 
-export type Competitor = {
-	websiteUrl: string;
-	websiteInfo: WebsiteInfo | undefined;
+// export type Competitor = {
+// 	websiteUrl: string;
+// 	websiteInfo: WebsiteInfo | undefined;
 
-	appStoreUrl: string | undefined;
-	appStoreInfo: AppStoreInfo | undefined;
+// 	appStoreUrl: string | undefined;
+// 	appStoreInfo: AppStoreInfo | undefined;
 
-	productMarketingAnalysis: ProductMarketingAnalysis | undefined;
-};
+// 	productMarketingAnalysis: ProductMarketingAnalysis | undefined;
+// };
+
+export type Competitor = Tables<'projects'>;
 
 export interface ImprovementSuggestion {
 	suggestion: string;
@@ -82,8 +85,3 @@ export const emptyProject: Project = {
 	appStoreInfo: undefined,
 	suggestions: undefined
 };
-
-export interface Competitor {
-	url: string;
-	appStoreInfo: AppStoreInfo;
-}

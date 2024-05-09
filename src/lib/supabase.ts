@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           appstore_info: Json | null
           appstore_url: string | null
+          competitor_of: string | null
           created_at: string
           description: string | null
           id: string
@@ -25,6 +26,7 @@ export type Database = {
         Insert: {
           appstore_info?: Json | null
           appstore_url?: string | null
+          competitor_of?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -37,6 +39,7 @@ export type Database = {
         Update: {
           appstore_info?: Json | null
           appstore_url?: string | null
+          competitor_of?: string | null
           created_at?: string
           description?: string | null
           id?: string

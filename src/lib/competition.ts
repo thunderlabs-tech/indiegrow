@@ -44,11 +44,9 @@ ${JSON.stringify(exampleProductMarketingAnalysis)} `;
 export async function analyzeCompetitorWebsite(
 	openai: OpenAI,
 	prompt: string,
-	competitor: Competitor
+	websiteInfo: WebsiteInfo
 ): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
 	console.log(`Analyzing competitor's website with: ${prompt} `);
-
-	const websiteInfo = competitor.websiteInfo;
 
 	let text: string | undefined = undefined;
 	if (websiteInfo?.text && websiteInfo.text.length > 0) {

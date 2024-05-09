@@ -13,7 +13,9 @@
 {#if currentProject}
 	<nav class="list-nav p-4">
 		<ul>
-			<li><a href="/competition" on:click={drawerClose}>Competition</a></li>
+			<li>
+				<a href="/projects/{currentProject.id}/competition" on:click={drawerClose}>Competition</a>
+			</li>
 			{#if currentProject.appstore_url}
 				<li><a href="/aso" on:click={drawerClose}>ASO</a></li>
 			{/if}

@@ -1,25 +1,31 @@
 <script lang="ts">
-	import type { Competitor, ProductMarketingAnalysis } from '$lib/types';
+	import type { AppStoreInfo, Competitor, ProductMarketingAnalysis, WebsiteInfo } from '$lib/types';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import { analyzeCompetitorWebsite, websiteAnalysisPrompt } from '$lib/competition';
 	import { onMount } from 'svelte';
 	import Spinner from './Spinner.svelte';
 	import { fade } from 'svelte/transition';
+	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 
 	export let competitor: Competitor;
 	export let onRemove: (event: Event) => void;
 
+	let websiteInfo: WebsiteInfo | undefined = undefined;
+	let appStoreInfo: AppStoreInfo | undefined = undefined;
+
 	const prompt = websiteAnalysisPrompt;
-	$: pma = undefined;
+	let pma = undefined;
 
 	let loading = false;
 
-	async function compileProductMarketingAnalaysis(competitor: Competitor) {
+	async function compileProductMarketingAnalaysis() {
+		if (!websiteInfo) return;
+
 		loading = true;
 		try {
 			const openai = openAiBrowserClient();
-			const stream = await analyzeCompetitorWebsite(openai, prompt, competitor);
+			const stream = await analyzeCompetitorWebsite(openai, prompt, websiteInfo);
 
 			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
 			const entityStream = openAiHandler.process(stream);
@@ -36,20 +42,31 @@
 		}
 	}
 
+	const appStoreUrlRegex =
+		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
+
 	onMount(async () => {
-		await compileProductMarketingAnalaysis(competitor as Competitor);
+		if (competitor.website_url) {
+			websiteInfo = await scrapeWebsiteInfo(competitor.website_url);
+		}
+		if (!competitor.appstore_url && websiteInfo) {
+			competitor.appstore_url = websiteInfo.html.match(appStoreUrlRegex)?.[0] || null;
+		}
+
+		if (competitor.appstore_url) {
+			appStoreInfo = await scrapeAppStoreInfo(competitor.appstore_url);
+		}
+
+		// await compileProductMarketingAnalaysis(competitor as Competitor);
 	});
 
-	const ogObject = competitor.websiteInfo?.ogObject;
+	$: ogObject = websiteInfo?.ogObject;
 	$: name = pma?.brandName || ogObject?.ogSiteName || ogObject?.ogTitle;
-	const app = competitor.appStoreInfo;
-	const imageUrl =
+	$: app = appStoreInfo;
+	$: imageUrl =
 		pma?.logoUrl ||
 		(app?.image && appStoreIconUrl(app.image)) ||
 		(ogObject?.ogImage && ogObject.ogImage[0].url);
-
-	// https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/35/43/ba/3543ba37-6e39-6f10-5527-4611f6295f93/AppIcon-1x_U007epad-85-220.png/540x540bb.jpg
-	//is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/270x270.png
 
 	function appStoreIconUrl(imgUrl: string): string {
 		// transform the url from the following format: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/1200x630wa.png
@@ -74,7 +91,7 @@
 	<td>
 		<p class="mt-2">
 			<a
-				href={competitor.appStoreUrl}
+				href={competitor.appstore_url}
 				style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
 			>
 				<img
@@ -85,7 +102,7 @@
 			>
 		</p>
 	</td>
-	<td><a href={competitor.websiteUrl} class="anchor">{name}</a></td>
+	<td><a href={competitor.website_url} class="anchor">{name}</a></td>
 	<!-- <td>
 		{#if app}
 			<a

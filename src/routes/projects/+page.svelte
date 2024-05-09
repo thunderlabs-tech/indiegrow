@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import type { Database, Tables } from '$lib/supabase';
-	import { SupabaseClient } from '@supabase/supabase-js';
 	import { onMount } from 'svelte';
 	import ProjectForm from '$lib/components/ProjectForm.svelte';
-
+	import type { Tables } from '$lib/supabase';
+	import { dbclient } from '$lib/dbclient';
 	let projects: Tables<'projects'>[] = [];
-	const db = $page.data.supabase as SupabaseClient<Database>;
 
 	async function loadProjects() {
-		const { error, data } = await db.from('projects').select('*');
+		const { error, data } = await dbclient().from('projects').select('*').is('competitor_of', null);
 		if (error) {
 			console.log(error);
 		} else {
@@ -32,7 +29,7 @@
 	}
 
 	async function deleteProject(id: string) {
-		const { error } = await db.from('projects').delete().match({ id });
+		const { error } = await dbclient().from('projects').delete().match({ id });
 		if (error) {
 			console.log(error);
 		} else {
