@@ -100,15 +100,7 @@
 					loadCompetitors();
 				}
 			});
-		// if (idx) {
-		// 	project.update((project) => {
-		// 		project.competitors.splice(idx - 1, 1);
-		// 		return project;
-		// 	});
-		// }
 	}
-
-	// $: console.log($project.competitors);
 </script>
 
 <div class="h-full w-full p-6">

@@ -8,6 +8,9 @@
 	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
 	import Screenshots from './Screenshots.svelte';
 	import type { AppStoreInfo, ImprovementSuggestions } from '$lib/types';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { scrapeAppStoreInfo } from '$lib/scrapingClientSide';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
@@ -16,6 +19,12 @@
 
 	let appStoreInfo: AppStoreInfo | undefined = undefined;
 	let suggestions: ImprovementSuggestions | undefined = undefined;
+
+	onMount(async () => {
+		if ($page.data.currentProject?.appstore_url) {
+			appStoreInfo = await scrapeAppStoreInfo($page.data.currentProject.appstore_url);
+		}
+	});
 
 	async function refine() {
 		loadingRefinements = true;
