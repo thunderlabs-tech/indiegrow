@@ -17,7 +17,7 @@
 				<a href="/projects/{currentProject.id}/competition" on:click={drawerClose}>Competition</a>
 			</li>
 			{#if currentProject.appstore_url}
-				<li><a href="/aso" on:click={drawerClose}>ASO</a></li>
+				<li><a href="/projects/{currentProject.id}/aso" on:click={drawerClose}>ASO</a></li>
 			{/if}
 		</ul>
 	</nav>

@@ -1,5 +1,5 @@
 import type OpenAI from 'openai';
-import type { Competitor, ProductMarketingAnalysis, WebsiteInfo } from './types';
+import type { ProductMarketingAnalysis, WebsiteInfo } from './types';
 import type { Stream } from 'openai/streaming.mjs';
 import type {
 	ChatCompletionSystemMessageParam,

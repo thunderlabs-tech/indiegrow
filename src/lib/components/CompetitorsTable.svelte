@@ -3,7 +3,7 @@
 	import CompetitorRow from '$lib/components/CompetitorRow.svelte';
 
 	export let competitors: Competitor[] = [];
-	export let onRemove: (event: Event) => void;
+	export let onRemove: (id: string) => void;
 </script>
 
 <table class="table">

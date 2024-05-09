@@ -9,13 +9,13 @@
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 
 	export let competitor: Competitor;
-	export let onRemove: (event: Event) => void;
+	export let onRemove: (id: string) => void;
 
 	let websiteInfo: WebsiteInfo | undefined = undefined;
 	let appStoreInfo: AppStoreInfo | undefined = undefined;
 
 	const prompt = websiteAnalysisPrompt;
-	let pma = undefined;
+	let pma: ProductMarketingAnalysis | undefined = undefined;
 
 	let loading = false;
 
@@ -57,7 +57,7 @@
 			appStoreInfo = await scrapeAppStoreInfo(competitor.appstore_url);
 		}
 
-		// await compileProductMarketingAnalaysis(competitor as Competitor);
+		await compileProductMarketingAnalaysis();
 	});
 
 	$: ogObject = websiteInfo?.ogObject;
@@ -189,7 +189,9 @@
 	</td>
 
 	<td>
-		<button class="variant-outline-warning btn btn-sm" on:click={onRemove}>Remove</button>
+		<button class="variant-outline-warning btn btn-sm" on:click={onRemove(competitor.id)}
+			>Remove</button
+		>
 	</td>
 </tr>
 

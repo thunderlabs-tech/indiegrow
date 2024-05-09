@@ -1,5 +1,5 @@
 import type { OgObject } from 'open-graph-scraper/dist/lib/types';
-import { Tables } from './supabase';
+import type { Tables } from '$lib/supabase';
 
 export type WebsiteInfo = {
 	html: string;

@@ -5,26 +5,28 @@
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
-	import { project } from '$lib/project';
 	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
 	import Screenshots from './Screenshots.svelte';
-	import type { ImprovementSuggestions } from '$lib/types';
+	import type { AppStoreInfo, ImprovementSuggestions } from '$lib/types';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
 	let showRefinementPrompt = false;
 	let showAnalaysisHelpers = false;
 
+	let appStoreInfo: AppStoreInfo | undefined = undefined;
+	let suggestions: ImprovementSuggestions | undefined = undefined;
+
 	async function refine() {
 		loadingRefinements = true;
 		try {
-			if (!$project.appStoreInfo) {
+			if (!appStoreInfo) {
 				console.error('No app store info');
 				return;
 			}
 
 			const openai = openAiBrowserClient();
-			const stream = await refineWithLLMStreaming(openai, prompt, $project.appStoreInfo);
+			const stream = await refineWithLLMStreaming(openai, prompt, appStoreInfo);
 
 			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
 			const entityStream = openAiHandler.process(stream);
@@ -32,7 +34,7 @@
 			for await (const item of entityStream) {
 				console.log(item);
 				if (item) {
-					$project.suggestions = item.data as unknown as ImprovementSuggestions;
+					suggestions = item.data as unknown as ImprovementSuggestions;
 				}
 			}
 		} catch (error) {
@@ -74,43 +76,43 @@
 	<h3>Name:</h3>
 	<div class="card p-2">
 		Current:
-		<pre class="current">{$project.appStoreInfo?.name}</pre>
-		{#if $project.suggestions?.name?.suggestion}
+		<pre class="current">{appStoreInfo?.name}</pre>
+		{#if suggestions?.name?.suggestion}
 			Suggestion:
-			<pre class="suggestion" transition:fade>{$project.suggestions.name.suggestion}</pre>
+			<pre class="suggestion" transition:fade>{suggestions.name.suggestion}</pre>
 		{/if}
-		{#if $project.suggestions?.name?.explanation}
+		{#if suggestions?.name?.explanation}
 			Explanation:
-			<p class="explanation" transition:fade>{$project.suggestions.name.explanation}</p>
+			<p class="explanation" transition:fade>{suggestions.name.explanation}</p>
 		{/if}
 	</div>
 	<h3>Category:</h3>
 	<div class="card p-2">
 		Current:
-		<pre class="current">{$project.appStoreInfo?.applicationCategory}</pre>
-		{#if $project.suggestions?.category?.suggestion}
+		<pre class="current">{appStoreInfo?.applicationCategory}</pre>
+		{#if suggestions?.category?.suggestion}
 			Suggestion:
-			<pre class="suggestion" transition:fade>{$project.suggestions.category.suggestion}</pre>
+			<pre class="suggestion" transition:fade>{suggestions.category.suggestion}</pre>
 		{/if}
-		{#if $project.suggestions?.category?.explanation}
+		{#if suggestions?.category?.explanation}
 			Explanation:
 			<p class="explanation" transition:fade>
-				{$project.suggestions.category.explanation}
+				{suggestions.category.explanation}
 			</p>
 		{/if}
 	</div>
 	<h3>Description:</h3>
 	<div class="card p-2">
 		Current:
-		<pre class="current">{$project.appStoreInfo?.description}</pre>
-		{#if $project.suggestions?.description?.suggestion}
+		<pre class="current">{appStoreInfo?.description}</pre>
+		{#if suggestions?.description?.suggestion}
 			Suggestion:
-			<pre class="suggestion" transition:fade>{$project.suggestions.description.suggestion}</pre>
+			<pre class="suggestion" transition:fade>{suggestions.description.suggestion}</pre>
 		{/if}
-		{#if $project.suggestions?.description?.explanation}
+		{#if suggestions?.description?.explanation}
 			Explanation:
 			<p class="explanation" transition:fade>
-				{$project.suggestions.description.explanation}
+				{suggestions.description.explanation}
 			</p>
 		{/if}
 	</div>
@@ -118,16 +120,16 @@
 
 	Current:
 	<div class="card p-2">
-		<Screenshots screenshotUrls={$project.appStoreInfo?.screenshot} />
+		<Screenshots screenshotUrls={appStoreInfo?.screenshot} />
 	</div>
-	{#if $project.suggestions?.screenshots?.suggestion}
+	{#if suggestions?.screenshots?.suggestion}
 		Suggestion:
-		<pre class="suggestion" transition:fade>{$project.suggestions.screenshots.suggestion}</pre>
+		<pre class="suggestion" transition:fade>{suggestions.screenshots.suggestion}</pre>
 	{/if}
-	{#if $project.suggestions?.screenshots?.explanation}
+	{#if suggestions?.screenshots?.explanation}
 		Explanation:
 		<p class="explanation" transition:fade>
-			{$project.suggestions.screenshots.explanation}
+			{suggestions.screenshots.explanation}
 		</p>
 	{/if}
 </div>

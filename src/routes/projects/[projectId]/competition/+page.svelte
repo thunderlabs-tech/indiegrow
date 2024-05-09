@@ -1,20 +1,17 @@
 <script lang="ts">
 	import type { Competitor } from '$lib/types';
-	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
 	import CompetitorsTable from '$lib/components/CompetitorsTable.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { page } from '$app/stores';
-	import type { Tables } from '$lib/supabase';
 
 	import { dbclient } from '$lib/dbclient';
 	import { onMount } from 'svelte';
-	import { load } from 'cheerio';
 
 	let competitorUrls = '';
 
 	$: currentProject = $page.data.currentProject;
 
-	$: competitors = [];
+	let competitors: Competitor[] = [];
 
 	async function loadCompetitors() {
 		const { error, data } = await dbclient()
@@ -91,8 +88,18 @@
 		}
 	}
 
-	function removeCompetitor(event: Event) {
-		const idx = (event.target as HTMLButtonElement).closest('tr')?.rowIndex;
+	function removeCompetitor(id: string) {
+		dbclient()
+			.from('projects')
+			.delete()
+			.eq('id', id)
+			.then((res) => {
+				if (res.error) {
+					console.error('Error deleting competitor:', res.error);
+				} else {
+					loadCompetitors();
+				}
+			});
 		// if (idx) {
 		// 	project.update((project) => {
 		// 		project.competitors.splice(idx - 1, 1);
