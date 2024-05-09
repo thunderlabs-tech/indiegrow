@@ -15,6 +15,8 @@
 		}
 	});
 
+	function newProject() {}
+
 	async function deleteProject(id: string) {
 		const db = $page.data.supabase as SupabaseClient<Database>;
 		const { error } = await db.from('projects').delete().match({ id });
@@ -26,26 +28,34 @@
 	}
 </script>
 
-<section class="card text-token w-full space-y-4 p-4">
-	<p class="font-bold">Projects</p>
+<div class="h-full w-full p-6">
+	<div class="flex flex-col space-y-4">
+		<h1 class="h1">Your projects</h1>
 
-	<dl class="list-dl">
-		{#each projects as project}
-			<div>
-				<span class="badge bg-primary-500">{project.name[0]}</span>
-				<a href="/projects/{project.id}">
-					<span class="flex-auto">
-						<dt class="font-bold">{project.name}</dt>
-						<dd>{project.description}</dd>
-					</span>
-				</a>
-				<span>
-					<a class="variant-outline-primary btn btn-sm" href="/projects/{project.id}">Select</a>
-					<a class="variant-outline-warning btn btn-sm">Edit</a>
-					<a class="variant-outline-error btn btn-sm" on:click={deleteProject(project.id)}>Delete</a
-					>
-				</span>
-			</div>
-		{/each}
-	</dl>
-</section>
+		<span>
+			<a class="variant-filled-primary btn btn-sm" on:click={newProject}>add project</a>
+		</span>
+		<section class="card text-token w-full space-y-4 p-4">
+			<dl class="list-dl">
+				{#each projects as project}
+					<div>
+						<!-- <span class="badge bg-primary-500 text-xl">{project.name[0]}</span> -->
+						<a href="/projects/{project.id}">
+							<span class="flex-auto">
+								<dt class="font-bold">{project.name}</dt>
+								<dd>{project.description}</dd>
+							</span>
+						</a>
+						<span>
+							<a class="variant-filled-primary btn btn-sm" href="/projects/{project.id}">Select</a>
+							<a class="variant-filled-primary btn btn-sm">Edit</a>
+							<a class="variant-filled-error btn btn-sm" on:click={deleteProject(project.id)}
+								>Delete</a
+							>
+						</span>
+					</div>
+				{/each}
+			</dl>
+		</section>
+	</div>
+</div>
