@@ -18,6 +18,7 @@ export type Database = {
           description: string | null
           id: string
           name: string
+          pma: Json | null
           updated_at: string
           user_id: string
           website_info: Json | null
@@ -31,6 +32,7 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
+          pma?: Json | null
           updated_at?: string
           user_id: string
           website_info?: Json | null
@@ -44,6 +46,7 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
+          pma?: Json | null
           updated_at?: string
           user_id?: string
           website_info?: Json | null

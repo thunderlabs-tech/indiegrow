@@ -7,6 +7,7 @@
 	import Spinner from './Spinner.svelte';
 	import { fade } from 'svelte/transition';
 	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
+	import { dbclient } from '$lib/dbclient';
 
 	export let competitor: Competitor;
 	export let onRemove: (id: string) => void;
@@ -57,16 +58,26 @@
 			appStoreInfo = await scrapeAppStoreInfo(competitor.appstore_url);
 		}
 
-		await compileProductMarketingAnalaysis();
+		if (competitor.pma) {
+			console.log('pma:', competitor.pma);
+			pma = JSON.parse(competitor.pma) as ProductMarketingAnalysis;
+		} else {
+			await compileProductMarketingAnalaysis();
+			const { data, error } = await dbclient()
+				.from('projects')
+				.update({ pma: JSON.stringify(pma) })
+				.eq('id', competitor.id);
+			if (error) {
+				console.error('Error updating competitor:', error);
+			}
+		}
 	});
 
 	$: ogObject = websiteInfo?.ogObject;
 	$: name = pma?.brandName || ogObject?.ogSiteName || ogObject?.ogTitle;
 	$: app = appStoreInfo;
 	$: imageUrl =
-		pma?.logoUrl ||
-		(app?.image && appStoreIconUrl(app.image)) ||
-		(ogObject?.ogImage && ogObject.ogImage[0].url);
+		(app?.image && appStoreIconUrl(app.image)) || (ogObject?.ogImage && ogObject.ogImage[0].url);
 
 	function appStoreIconUrl(imgUrl: string): string {
 		// transform the url from the following format: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/1200x630wa.png
@@ -90,16 +101,18 @@
 	</td>
 	<td>
 		<p class="mt-2">
-			<a
-				href={competitor.appstore_url}
-				style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
-			>
-				<img
-					src={imageUrl}
-					alt={name}
-					style="width: 85px; height:85px;  border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
-				/></a
-			>
+			{#if imageUrl}
+				<a
+					href={competitor.appstore_url}
+					style="width: 85px; height: 85px; border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+				>
+					<img
+						src={imageUrl}
+						alt={name}
+						style="width: 85px; height:85px;  border-radius: 22%; overflow: hidden; display: inline-block; vertical-align: middle;"
+					/></a
+				>
+			{/if}
 		</p>
 	</td>
 	<td><a href={competitor.website_url} class="anchor">{name}</a></td>
