@@ -4,6 +4,10 @@ import type { LayoutLoad } from './$types';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
 import type { Database, Tables } from '$lib/supabase';
 
+import { dev } from '$app/environment';
+import { inject } from '@vercel/analytics';
+inject({ mode: dev ? 'development' : 'production' });
+
 export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 	depends('supabase:auth');
 	console.log('params:', params);
