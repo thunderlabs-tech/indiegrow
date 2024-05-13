@@ -143,6 +143,17 @@
 		{/if}
 	</td>
 	<td>
+		{#if app?.aggregateRating}
+			<span transition:effect>
+				<div class="grid h-24 w-48 grid-cols-[auto_1fr_auto] items-center gap-0">
+					<div class="flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth pb-2">
+						{app.aggregateRating.ratingValue} ({app.aggregateRating.reviewCount} reviews)
+					</div>
+				</div>
+			</span>
+		{/if}
+	</td>
+	<td>
 		{#if pma?.oneLinePitch}
 			<span transition:effect>
 				{pma.oneLinePitch}

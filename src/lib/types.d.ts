@@ -22,6 +22,11 @@ export type AppStoreInfo = {
 		url: string;
 	};
 	screenshot: string[];
+	aggregateRating: {
+		'@type': string;
+		ratingValue: number;
+		reviewCount: number;
+	};
 	offers: {
 		'@type': string;
 		price: number;

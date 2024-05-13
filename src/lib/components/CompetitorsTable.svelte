@@ -15,6 +15,7 @@
 		<td>Name</td>
 		<!-- <td>Apps</td> -->
 		<td>Screenshots</td>
+		<td>App Rating</td>
 		<td>One line pitch</td>
 		<td>Product Type</td>
 		<td>Target Audience</td>
