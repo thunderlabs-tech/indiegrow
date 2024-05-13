@@ -60,34 +60,40 @@
 				<p>No projects yet</p>
 			{:else}
 				<section class="card text-token w-full space-y-4 p-4">
-					<dl class="list-dl">
+					<table class="projects">
 						{#each projects as project}
-							<div>
+							<tr>
 								<!-- <span class="badge bg-primary-500 text-xl">{project.name[0]}</span> -->
-								<a href="/projects/{project.id}">
-									<span class="flex-auto">
-										<dt class="font-bold">{project.name}</dt>
-										<dd>
-											{#if project.description}
-												{project.description}
-											{/if}
-										</dd>
-									</span>
-								</a>
-								<span>
-									<a class="variant-filled-primary btn btn-sm" href="/projects/{project.id}"
+								<td>
+									<a href="/projects/{project.id}">
+										{project.name}
+									</a>
+								</td>
+								<td>
+									{#if project.description}
+										{project.description}
+									{/if}
+								</td>
+								<td>
+									<a class="variant-filled-primary btn btn-sm mr-2" href="/projects/{project.id}"
 										>Select</a
 									>
-									<button
-										class="variant-filled-error btn btn-sm"
-										on:click={deleteProject(project.id)}>Delete</button
+									<a
+										class="variant-filled-error btn btn-sm mr-2"
+										on:click={deleteProject(project.id)}>Delete</a
 									>
-								</span>
-							</div>
+								</td>
+							</tr>
 						{/each}
-					</dl>
+					</table>
 				</section>
 			{/if}
 		{/if}
 	</div>
 </div>
+
+<style lang="postcss">
+	td {
+		padding: 15px;
+	}
+</style>

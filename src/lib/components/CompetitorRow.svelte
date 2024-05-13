@@ -63,7 +63,7 @@
 			pma = JSON.parse(competitor.pma) as ProductMarketingAnalysis;
 		} else {
 			await compileProductMarketingAnalaysis();
-			const { data, error } = await dbclient()
+			const { error } = await dbclient()
 				.from('projects')
 				.update({ pma: JSON.stringify(pma) })
 				.eq('id', competitor.id);
@@ -74,7 +74,7 @@
 	});
 
 	$: ogObject = websiteInfo?.ogObject;
-	$: name = pma?.brandName || ogObject?.ogSiteName || ogObject?.ogTitle;
+	$: name = ogObject?.ogSiteName || ogObject?.ogTitle;
 	$: app = appStoreInfo;
 	$: imageUrl =
 		(app?.image && appStoreIconUrl(app.image)) || (ogObject?.ogImage && ogObject.ogImage[0].url);

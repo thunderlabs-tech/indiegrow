@@ -17,7 +17,7 @@
 		const { error, data } = await dbclient()
 			.from('projects')
 			.select('*')
-			.eq('competitor_of', currentProject.id);
+			.or(`id.eq.${currentProject.id},competitor_of.eq.${currentProject.id}`);
 		if (error) {
 			console.log(error);
 		} else {
