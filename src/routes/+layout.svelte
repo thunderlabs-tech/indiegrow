@@ -50,14 +50,16 @@
 					<span class="strong text-white">
 						<a href="/projects">
 							<span class="font-bold"> indiegrow </span>
+						</a>
 
-							{#if $page.data.currentProject}
+						{#if $page.data.currentProject}
+							<a href="/projects/{$page.data.currentProject.id}">
 								<span class="">
 									&#60;{$page.data.currentProject.name}&#62;
 								</span>
-							{/if}
-							$</a
-						>
+							</a>
+						{/if}
+						$
 					</span>
 				</span>
 			</svelte:fragment>
