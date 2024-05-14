@@ -103,34 +103,26 @@
 	}
 </script>
 
-<div class="h-full w-full p-6">
+<div class="h-full w-full p-4">
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Competition</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>
-		<div class="space-y-4">
-			<div class="justify-center space-x-2">
-				<form on:submit={addCompetitors}>
-					<div class="input-group input-group-divider grid-cols-[1fr_auto]">
-						<input
-							bind:value={competitorUrls}
-							class="input"
-							type="text"
-							placeholder="URLs of your competitors"
-						/>
-						<button class="variant-filled-secondary">Add</button>
-					</div>
-					{#if analyzingCompetitors}
-						<Spinner text="Loading competitors..." />
-					{/if}
-					<div class="p-6">
-						{#if competitors}
-							<h2>Your Competitors:</h2>
-
-							<CompetitorsTable {competitors} onRemove={removeCompetitor} />
-						{/if}
-					</div>
-				</form>
+		<form on:submit={addCompetitors}>
+			<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+				<input
+					bind:value={competitorUrls}
+					class="input"
+					type="text"
+					placeholder="URLs of your competitors"
+				/>
+				<button class="variant-filled-secondary">Add</button>
 			</div>
-		</div>
+		</form>
+		{#if analyzingCompetitors}
+			<Spinner text="Loading competitors..." />
+		{/if}
+		{#if competitors}
+			<CompetitorsTable {competitors} onRemove={removeCompetitor} />
+		{/if}
 	</div>
 </div>

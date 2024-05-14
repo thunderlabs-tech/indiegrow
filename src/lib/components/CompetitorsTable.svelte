@@ -6,7 +6,7 @@
 	export let onRemove: (id: string) => void;
 </script>
 
-<table class="table">
+<table class="table table-compact">
 	<tr>
 		<td>
 			<!-- Loading spinner... -->
