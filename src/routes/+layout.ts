@@ -14,7 +14,6 @@ injectSpeedInsights();
 
 export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 	depends('supabase:auth');
-	console.log('params:', params);
 
 	const supabase = createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		global: {
@@ -42,10 +41,8 @@ export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 	} = await supabase.auth.getSession();
 
 	if (session?.user) {
-		console.log('user already signed in:', session.user);
 	} else {
-		const { data, error } = await supabase.auth.signInAnonymously();
-		console.log('created new anon user:', data, error);
+		await supabase.auth.signInAnonymously();
 	}
 
 	let currentProject: Tables<'projects'> | null = null;
@@ -56,8 +53,11 @@ export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 			.select('*')
 			.eq('id', params.projectId)
 			.single();
-		console.log('setting current project:', project, error);
-		currentProject = project;
+		if (error) {
+			console.error('Error getting project:', error);
+		} else {
+			currentProject = project;
+		}
 	}
 
 	return { supabase, session, user: session?.user, currentProject };
