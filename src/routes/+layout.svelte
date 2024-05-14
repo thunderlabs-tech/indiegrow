@@ -36,7 +36,7 @@
 		<AppBar padding="p-2">
 			<svelte:fragment slot="lead">
 				<span class="logo xs:text-xs xs:p-0 p-1 xl:text-xl">
-					{#if $page.data.currentProject}
+					<!-- {#if $page.data.currentProject}
 						<button class="btn btn-sm p-0 lg:hidden" on:click={drawerOpen}>
 							<span>
 								<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
@@ -46,19 +46,19 @@
 								</svg>
 							</span>
 						</button>
-					{/if}
+					{/if} -->
 					<span class="strong text-white">
 						<a href="/projects">
 							<span class="font-bold"> indiegrow </span>
 						</a>
 
-						{#if $page.data.currentProject}
+						<!-- {#if $page.data.currentProject}
 							<a href="/projects/{$page.data.currentProject.id}">
 								<span class="">
 									&#60;{$page.data.currentProject.name}&#62;
 								</span>
 							</a>
-						{/if}
+						{/if} -->
 						$
 					</span>
 				</span>
@@ -76,11 +76,12 @@
 		</AppBar>
 	</svelte:fragment>
 
-	<svelte:fragment slot="sidebarLeft">
+	<!-- <svelte:fragment slot="sidebarLeft">
 		{#if $page.data.currentProject}
 			<Navigation />
 		{/if}
-	</svelte:fragment>
+	</svelte:fragment> -->
+
 	<div class="layout-docs page-padding flex items-start justify-center gap-10">
 		<div class="layout-docs-content page-container-aside w-full">
 			<slot />
