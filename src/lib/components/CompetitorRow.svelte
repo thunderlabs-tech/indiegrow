@@ -1,32 +1,29 @@
 <script lang="ts">
-	import type { AppStoreInfo, Competitor, ProductMarketingAnalysis, WebsiteInfo } from '$lib/types';
+	import type { Competitor, ProductMarketingAnalysis } from '$lib/types';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
-	import { analyzeCompetitorWebsite, websiteAnalysisPrompt } from '$lib/competition';
+	import { compileProductMarketingAnalysis, appStorePMAAnalysisPrompt } from '$lib/competition';
 	import { onMount } from 'svelte';
 	import Spinner from './Spinner.svelte';
 	import { fade } from 'svelte/transition';
-	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scraping/scrapingClientSide';
 	import { dbclient } from '$lib/dbclient';
 
 	export let competitor: Competitor;
 	export let onRemove: (id: string) => void;
 
-	let websiteInfo: WebsiteInfo | undefined = undefined;
-	let appStoreInfo: AppStoreInfo | undefined = undefined;
-
-	const prompt = websiteAnalysisPrompt;
+	const prompt = appStorePMAAnalysisPrompt;
 	let pma: ProductMarketingAnalysis | undefined = undefined;
 
 	let loadingPma = false;
 
 	async function compileProductMarketingAnalaysis() {
-		if (!websiteInfo || !websiteInfo.text?.length > 0) return;
+		if (!competitor.appstore_info) return;
 
+		const info = JSON.parse(competitor.appstore_info);
 		loadingPma = true;
 		try {
 			const openai = openAiBrowserClient();
-			const stream = await analyzeCompetitorWebsite(openai, prompt, websiteInfo);
+			const stream = await compileProductMarketingAnalysis(openai, prompt, info);
 
 			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
 			const entityStream = openAiHandler.process(stream);
@@ -43,21 +40,7 @@
 		}
 	}
 
-	const appStoreUrlRegex =
-		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
-
-	onMount(async () => {
-		if (competitor.website_url) {
-			websiteInfo = await scrapeWebsiteInfo(competitor.website_url);
-		}
-		if (!competitor.appstore_url && websiteInfo?.html) {
-			competitor.appstore_url = websiteInfo.html.match(appStoreUrlRegex)?.[0] || null;
-		}
-
-		if (competitor.appstore_url) {
-			appStoreInfo = await scrapeAppStoreInfo(competitor.appstore_url);
-		}
-
+	async function updatePMA() {
 		if (competitor.pma) {
 			console.log('pma:', competitor.pma);
 			pma = JSON.parse(competitor.pma) as ProductMarketingAnalysis;
@@ -65,19 +48,22 @@
 			await compileProductMarketingAnalaysis();
 			const { error } = await dbclient()
 				.from('projects')
-				.update({ pma: JSON.stringify(pma) })
+				.update({
+					pma: JSON.stringify(pma)
+				})
 				.eq('id', competitor.id);
 			if (error) {
 				console.error('Error updating competitor:', error);
 			}
 		}
+	}
+	onMount(async () => {
+		await updatePMA();
 	});
 
-	$: ogObject = websiteInfo?.ogObject;
-	$: name = competitor.name || ogObject?.ogSiteName || ogObject?.ogTitle;
-	$: app = appStoreInfo;
-	$: imageUrl =
-		(app?.image && appStoreIconUrl(app.image)) || (ogObject?.ogImage && ogObject.ogImage[0].url);
+	$: name = competitor.name;
+	$: app = JSON.parse(competitor.appstore_info) as AppStoreInfo;
+	$: imageUrl = app?.image && appStoreIconUrl(app.image);
 
 	function appStoreIconUrl(imgUrl: string): string {
 		// transform the url from the following format: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/30/22/8e/30228eb1-eccd-bf23-0cf0-6361301e803e/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/1200x630wa.png
@@ -93,7 +79,7 @@
 	const effect = fade;
 </script>
 
-<tr>
+<tr class="!border-t-2">
 	<td>
 		{#if loadingPma}
 			<Spinner />
@@ -115,20 +101,8 @@
 			{/if}
 		</p>
 	</td>
-	<td><a href={competitor.website_url} class="anchor">{name}</a></td>
-	<!-- <td>
-		{#if app}
-			<a
-				href={competitor.appStoreUrl}
-				style="display: inline-block; overflow: hidden; border-radius: 13px; width: 80px;"
-				><img
-					src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1617321600"
-					alt="Download on the App Store"
-					style="border-radius: 20px;  height: 83px;"
-				/></a
-			>
-		{/if}
-	</td> -->
+	<td><a href={competitor.appstore_url} class="anchor">{name}</a></td>
+	<td>{app.applicationCategory}</td>
 	<td>
 		{#if app?.screenshot}
 			<span transition:effect>
@@ -151,6 +125,8 @@
 					</div>
 				</div>
 			</span>
+		{:else}
+			No reviews.
 		{/if}
 	</td>
 	<td>

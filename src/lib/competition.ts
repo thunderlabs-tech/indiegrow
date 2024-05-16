@@ -1,5 +1,5 @@
 import type OpenAI from 'openai';
-import type { ProductMarketingAnalysis, WebsiteInfo } from './types';
+import type { AppStoreInfo, ProductMarketingAnalysis, WebsiteInfo } from './types';
 import type { Stream } from 'openai/streaming.mjs';
 import type {
 	ChatCompletionSystemMessageParam,
@@ -16,8 +16,8 @@ export const exampleProductMarketingAnalysis: ProductMarketingAnalysis = {
 	positioning: "Apple's products are known for their high quality and ease of use."
 };
 
-export const websiteAnalysisPrompt = `Act as a product marketing manager doing competitive analysis.
-You will be provided with the content of a website of a competitor and you will need to analyze it.
+export const appStorePMAAnalysisPrompt = `Act as a product marketing manager doing competitive analysis.
+You will be provided with the content of the AppStore of a competitor and you will need to analyze it.
 
 Focus on the following aspects during your analysis:
 - brand name
@@ -27,7 +27,6 @@ Focus on the following aspects during your analysis:
 - key features
 - key benefits
 - positioning
-
 
 For the brand name only use the name of the brand, don't include any tld or other information.
 
@@ -41,19 +40,17 @@ Return only the JSON object as the result.
 Here is an example of the JSON object structure:
 ${JSON.stringify(exampleProductMarketingAnalysis)} `;
 
-export async function analyzeCompetitorWebsite(
+export async function compileProductMarketingAnalysis(
 	openai: OpenAI,
 	prompt: string,
-	websiteInfo: WebsiteInfo
+	appStoreInfo: AppStoreInfo
 ): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
 	console.log(`Analyzing competitor's website with: ${prompt} `);
 
-	let text: string | undefined = undefined;
-	if (websiteInfo?.text && websiteInfo.text.length > 0) {
-		text = websiteInfo.text;
-	} else {
-		text = websiteInfo?.ogObject?.ogDescription;
-	}
+	let text: string | undefined = '';
+	text += `App Name: ${appStoreInfo.name}\n`;
+	text += `App Description: ${appStoreInfo.description}\n`;
+	text += `App Category: ${appStoreInfo.applicationCategory}\n`;
 
 	if (!text) {
 		throw new Error('No text found on the website');
@@ -69,7 +66,7 @@ export async function analyzeCompetitorWebsite(
 		content: [
 			{
 				type: 'text',
-				text: `Website content: """${text}"""`
+				text: `AppStore content: """${text}"""`
 			}
 		]
 	};

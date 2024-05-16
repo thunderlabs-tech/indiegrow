@@ -6,6 +6,7 @@
 
 	import { dbclient } from '$lib/dbclient';
 	import { onMount } from 'svelte';
+	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
 
 	let competitorUrls = '';
 
@@ -17,7 +18,7 @@
 		const { error, data } = await dbclient()
 			.from('projects')
 			.select('*')
-			.or(`id.eq.${currentProject.id},competitor_of.eq.${currentProject.id}`);
+			.or(`id.eq.${currentProject.id}, competitor_of.eq.${currentProject.id}`);
 		if (error) {
 			console.log(error);
 		} else {
@@ -48,13 +49,17 @@
 		const competitor: Partial<Competitor> = {};
 
 		const url = sanitizeUrl(rawUrl);
-		competitor.name = url;
 
-		if (isAppleAppStoreUrl(url)) {
-			competitor.appstore_url = url;
-		} else {
-			competitor.website_url = url;
+		if (!isAppleAppStoreUrl(url)) {
+			console.error("URL doesn't match Apple App Store URL pattern:", url);
+			return undefined;
 		}
+		competitor.appstore_url = url;
+		const appStoreInfo = await scrapeAppStoreInfo(competitor.appstore_url);
+
+		competitor.name = appStoreInfo.name;
+		competitor.description = appStoreInfo.description;
+		competitor.appstore_info = JSON.stringify(appStoreInfo);
 
 		return competitor;
 	}
@@ -67,6 +72,9 @@
 			const urls = competitorUrls.split(' ').filter(Boolean);
 			for (const url of urls) {
 				const competitor = await competitorFromUrl(url.trim());
+				if (!competitor) {
+					continue;
+				}
 				const { error } = await dbclient()
 					.from('projects')
 					.insert({
@@ -81,6 +89,7 @@
 				}
 			}
 			loadCompetitors();
+			competitorUrls = '';
 		} catch (error) {
 			console.error('Error adding competitors:', error);
 		} finally {
