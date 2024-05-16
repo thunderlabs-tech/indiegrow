@@ -1,23 +1,28 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
 	import type { Tables } from '$lib/supabase';
-	// import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
+	import type { AppStoreInfo } from '$lib/types';
 
 	export let project: Partial<Tables<'projects'>>;
 	export let onSave: () => void;
 
-	$: nameValid = project?.name && project.name?.length > 2;
+	let appStoreInfo: AppStoreInfo | undefined = undefined;
+
+	$: projectValid = project?.appstore_url && appStoreInfo !== undefined;
 	let loadingContent = false;
 
-	$: saveActive = nameValid && !loadingContent;
+	$: saveActive = projectValid && !loadingContent;
 
 	async function createProject() {
-		if (!nameValid) return;
+		if (!projectValid) return;
 		const supabase = $page.data.supabase;
 
 		const newProject = {
 			...project,
-			user_id: $page.data?.session?.user.id
+			user_id: $page.data?.session?.user.id,
+			appstore_info: JSON.stringify(appStoreInfo),
+			name: appStoreInfo.name
 		};
 		const insertProjectResult = await supabase
 			.from('projects')
@@ -34,64 +39,37 @@
 		}
 	}
 
-	// async function updateAppStoreInfo() {
-	// 	loadingContent = true;
-	// 	project.appstore_info = null;
-	// 	try {
-	// 		if (project.appstore_url) {
-	// 			const info = await scrapeAppStoreInfo(project.appstore_url);
-	// 			project.appstore_info = JSON.stringify(info);
-	// 			console.log('App store info', project.appstore_info);
-	// 		}
-	// 		// project.suggestions = undefined;
-	// 	} catch (error) {
-	// 		console.error('Error scraping app store', error);
-	// 		project.appstore_info = undefined;
-	// 	} finally {
-	// 		loadingContent = false;
-	// 	}
-	// }
-
-	// async function updateWebsiteInfo() {
-	// 	project.website_info = undefined;
-	// 	if (!project.website_url) {
-	// 		return;
-	// 	}
-	// 	loadingContent = true;
-	// 	try {
-	//         const info =await scrapeWebsiteInfo(project.website_url);
-	// 		project.website_info = JSON.stringify(info);
-	// 	} catch (error) {
-	// 		console.error('Error scraping app store', error);
-	// 	} finally {
-	// 		loadingContent = false;
-	// 	}
-	// }
+	async function updateAppStoreInfo() {
+		loadingContent = true;
+		appStoreInfo = undefined;
+		try {
+			if (project.appstore_url) {
+				console.log('Scraping app store info', project.appstore_url);
+				appStoreInfo = await scrapeAppStoreInfo(project.appstore_url);
+				console.log('App store info', appStoreInfo);
+			}
+			// project.suggestions = undefined;
+		} catch (error) {
+			console.error('Error scraping app store', error);
+			appStoreInfo = undefined;
+		} finally {
+			loadingContent = false;
+		}
+	}
 </script>
 
 <form class="space-y-2">
-	<p>Name*:</p>
-	<input bind:value={project.name} class="input" type="text" placeholder="Name of your project" />
-
-	<p>Description:</p>
-	<textarea
-		bind:value={project.description}
-		class="textarea"
-		placeholder="What is your project about? "
-	/>
-
-	<p>Website:</p>
-	<input bind:value={project.website_url} type="text" class="input" placeholder="Website URL" />
-	<!-- {#if project.website_info?.ogObject !== null}
-		🌐 {project.website_info.ogObject.ogTitle}:
-		{project.website_info.ogObject.ogDescription}
-	{/if} -->
-
 	<p>App Store URL:</p>
-	<input bind:value={project.appstore_url} type="text" class="input" placeholder="App Store URL" />
-	<!-- {#if project.appstore_info !== null}
-		📱 {project.appstore_info.name}
-	{/if} -->
+	<input
+		bind:value={project.appstore_url}
+		type="text"
+		class="input"
+		placeholder="App Store URL"
+		on:change={updateAppStoreInfo}
+	/>
+	{#if project?.appstore_info !== undefined}
+		📱 {project.appstore_info?.name}
+	{/if}
 
 	<p>
 		<button
