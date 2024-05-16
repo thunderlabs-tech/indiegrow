@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import Spinner from './Spinner.svelte';
 	import { fade } from 'svelte/transition';
-	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scrapingClientSide';
+	import { scrapeAppStoreInfo, scrapeWebsiteInfo } from '$lib/scraping/scrapingClientSide';
 	import { dbclient } from '$lib/dbclient';
 
 	export let competitor: Competitor;

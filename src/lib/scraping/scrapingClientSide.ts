@@ -1,4 +1,4 @@
-import type { AppStoreInfo, WebsiteInfo } from './types';
+import type { AppStoreInfo, WebsiteInfo } from '../types';
 
 export async function scrapeAppStoreInfo(appStoreUrl: string): Promise<AppStoreInfo> {
 	const response = await fetch('/api/scrape/appstore', {

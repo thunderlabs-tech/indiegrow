@@ -1,4 +1,4 @@
-import { scrapeWebsite } from '$lib/scraping.js';
+import { scrapeWebsite } from '$lib/scraping/website';
 
 import { json } from '@sveltejs/kit';
 

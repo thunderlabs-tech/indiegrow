@@ -10,7 +10,7 @@
 	import type { AppStoreInfo, ImprovementSuggestions } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { scrapeAppStoreInfo } from '$lib/scrapingClientSide';
+	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
