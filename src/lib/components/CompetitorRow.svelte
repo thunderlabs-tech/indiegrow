@@ -18,12 +18,12 @@
 	const prompt = websiteAnalysisPrompt;
 	let pma: ProductMarketingAnalysis | undefined = undefined;
 
-	let loading = false;
+	let loadingPma = false;
 
 	async function compileProductMarketingAnalaysis() {
-		if (!websiteInfo) return;
+		if (!websiteInfo || !websiteInfo.text?.length > 0) return;
 
-		loading = true;
+		loadingPma = true;
 		try {
 			const openai = openAiBrowserClient();
 			const stream = await analyzeCompetitorWebsite(openai, prompt, websiteInfo);
@@ -39,7 +39,7 @@
 		} catch (error) {
 			console.error('Error running analysis:', error);
 		} finally {
-			loading = false;
+			loadingPma = false;
 		}
 	}
 
@@ -50,7 +50,7 @@
 		if (competitor.website_url) {
 			websiteInfo = await scrapeWebsiteInfo(competitor.website_url);
 		}
-		if (!competitor.appstore_url && websiteInfo) {
+		if (!competitor.appstore_url && websiteInfo?.html) {
 			competitor.appstore_url = websiteInfo.html.match(appStoreUrlRegex)?.[0] || null;
 		}
 
@@ -74,7 +74,7 @@
 	});
 
 	$: ogObject = websiteInfo?.ogObject;
-	$: name = ogObject?.ogSiteName || ogObject?.ogTitle;
+	$: name = competitor.name || ogObject?.ogSiteName || ogObject?.ogTitle;
 	$: app = appStoreInfo;
 	$: imageUrl =
 		(app?.image && appStoreIconUrl(app.image)) || (ogObject?.ogImage && ogObject.ogImage[0].url);
@@ -95,7 +95,7 @@
 
 <tr>
 	<td>
-		{#if loading}
+		{#if loadingPma}
 			<Spinner />
 		{/if}
 	</td>
@@ -158,7 +158,7 @@
 			<span transition:effect>
 				{pma.oneLinePitch}
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
@@ -167,7 +167,7 @@
 			<span transition:effect>
 				{pma.productType}
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
@@ -176,7 +176,7 @@
 			<span transition:effect>
 				{pma.targetAudience}
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
@@ -187,7 +187,7 @@
 					<span class="variant-outline-primary chip">{benefit}</span>
 				{/each}
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
@@ -198,7 +198,7 @@
 					<span class="variant-outline-secondary chip">{feature}</span>
 				{/each}
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
@@ -207,7 +207,7 @@
 			<span transition:effect>
 				<i>{pma.positioning}</i>
 			</span>
-		{:else}
+		{:else if loadingPma}
 			<div class="placeholder animate-pulse" />
 		{/if}
 	</td>
