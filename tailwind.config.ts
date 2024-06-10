@@ -4,6 +4,8 @@ import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { skeleton } from '@skeletonlabs/tw-plugin';
 
+import { indiegrowTheme } from './indiegrowTheme';
+
 export default {
 	darkMode: 'class',
 	content: [
@@ -18,6 +20,7 @@ export default {
 		typography,
 		skeleton({
 			themes: {
+				custom: [indiegrowTheme],
 				preset: [
 					{
 						name: 'skeleton',
