@@ -59,13 +59,13 @@
 <button on:click={refine} class="variant-filled-secondary btn mb-4 mt-4 flex"
 	>Make improvement suggestions</button
 >
-<SlideToggle name="refinementPrompt" bind:checked={showRefinementPrompt} size="sm">
+<!-- <SlideToggle name="refinementPrompt" bind:checked={showRefinementPrompt} size="sm">
 	Show prompt
 </SlideToggle>
 
 {#if showRefinementPrompt}
 	<textarea class="textarea" rows="20" bind:value={prompt} placeholder="Enter your prompt" />
-{/if}
+{/if} -->
 
 {#if loadingRefinements}
 	<span class="flex">
