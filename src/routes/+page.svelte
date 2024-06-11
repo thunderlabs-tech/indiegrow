@@ -1,11 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import ProjectForm from '$lib/components/ProjectForm.svelte';
 	import WaitingListForm from '$lib/components/WaitingListForm.svelte';
-
-	function onSave() {
-		goto('/projects');
-	}
 </script>
 
 <section class="lg:py-18 w-full items-center bg-surface-900 py-12 md:py-16 xl:py-24">

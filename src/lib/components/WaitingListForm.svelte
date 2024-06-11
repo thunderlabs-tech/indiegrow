@@ -31,7 +31,7 @@
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
-		<h2 class="  font-medium text-primary-500">Closed alpha</h2>
+		<h2 class="text-2xl font-medium text-primary-500">Closed alpha</h2>
 		<p class="text-primary-50">
 			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
 		</p>

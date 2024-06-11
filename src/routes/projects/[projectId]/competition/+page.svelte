@@ -7,6 +7,9 @@
 	import { dbclient } from '$lib/dbclient';
 	import { onMount } from 'svelte';
 	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
+	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
+	import { compileProductMarketingAnalysis, findCompetitorsPrompt } from '$lib/competition';
+	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 
 	let competitorUrls = '';
 
@@ -15,6 +18,10 @@
 	let competitors: Competitor[] = [];
 
 	async function loadCompetitors() {
+		if (!currentProject) {
+			console.log('No current project set');
+			return;
+		}
 		const { error, data } = await dbclient()
 			.from('projects')
 			.select('*')
@@ -23,7 +30,6 @@
 			console.log(error);
 		} else {
 			competitors = data;
-			console.log('loaded competitors:', competitors);
 		}
 	}
 
@@ -64,6 +70,21 @@
 		return competitor;
 	}
 
+	async function addCompetitor(competitor: Partial<Competitor>) {
+		const { error } = await dbclient()
+			.from('projects')
+			.insert({
+				user_id: currentProject.user_id,
+				competitor_of: currentProject.id,
+				...competitor
+			})
+			.select('*');
+		if (error) {
+			console.log('error inserting competitor', error);
+		}
+		competitors = [...competitors, competitor];
+	}
+
 	async function addCompetitors() {
 		analyzingCompetitors = true;
 		console.log('Adding competitors:', competitorUrls);
@@ -75,20 +96,8 @@
 				if (!competitor) {
 					continue;
 				}
-				const { error } = await dbclient()
-					.from('projects')
-					.insert({
-						user_id: currentProject.user_id,
-						competitor_of: currentProject.id,
-
-						...competitor
-					})
-					.select('*');
-				if (error) {
-					console.log('error inserting competitor', error);
-				}
+				await addCompetitor(competitor);
 			}
-			loadCompetitors();
 			competitorUrls = '';
 		} catch (error) {
 			console.error('Error adding competitors:', error);
@@ -105,10 +114,65 @@
 			.then((res) => {
 				if (res.error) {
 					console.error('Error deleting competitor:', res.error);
-				} else {
-					loadCompetitors();
 				}
 			});
+		competitors = competitors.filter((competitor) => competitor.id !== id);
+	}
+
+	async function searchAppStore(term: string): Promise<string[]> {
+		const endpoint = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=software&limit=10&country=DE`;
+		try {
+			const response = await fetch(endpoint);
+			const data = await response.json();
+			console.log('data', data);
+			return data.results.map((app: any) => app.trackViewUrl);
+		} catch (error) {
+			console.error(`Error searching for term "${term}":`, error);
+			return [];
+		}
+	}
+
+	async function findCompetitors() {
+		console.log('finding competitors');
+		console.log('current project', currentProject.appstore_info.description);
+
+		let data: string[] = [];
+		const info = JSON.parse(currentProject.appstore_info);
+		analyzingCompetitors = true;
+		try {
+			const openai = openAiBrowserClient();
+			const stream = await compileProductMarketingAnalysis(openai, findCompetitorsPrompt, info);
+
+			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
+			const entityStream = openAiHandler.process(stream);
+
+			for await (const item of entityStream) {
+				if (item) {
+					data = item.data; // as unknown as ProductMarketingAnalysis;
+					console.log('partial response: ', item.data);
+				}
+			}
+
+			const competitorUrls = await searchAppStore(data.search_term);
+
+			const allCompetitors = await Promise.all(competitorUrls.map(competitorFromUrl));
+
+			const topCompetitors = allCompetitors.sort((a, b) => {
+				const aReviewCount = JSON.parse(a?.appstore_info || '{}').aggregateRating?.reviewCount || 1;
+				const bReviewCount = JSON.parse(b?.appstore_info || '{}').aggregateRating?.reviewCount || 1;
+				return bReviewCount - aReviewCount;
+			});
+			topCompetitors.forEach((competitor) => {
+				console.log('adding competitor:', competitor);
+				addCompetitor(competitor);
+			});
+
+			console.log('topCompetitors:', topCompetitors);
+		} catch (error) {
+			console.error('Error running analysis:', error);
+		} finally {
+			analyzingCompetitors = false;
+		}
 	}
 </script>
 
@@ -116,6 +180,7 @@
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Competition</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>
+
 		<form on:submit={addCompetitors}>
 			<div class="input-group input-group-divider grid-cols-[1fr_auto]">
 				<input
@@ -124,9 +189,16 @@
 					type="text"
 					placeholder="URLs of your competitors"
 				/>
-				<button class="variant-filled-secondary">Add</button>
+				<button class="variant-filled-secondary">Add manually</button>
 			</div>
 		</form>
+
+		<p>
+			<button class="variant-filled-secondary btn btn-md" on:click={findCompetitors}
+				>Automatic search</button
+			>
+		</p>
+
 		{#if analyzingCompetitors}
 			<Spinner text="Loading competitors..." />
 		{/if}

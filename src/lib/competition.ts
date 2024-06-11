@@ -86,3 +86,56 @@ export async function compileProductMarketingAnalysis(
 	});
 	return stream;
 }
+
+export const findCompetitorsPrompt = `Given the following details of an app in the AppStore,
+your goal is to find the most similar competitors in the AppStore.
+
+Task:
+From the description, come up with a search term that can be used to find the competitors.
+Return the search term as a JSON Object of the following schema:
+{
+	"search_term": 'search term'
+}
+`;
+
+export async function findCompetitors(
+	openai: OpenAI,
+	prompt: string,
+	appStoreInfo: AppStoreInfo
+): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
+	console.log(`Finding competitors for: ${appStoreInfo.name}`);
+
+	let appDetails = `App Name: ${appStoreInfo.name}\n`;
+	appDetails += `App Description: ${appStoreInfo.description}\n`;
+	appDetails += `App Category: ${appStoreInfo.applicationCategory}\n`;
+
+	const promptMessage: ChatCompletionSystemMessageParam = {
+		role: 'system',
+		content: prompt
+	};
+
+	const userMessage: ChatCompletionUserMessageParam = {
+		role: 'user',
+		content: [
+			{
+				type: 'text',
+				text: `App Details: """${appDetails}"""`
+			}
+		]
+	};
+
+	const messages = [promptMessage, userMessage];
+
+	const stream = await openai.chat.completions.create({
+		model: 'gpt-4o',
+		response_format: {
+			type: 'json_object'
+		},
+		temperature: 0,
+		max_tokens: 1024,
+		stream: true,
+		tool_choice: 'auto',
+		messages
+	});
+	return stream;
+}

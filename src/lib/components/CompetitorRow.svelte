@@ -7,9 +7,12 @@
 	import Spinner from './Spinner.svelte';
 	import { fade } from 'svelte/transition';
 	import { dbclient } from '$lib/dbclient';
+	import { page } from '$app/stores';
 
 	export let competitor: Competitor;
 	export let onRemove: (id: string) => void;
+
+	$: currentProject = $page.data.currentProject;
 
 	const prompt = appStorePMAAnalysisPrompt;
 	let pma: ProductMarketingAnalysis | undefined = undefined;
@@ -42,7 +45,6 @@
 
 	async function updatePMA() {
 		if (competitor.pma) {
-			console.log('pma:', competitor.pma);
 			pma = JSON.parse(competitor.pma) as ProductMarketingAnalysis;
 		} else {
 			await compileProductMarketingAnalaysis();
@@ -189,9 +191,11 @@
 	</td>
 
 	<td>
-		<button class="variant-outline-warning btn btn-sm" on:click={onRemove(competitor.id)}
-			>Remove</button
-		>
+		{#if competitor.id !== currentProject.id}
+			<button class="variant-outline-warning btn btn-sm" on:click={onRemove(competitor.id)}
+				>Remove</button
+			>
+		{/if}
 	</td>
 </tr>
 
