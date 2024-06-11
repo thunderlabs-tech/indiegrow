@@ -48,7 +48,7 @@
 						</button>
 					{/if} -->
 					<span class="strong text-white">
-						<a href="/projects">
+						<a href="/">
 							<span class="font-bold"> indiegrow </span>
 						</a>
 
