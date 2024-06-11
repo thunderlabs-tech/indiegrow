@@ -1,6 +1,22 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
+	const discordWebhookUrl =
+		'https://discord.com/api/webhooks/1250136503951032482/g7W_scQknOS2z0Bb1_-6kDrj5YFnJeuKPDs8pLQpx3ID-wB3qV_WjyrWG4Y9zUWds4yp';
+
+	async function sendToDiscord(payload: string | object) {
+		const data = typeof payload === 'string' ? { content: payload } : payload;
+
+		const response = await fetch(discordWebhookUrl, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: { 'Content-Type': 'application/json' }
+		});
+		if (!response.ok) {
+			console.error('Failed to send to discord', response);
+		}
+	}
+
 	let email = '';
 
 	let submitted = false;
@@ -22,6 +38,10 @@
 			console.error(error);
 		} else {
 			submitted = true;
+			sendToDiscord({
+				content: `New user on waiting list: ${email}`,
+				username: 'Waiting List Bot'
+			});
 		}
 		return true;
 	}
