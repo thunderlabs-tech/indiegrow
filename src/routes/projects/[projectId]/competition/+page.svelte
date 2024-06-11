@@ -164,7 +164,9 @@
 			});
 			topCompetitors.forEach((competitor) => {
 				console.log('adding competitor:', competitor);
-				addCompetitor(competitor);
+				if (competitor?.name !== currentProject.name) {
+					addCompetitor(competitor);
+				}
 			});
 
 			console.log('topCompetitors:', topCompetitors);
