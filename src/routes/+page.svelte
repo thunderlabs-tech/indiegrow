@@ -41,29 +41,55 @@
 						strategies, and monetization features to take your app to new heights.
 					</p>
 				</div>
+				<WaitingListForm />
+			</div>
+			<img
+				src="/screenshots/competition.png"
+				width="650"
+				alt="IndieGrow Screenshot"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
+			/>
+		</div>
+	</div>
+</section>
+
+<section class="w-full bg-white py-12 md:py-24 lg:py-32 xl:py-48">
+	<div class="container px-4 md:px-6">
+		<div
+			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
+		>
+			<img
+				src="/screenshots/competition.png"
+				width="650"
+				alt="Competitor Analysis"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+			/>
+			<div class="flex flex-col justify-center space-y-4">
+				<div class="space-y-2">
+					<h2
+						class="text-2xl font-bold tracking-tighter text-blue-800 sm:text-3xl md:text-4xl lg:text-5xl/none"
+					>
+						Automatic competitor analysis
+					</h2>
+					<p class="max-w-[600px] text-primary-900 dark:text-green-500 md:text-xl">
+						Learn from your competition, improve your positioning and differentiation.
+					</p>
+				</div>
 				<div class="flex flex-col gap-2 min-[400px]:flex-row">
 					<a
-						class="variant-filled-secondary inline-flex h-10 items-center justify-center rounded-md px-8 text-sm font-medium text-white shadow transition-colors hover:bg-green-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-800 disabled:pointer-events-none disabled:opacity-50"
-						href="/projects"
+						class="inline-flex h-10 items-center justify-center rounded-md bg-blue-800 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-green-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-800 disabled:pointer-events-none disabled:opacity-50"
+						href="#"
 					>
-						Get Started
+						Analyze Now
 					</a>
 					<a
-						class="inline-flex h-10 items-center justify-center rounded-md border bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-secondary-300 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-900 disabled:pointer-events-none disabled:opacity-50 dark:border-green-500 dark:bg-primary-900 dark:hover:bg-green-500 dark:hover:text-white dark:focus-visible:ring-green-500"
-						href="/about"
+						class="inline-flex h-10 items-center justify-center rounded-md border border-secondary-300 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-secondary-300 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-900 disabled:pointer-events-none disabled:opacity-50 dark:border-green-500 dark:bg-primary-900 dark:hover:bg-green-500 dark:hover:text-white dark:focus-visible:ring-green-500"
+						href="#"
 					>
 						Learn More
 					</a>
 				</div>
-				<WaitingListForm />
 			</div>
-			<img
-				src="/placeholder.svg"
-				width="650"
-				height="450"
-				alt="IndieGrow Screenshot"
-				class="mx-auto aspect-[13/9] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
-			/>
 		</div>
 	</div>
 </section>
@@ -103,54 +129,11 @@
 				</div>
 			</div>
 			<img
-				src="/placeholder.svg"
+				src="/screenshots/improve-appstore-content.png"
 				width="650"
-				height="450"
 				alt="App Store Content"
-				class="mx-auto aspect-[13/9] overflow-hidden rounded-xl object-cover object-center sm:w-full"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full"
 			/>
-		</div>
-	</div>
-</section>
-
-<section class="w-full bg-white py-12 md:py-24 lg:py-32 xl:py-48">
-	<div class="container px-4 md:px-6">
-		<div
-			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
-		>
-			<img
-				src="/placeholder.svg"
-				width="650"
-				height="450"
-				alt="Competitor Analysis"
-				class="mx-auto aspect-[13/9] overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
-			/>
-			<div class="flex flex-col justify-center space-y-4">
-				<div class="space-y-2">
-					<h2
-						class="text-2xl font-bold tracking-tighter text-blue-800 sm:text-3xl md:text-4xl lg:text-5xl/none"
-					>
-						Automatic competitor analysis
-					</h2>
-					<p class="max-w-[600px] text-primary-900 dark:text-green-500 md:text-xl">
-						Learn from your competition, improve your positioning and differentiation.
-					</p>
-				</div>
-				<div class="flex flex-col gap-2 min-[400px]:flex-row">
-					<a
-						class="inline-flex h-10 items-center justify-center rounded-md bg-blue-800 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-green-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-800 disabled:pointer-events-none disabled:opacity-50"
-						href="#"
-					>
-						Analyze Now
-					</a>
-					<a
-						class="inline-flex h-10 items-center justify-center rounded-md border border-secondary-300 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-secondary-300 hover:text-primary-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-900 disabled:pointer-events-none disabled:opacity-50 dark:border-green-500 dark:bg-primary-900 dark:hover:bg-green-500 dark:hover:text-white dark:focus-visible:ring-green-500"
-						href="#"
-					>
-						Learn More
-					</a>
-				</div>
-			</div>
 		</div>
 	</div>
 </section>
