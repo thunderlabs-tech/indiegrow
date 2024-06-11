@@ -66,6 +66,7 @@
 		class="input"
 		placeholder="App Store URL"
 		on:change={updateAppStoreInfo}
+		on:input={updateAppStoreInfo}
 	/>
 	{#if project?.appstore_info !== undefined}
 		📱 {project.appstore_info?.name}
