@@ -27,11 +27,14 @@
 	}
 </script>
 
-<div class="space-y-4 p-2">
+<div class="max-w-[800px] space-y-4 md:text-xl">
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
-		<h2 class="h2 text-lg font-medium">Join the Waiting List</h2>
+		<h2 class="  font-medium text-primary-500">Closed alpha</h2>
+		<p class="text-primary-50">
+			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
+		</p>
 		<form class="space-y-4" on:submit={addToWaitingList}>
 			<input
 				bind:value={email}
@@ -41,7 +44,6 @@
 				id="email"
 				placeholder="Your email"
 			/>
-			<p class="text-sm text-gray-500">We'll send you an email when we are ready for more users.</p>
 			<button class="variant-filled-primary btn" type="submit">Apply for waiting list</button>
 		</form>
 	{/if}

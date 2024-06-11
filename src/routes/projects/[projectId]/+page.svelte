@@ -8,7 +8,7 @@
 
 <div class="h-full w-full p-6">
 	<div class="flex flex-col space-y-4">
-		<h1 class="h1">{currentProject.name}</h1>
+		<!-- <h1 class="h1">{currentProject.name}</h1> -->
 
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<div class="card">
@@ -37,6 +37,18 @@
 					</footer>
 				</div>
 			{/if}
+
+			<div class="card">
+				<header class="card-header font-bold">Community marketing</header>
+				<section class="p-4">
+					Find the right community for your app - on reddit, discord, or slack.
+				</section>
+				<footer class="card-footer">
+					<a class="variant-outline-primary btn btn-md" href="/projects/{currentProject.id}/aso"
+						>Coming soon</a
+					>
+				</footer>
+			</div>
 		</div>
 	</div>
 </div>
