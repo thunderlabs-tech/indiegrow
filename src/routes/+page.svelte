@@ -27,6 +27,7 @@
 				<WaitingListForm />
 			</div>
 			<img
+				style="border-radius:80px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);;"
 				src="/screenshots/mobile-view.png"
 				alt="IndieGrow Screenshot"
 				class="mx-auto overflow-hidden rounded-xl object-cover object-center lg:order-last"
@@ -95,7 +96,7 @@
 						screenshots, and descriptions.
 					</p>
 				</div>
-				<div class="flex flex-col gap-2 min-[400px]:flex-row">
+				<!-- <div class="flex flex-col gap-2 min-[400px]:flex-row">
 					<a
 						class="inline-flex h-10 items-center justify-center rounded-md bg-white px-8 text-sm font-medium text-blue-800 shadow transition-colors hover:bg-secondary-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-800 disabled:pointer-events-none disabled:opacity-50"
 						href="#"
@@ -108,7 +109,7 @@
 					>
 						Learn More
 					</a>
-				</div>
+				</div> -->
 			</div>
 			<img
 				src="/screenshots/improve-appstore-content.png"
