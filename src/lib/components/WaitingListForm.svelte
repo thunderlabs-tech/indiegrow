@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 
 	const discordWebhookUrl =
-		'https://discord.com/api/webhooks/1250136503951032482/g7W_scQknOS2z0Bb1_-6kDrj5YFnJeuKPDs8pLQpx3ID-wB3qV_WjyrWG4Y9zUWds4yp';
+		'https://discord.com/api/webhooks/1250451829741977641/UIvHjqlu_eG8XVRA9vdItJ8yQJ59HiYNuIBJDmhhOyCdscc1CPpT1hhl8Yi2_gWvaPGR';
 
 	async function sendToDiscord(payload: string | object) {
 		const data = typeof payload === 'string' ? { content: payload } : payload;
