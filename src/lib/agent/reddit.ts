@@ -9,23 +9,8 @@ const username = 'eugen@thunderlabs.tech'; //process.env.REDDIT_USERNAME;
 const password = 'NTF0auq*qxr@xqk8ekg'; //process.env.REDDIT_PASSWORD;
 const userAgent = 'IndieGrowClient/0.1 by Lanky_Echo6094';
 
-// import RedditClient from 'reddit-client-api';
-
-// const config = {
-// 	apiKey: `${clientId}`,
-// 	apiSecret: `${clientSecret}`,
-// 	userAgent: `${userAgent}`
-// };
-// const myRedditClient = new RedditClient(config);
-
-// await myRedditClient.auth({
-// 	username: `${username}`,
-// 	password: `${password}`
-// });
-
 async function getToken() {
 	const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-	// const auth = `${clientId}:${clientSecret}`;
 	const headers = {
 		'Content-Type': 'application/x-www-form-urlencoded',
 		Authorization: `Basic ${auth}`
@@ -50,29 +35,8 @@ async function getToken() {
 	}
 }
 
-async function getUserInfo(token: string) {
-	const headers = {
-		Authorization: `Bearer ${token}`,
-		'User-Agent': userAgent
-	};
-
-	try {
-		const response = await fetch('https://oauth.reddit.com/api/v1/me', {
-			headers: headers
-		});
-
-		if (!response.ok) {
-			throw new Error(`Error getting user info: ${response.statusText}`);
-		}
-
-		const responseData = await response.json();
-		console.log(responseData);
-	} catch (error) {
-		console.error('Error getting user info:', error.message);
-	}
-}
-
-async function searchSubReddits(token: string, query: string) {
+export async function searchSubReddits(query: string) {
+	const token = await getToken();
 	const headers = {
 		Authorization: `Bearer ${token}`,
 		'User-Agent': userAgent
@@ -101,7 +65,8 @@ async function searchSubReddits(token: string, query: string) {
 	}
 }
 
-async function searchPostsInSubreddit(token: string, subreddit: string, query: string) {
+export async function searchPostsInSubreddit(subreddit: string, query: string) {
+	const token = await getToken();
 	const headers = {
 		Authorization: `Bearer ${token}`,
 		'User-Agent': userAgent
@@ -126,31 +91,20 @@ async function searchPostsInSubreddit(token: string, subreddit: string, query: s
 	const responseData = await response.json();
 	const posts = responseData.data.children;
 
-	console.log(
-		posts.map((post: any) => {
-			return post;
-			return {
-				text: post.data.selftext,
-				url: post.data.url,
-				type: post.data.type,
-				category: post.data.category
-			};
-		})
-	);
-	return posts;
+	return posts.map((post: any) => {
+		return {
+			text: post.data.selftext,
+			url: post.data.url
+		};
+	});
 }
-// https://www.reddit.com/dev/api#GET_comments_{article}
-async function getCommentsOfArticle(token: string, articleId: string) {
+
+export async function getCommentsOfArticle(articleId: string) {
+	const token = await getToken();
 	const headers = {
 		Authorization: `Bearer ${token}`,
 		'User-Agent': userAgent
 	};
-
-	// const params = new URLSearchParams({
-	// 	q: query,
-	// 	type: 'link',
-	// 	limit: '5'
-	// });
 
 	const url = `https://oauth.reddit.com/comments/${articleId}`;
 	console.log('url: ', url);
@@ -163,19 +117,16 @@ async function getCommentsOfArticle(token: string, articleId: string) {
 	}
 
 	const responseData = await response.json();
-	console.log(responseData);
 
 	for (const comment of responseData) {
 		console.log(comment.data.children);
 	}
 }
 
-const token = await getToken();
-if (token) {
-	// await getUserInfo(token);
-	// await searchSubReddits(token, 'neighbors');
-	// await searchPostsInSubreddit(token, 'berlin', 'Communicate with neighbors');
+// await searchSubReddits('neighbors');
+// const posts = await searchPostsInSubreddit('berlin', 'Communicate with neighbors');
+// console.log(posts);
 
-	// https://www.reddit.com/r/berlin/comments/12ul8cd/how_do_you_communicate_with_neighbors_in_same/
-	await getCommentsOfArticle(token, '12ul8cd');
-}
+// https://www.reddit.com/r/berlin/comments/12ul8cd/how_do_you_communicate_with_neighbors_in_same/
+const comments = await getCommentsOfArticle('12ul8cd');
+console.log(comments);
