@@ -44,8 +44,9 @@
 					Find the right community for your app - on reddit, discord, or slack.
 				</section>
 				<footer class="card-footer">
-					<a class="variant-outline-primary btn btn-md" href="/projects/{currentProject.id}/aso"
-						>Coming soon</a
+					<a
+						class="variant-outline-primary btn btn-md"
+						href="/projects/{currentProject.id}/communities">Find communities</a
 					>
 				</footer>
 			</div>
