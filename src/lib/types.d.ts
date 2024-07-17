@@ -90,3 +90,15 @@ export const emptyProject: Project = {
 	appStoreInfo: undefined,
 	suggestions: undefined
 };
+
+export type Post = {
+	url: string;
+	title: string;
+	content: string;
+	score: number;
+};
+
+export type Result = {
+	searchTerm: string;
+	posts: Post[];
+};

@@ -1,7 +1,9 @@
 <script lang="ts">
+	import CommunityPost from '$lib/components/CommunityPost.svelte';
 	import { page } from '$app/stores';
 	import { briefing } from '$lib/agent/agent';
 	import Spinner from '$lib/components/Spinner.svelte';
+	import type { Post, Result } from '$lib/types';
 
 	import { parse } from 'best-effort-json-parser';
 
@@ -11,22 +13,10 @@
 	let output: string;
 	$: output = '';
 
-	type Post = {
-		url: string;
-		title: string;
-		content: string;
-		score: number;
-	};
-
-	type Result = {
-		searchTerm: string;
-		posts: Post[];
-	};
-
 	let results: Result[];
 	$: results = [];
 
-	// for testing layout:
+	// // for testing layout:
 	// $: results = [
 	// 	{
 	// 		searchTerm: 'best app to connect with neighbors site:reddit.com',
@@ -110,6 +100,14 @@
 			loading = false;
 		}
 	}
+	function removePost(post: Post) {
+		results = results.map((result) => {
+			return {
+				...result,
+				posts: result.posts.filter((p) => p !== post)
+			};
+		});
+	}
 </script>
 
 <div class="h-full w-full p-4">
@@ -119,7 +117,7 @@
 
 		<p>
 			<button class="variant-filled-primary btn btn-md" on:click={callAgent}
-				>Automatic search</button
+				>Find relevant conversations</button
 			>
 		</p>
 
@@ -134,17 +132,7 @@
 			{#if result?.posts?.length > 0}
 				<dl class="list-dl text-sm">
 					{#each result.posts as post}
-						<div>
-							<span class="badge bg-primary-500">💬</span>
-							<span class="flex-auto">
-								<dt>
-									<a href={post.url} class="font-bold" target="_blank">
-										{post.title}
-									</a>
-								</dt>
-								<dd>{post.content}</dd>
-							</span>
-						</div>
+						<CommunityPost {post} {removePost} />
 					{/each}
 				</dl>
 			{/if}
