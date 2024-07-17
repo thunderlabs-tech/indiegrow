@@ -5,13 +5,12 @@ import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
 import { load } from 'cheerio';
 
-const searchTool = new TavilySearchResults({ maxResults: 5 });
+const searchTool = new TavilySearchResults({ maxResults: 10 });
 
 const getAppInfoTool = tool(
 	async (input: { url: string }): Promise<string> => {
 		const response = await fetch(input.url);
 		const html = await response.text();
-		console.log(html);
 		const $ = load(html);
 		const metaDataJson = $(`[name=schema:software-application]`).html();
 

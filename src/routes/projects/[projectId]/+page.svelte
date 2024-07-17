@@ -45,7 +45,7 @@
 				</section>
 				<footer class="card-footer">
 					<a
-						class="variant-outline-primary btn btn-md"
+						class="variant-filled-primary btn btn-md"
 						href="/projects/{currentProject.id}/communities">Find communities</a
 					>
 				</footer>
