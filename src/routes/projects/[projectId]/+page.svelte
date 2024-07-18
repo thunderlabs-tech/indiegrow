@@ -39,9 +39,9 @@
 			{/if}
 
 			<div class="card">
-				<header class="card-header font-bold">Community marketing</header>
+				<header class="card-header font-bold">Community pulse</header>
 				<section class="p-4">
-					Find the right community for your app - on reddit, discord, or slack.
+					Find the right community conversations for your app - on reddit, discord, or slack.
 				</section>
 				<footer class="card-footer">
 					<a

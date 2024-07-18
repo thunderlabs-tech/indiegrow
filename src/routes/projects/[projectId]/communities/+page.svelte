@@ -104,7 +104,7 @@
 
 <div class="h-full w-full p-4">
 	<div class="flex flex-col space-y-4">
-		<h1 class="h1">Community Marketing</h1>
+		<h1 class="h1">Community pulse</h1>
 		<p>Let's find communities talking about the problems your app is solving.</p>
 
 		<p>
