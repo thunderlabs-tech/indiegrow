@@ -1,12 +1,12 @@
 <script lang="ts">
-	import CommunityPost from '$lib/components/CommunityRow.svelte';
 	import { page } from '$app/stores';
 	import { briefing } from '$lib/agent/agent';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import type { CommunityPost, CommunitySearchResult } from '$lib/types';
+	import type { CommunitySearchResult } from '$lib/types';
 
 	import { parse } from 'best-effort-json-parser';
 	import CommunityTable from '$lib/components/CommunityTable.svelte';
+	import { marked } from 'marked';
 
 	$: currentProject = $page.data.currentProject;
 
