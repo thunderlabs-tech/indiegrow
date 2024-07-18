@@ -91,14 +91,14 @@ export const emptyProject: Project = {
 	suggestions: undefined
 };
 
-export type Post = {
+export type CommunityPost = {
 	url: string;
 	title: string;
 	content: string;
 	score: number;
 };
 
-export type Result = {
+export type CommunitySearchResult = {
 	searchTerm: string;
-	posts: Post[];
+	posts: CommunityPost[];
 };
