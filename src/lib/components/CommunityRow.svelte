@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { marked } from 'marked';
 	import { page } from '$app/stores';
-	import type { Post } from '$lib/types';
+	import type { CommunityPost } from '$lib/types';
 	import Spinner from './Spinner.svelte';
 	import { clipboard } from '@skeletonlabs/skeleton';
 
-	export let post: Post;
+	export let post: CommunityPost;
 	$: currentProject = $page.data.currentProject;
 
-	export let removePost: (post: Post) => void;
+	export let removePost: (post: CommunityPost) => void;
 
 	let loading = false;
 
