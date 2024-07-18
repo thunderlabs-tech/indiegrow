@@ -87,6 +87,35 @@
 	</div>
 </section>
 
+<section class="w-full bg-surface-800 py-12 md:py-16 xl:py-24">
+	<div class="container px-4 md:px-6">
+		<div
+			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
+		>
+			<img
+				src="/screenshots/community-pulse.png"
+				width="650"
+				alt="Community Pulse"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+			/>
+			<div class="flex flex-col justify-center space-y-4">
+				<div class="space-y-2">
+					<h2
+						class="text-2xl font-bold tracking-tighter text-primary-500 sm:text-3xl md:text-4xl lg:text-5xl/none"
+					>
+						Community Pulse
+					</h2>
+					<p class="max-w-[600px] dark:text-secondary-300 md:text-xl">
+						If you're solving a real problem there probably are thousands of people talking about it
+						in online communities like reddit. We can help you find the right community conversation
+						relevant for your app and generate a meaningful response promoting your app.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
 <section class="w-full items-center bg-surface-900 py-12">
 	<div class="container px-4 md:px-8">
 		<div class="grid items-center gap-4 lg:grid-cols-[1fr_550px] lg:gap-8 xl:grid-cols-[1fr_650px]">
