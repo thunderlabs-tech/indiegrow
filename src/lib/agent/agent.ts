@@ -19,6 +19,7 @@ Tasks:
 After you're done, respond with a JSON array of objects, where each object has a "searchTerm" and "posts" property.
 Don't talk about technical details.
 Don't announce returning the array - just return it.
+Enclose the JSON array with "\`\`\`json"
 `;
 
 export async function createAgentExecutor(

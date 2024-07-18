@@ -34,8 +34,7 @@
 			<td> Actions </td>
 		</tr>
 		{#if result?.posts?.length > 0}
-			{#each result.posts as post, postIdx}
-				{@const idx = indexMap.get(post)}
+			{#each result.posts as post, idx}
 				<CommunityRow {idx} {post} {removePost} />
 			{/each}
 		{/if}

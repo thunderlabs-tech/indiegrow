@@ -68,7 +68,7 @@
 	<td class="text-center text-xl">💬</td>
 	<td>
 		<a href={post.url} class="font-bold" target="_blank">
-			{idx}.
+			{idx + 1}.
 			{post.title}
 		</a>
 		<p>{post.content}</p>
