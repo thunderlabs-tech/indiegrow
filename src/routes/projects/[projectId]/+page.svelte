@@ -46,7 +46,7 @@
 				<footer class="card-footer">
 					<a
 						class="variant-filled-primary btn btn-md"
-						href="/projects/{currentProject.id}/communities">Find communities</a
+						href="/projects/{currentProject.id}/communities">Find relevant conversations</a
 					>
 				</footer>
 			</div>
