@@ -4,6 +4,15 @@
 
 	export let results: CommunitySearchResult[];
 
+	const indexMap = new Map<CommunityPost, number>();
+	let idx = 1;
+	for (const result of results) {
+		for (const post of result.posts) {
+			indexMap.set(post, idx);
+			idx++;
+		}
+	}
+
 	function removePost(post: CommunityPost) {
 		results = results.map((result) => {
 			return {
@@ -15,22 +24,19 @@
 </script>
 
 <table class="table table-compact">
-	{#each results as result}
+	{#each results as result, resultIdx}
 		<tr>
 			<td colspan="2" class="text-xl">
 				<h4>
 					<span class="font-bold">Search Term:</span> "{result.searchTerm}"
 				</h4>
 			</td>
-			<!-- <td>
-				<h4 class="text-xl font-bold">
-				</h4>
-			</td> -->
 			<td> Actions </td>
 		</tr>
 		{#if result?.posts?.length > 0}
-			{#each result.posts as post}
-				<CommunityRow {post} {removePost} />
+			{#each result.posts as post, postIdx}
+				{@const idx = indexMap.get(post)}
+				<CommunityRow {idx} {post} {removePost} />
 			{/each}
 		{/if}
 	{/each}

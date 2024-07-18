@@ -6,6 +6,7 @@
 	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let post: CommunityPost;
+	export let idx: number | undefined;
 	$: currentProject = $page.data.currentProject;
 
 	export let removePost: (post: CommunityPost) => void;
@@ -67,6 +68,7 @@
 	<td class="text-center text-xl">💬</td>
 	<td>
 		<a href={post.url} class="font-bold" target="_blank">
+			{idx}.
 			{post.title}
 		</a>
 		<p>{post.content}</p>
@@ -82,7 +84,7 @@
 			<button
 				type="button"
 				class="variant-soft btn btn-sm mt-2 !text-white"
-				use:clipboard={suggestedResponse}>Copy resposne</button
+				use:clipboard={suggestedResponse}>Copy</button
 			>
 		{/if}
 	</td>

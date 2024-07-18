@@ -6,7 +6,6 @@
 
 	import { parse } from 'best-effort-json-parser';
 	import CommunityTable from '$lib/components/CommunityTable.svelte';
-	import { marked } from 'marked';
 
 	$: currentProject = $page.data.currentProject;
 
