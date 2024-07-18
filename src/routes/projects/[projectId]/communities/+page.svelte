@@ -126,16 +126,34 @@
 		{/if}
 		<pre class="text-sm">{output}</pre>
 
-		{#each results as result}
-			<hr />
-			<h4 class="text-lg"><span class="font-bold">Search term:</span> "{result.searchTerm}"</h4>
-			{#if result?.posts?.length > 0}
-				<dl class="list-dl text-sm">
+		<table class="table table-compact">
+			{#each results as result}
+				<tr>
+					<td>
+						<h4 class="text-lg">Search Term:</h4>
+					</td>
+					<td>
+						<h4 class="text-lg">
+							"{result.searchTerm}"
+						</h4>
+					</td>
+					<td> Actions </td>
+				</tr>
+				{#if result?.posts?.length > 0}
 					{#each result.posts as post}
 						<CommunityPost {post} {removePost} />
 					{/each}
-				</dl>
-			{/if}
-		{/each}
+				{/if}
+			{/each}
+		</table>
 	</div>
 </div>
+
+<style lang="postcss">
+	tr {
+		border-bottom: 4px solid #e2e8f0;
+	}
+	td {
+		padding: 0.5rem;
+	}
+</style>

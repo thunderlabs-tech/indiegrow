@@ -14,6 +14,7 @@
 
 	let suggestedResponse: string | undefined = undefined;
 	$: suggestedResponse;
+	// suggestedResponse = "It looks like you're enjoying connecting with your neighbors.".repeat(10);
 
 	async function suggestResponse() {
 		loading = true;
@@ -62,15 +63,13 @@
 	}
 </script>
 
-<div>
-	<span class="badge bg-primary-500">💬</span>
-	<span class="flex-auto">
-		<dt>
-			<a href={post.url} class="font-bold" target="_blank">
-				{post.title}
-			</a>
-		</dt>
-		<dd>{post.content}</dd>
+<tr>
+	<td class="text-center text-xl">💬</td>
+	<td>
+		<a href={post.url} class="font-bold" target="_blank">
+			{post.title}
+		</a>
+		<p>{post.content}</p>
 
 		{#if loading}
 			<Spinner text="Generating a response..." />
@@ -86,8 +85,8 @@
 				use:clipboard={suggestedResponse}>Copy resposne</button
 			>
 		{/if}
-	</span>
-	<span class="flex justify-end">
+	</td>
+	<td class="space-y-2">
 		<button
 			class="variant-filled-primary btn btn-sm"
 			on:click={() => {
@@ -95,10 +94,20 @@
 			}}>Respond</button
 		>
 		<button
-			class="variant-filled-error btn btn-sm ml-2"
+			class="variant-filled-error btn btn-sm"
 			on:click={() => {
 				removePost(post);
 			}}>Remove</button
 		>
-	</span>
-</div>
+	</td>
+</tr>
+
+<style lang="postcss">
+	td {
+		padding: 0.5rem;
+		vertical-align: top;
+	}
+	tr {
+		border-bottom: 1px solid #e2e8f0;
+	}
+</style>
