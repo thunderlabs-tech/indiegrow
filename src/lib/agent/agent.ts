@@ -13,7 +13,7 @@ You will be given the app store url of the app.
 Tasks:
 - get the info about the app from the url you're given
 - from the app info compile a list of search terms that you can use to find relevant user questions like "How do I do X?", "What's the best app to do X?" where X is some of the use cases of the app.
-- use the tools to find relevant posts on reddit.com using the search terms, return 10 posts per search term. Only search for posts on reddit and no other sites.
+- use the tools to find relevant posts on reddit.com using the search terms, return 10 posts per search term. Only search for posts on site:reddit.com and no other sites.
 - rank the posts by how relevant they are to the app and return the top 5 posts per search term.
 
 After you're done, respond with a JSON array of objects, where each object has a "searchTerm" and "posts" property.

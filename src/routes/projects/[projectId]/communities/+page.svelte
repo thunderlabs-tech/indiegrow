@@ -124,7 +124,7 @@
 		{#if loading}
 			<Spinner text="Loading community conversations..." />
 		{/if}
-		<pre>{output}</pre>
+		<pre class="text-sm">{output}</pre>
 
 		{#each results as result}
 			<hr />
