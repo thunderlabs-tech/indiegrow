@@ -1,35 +1,43 @@
-export const ssr = false;
+import { createBrowserClient, createServerClient, isBrowser, parse } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
-import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
-import type { Database, Tables } from '$lib/supabase';
+import type { Database } from '$lib/supabase';
 
-import { dev } from '$app/environment';
-import { inject } from '@vercel/analytics';
-inject({ mode: dev ? 'development' : 'production' });
-
-import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-
-injectSpeedInsights();
-
-export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
+export const ssr = true;
+export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
+	/**
+	 * Declare a dependency so the layout can be invalidated, for example, on
+	 * session refresh.
+	 */
 	depends('supabase:auth');
 
-	const supabase = createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-		global: {
-			fetch
-		},
-		cookies: {
-			get(key) {
-				if (!isBrowser()) {
-					return JSON.stringify(data.session);
-				}
+	console.log('layout - is browser?', isBrowser());
+	const supabase = isBrowser()
+		? createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+				global: {
+					fetch
+				},
+				cookies: {
+					get(key) {
+						if (!isBrowser()) {
+							return JSON.stringify(data.session);
+						}
 
-				const cookie = parse(document.cookie);
-				return cookie[key];
-			}
-		}
-	});
+						const cookie = parse(document.cookie);
+						return cookie[key];
+					}
+				}
+			})
+		: createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+				global: {
+					fetch
+				},
+				cookies: {
+					getAll() {
+						return data.cookies;
+					}
+				}
+			});
 
 	/**
 	 * It's fine to use `getSession` here, because on the client, `getSession` is
@@ -40,13 +48,13 @@ export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 		data: { session }
 	} = await supabase.auth.getSession();
 
-	if (session?.user) {
-	} else {
-		await supabase.auth.signInAnonymously();
-	}
+	const {
+		data: { user }
+	} = await supabase.auth.getUser();
 
 	let currentProject: Tables<'projects'> | null = null;
 
+	console.log('params', params);
 	if (params.projectId) {
 		const { data: project, error } = await supabase
 			.from('projects')
@@ -59,6 +67,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends, params }) => {
 			currentProject = project;
 		}
 	}
+	console.log('currentProject:', currentProject);
 
 	return { supabase, session, user: session?.user, currentProject };
 };

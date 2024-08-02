@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 
 	/** @type {import('./$types').PageData} */
-
 	const currentProject = $page.data.currentProject;
 </script>
 
