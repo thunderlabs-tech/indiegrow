@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import {
 		analysisPrompt,
 		analyzetWithAssistant,
@@ -6,9 +7,10 @@
 		type AnalysisResult
 	} from '$lib/analysis';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
-	import { project } from '$lib/project';
 	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { fade } from 'svelte/transition';
+
+	$: currentProject = $page.data.currentProject;
 
 	let prompt = analysisPrompt;
 	let assistantId = 'asst_fo8tifPDDG95lmaJwbbdZfc8';
@@ -29,7 +31,7 @@
 
 	async function analyze(useAssistant: boolean) {
 		try {
-			if (!$project.appStoreInfo) {
+			if (!currentProject.appStoreInfo) {
 				console.error('No app store info');
 				return;
 			}
@@ -40,9 +42,13 @@
 			const openai = openAiBrowserClient();
 
 			if (useAssistant) {
-				analysisResult = await analyzetWithAssistant(openai, assistantId, $project.appStoreInfo);
+				analysisResult = await analyzetWithAssistant(
+					openai,
+					assistantId,
+					currentProject.appStoreInfo
+				);
 			} else {
-				analysisResult = await analyzetWithLLM(openai, prompt, $project.appStoreInfo);
+				analysisResult = await analyzetWithLLM(openai, prompt, currentProject.appStoreInfo);
 			}
 
 			if (analysisResult?.error) {
