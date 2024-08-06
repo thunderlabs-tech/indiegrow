@@ -14,6 +14,23 @@ function postsQuery(postSlug: string) {
 
 				content {
 					json
+					links{
+					assets {
+						block {
+						sys {
+							id
+						}
+						title
+						description
+						contentType
+						fileName
+						size
+						url
+						width
+						height
+						}
+					}
+					}
 				}
 			}
 		}
