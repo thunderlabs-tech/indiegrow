@@ -22,7 +22,7 @@ import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 const query = `
 {
-	blogPostCollection{
+	postCollection{
     items{
         title
         content {
@@ -44,11 +44,11 @@ export async function load() {
 
 	const { data } = await response.json();
 
-	const { items } = data.blogPostCollection;
-	console.log(items[0].content.json);
+	const { items: posts } = data.postCollection;
+	console.log(posts[0].content.json);
 
 	return {
-		posts: items.map((e) => {
+		posts: posts.map((e) => {
 			// const options = { month: 'long', year: 'numeric' };
 			// const date = new Date(e.startDate);
 			// const formattedStartDate = new Intl.DateTimeFormat('en-US', options).format(date);
