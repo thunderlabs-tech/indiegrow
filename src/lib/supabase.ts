@@ -56,6 +56,35 @@ export type Database = {
           },
         ]
       }
+      waiting_list: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waiting_list_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
