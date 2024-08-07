@@ -3,18 +3,27 @@ import contentfulFetch from '$lib/contentful-fetch';
 
 function postsQuery(postSlug: string) {
 	return `
-	{
-		postCollection(where: { slug: "${postSlug}" }, limit: 1) {
-			items {
-				slug
-				title
-				category {
-					title
-				}
+{
+	postCollection(where: { slug: "${postSlug}" }, limit: 1) {
+		items {
+			slug
+			title
 
-				content {
-					json
-					links{
+			category {
+				title
+				slug
+			}
+
+			image{
+				title
+				url(transform: {
+				width: 480
+				})
+			}
+
+			content {
+				json
+				links{
 					assets {
 						block {
 						sys {
@@ -30,11 +39,15 @@ function postsQuery(postSlug: string) {
 						height
 						}
 					}
-					}
 				}
+			}
+
+			sys {
+				publishedAt
 			}
 		}
 	}
+}
 	`;
 }
 
@@ -50,6 +63,11 @@ export async function load({ params }) {
 	const postsData = await postsResponse.json();
 	const posts = postsData.data.postCollection.items;
 	const post = posts[0];
+	post.publishedAt = new Date(post.sys.publishedAt).toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
 	const category = post.category;
 
 	return {
