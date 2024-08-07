@@ -66,6 +66,7 @@
 				{#if $page.data.projects?.length > 0}
 					<a class="variant-ghost-surface btn btn-sm" href="/projects"> Projects </a>
 				{/if}
+				<a class="variant-ghost-surface btn btn-sm" href="/content"> Content </a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
@@ -76,10 +77,11 @@
 		{/if}
 	</svelte:fragment> -->
 
-	<div class="layout-docs page-padding flex items-start justify-center gap-10">
+	<div class="layout-docs flex items-start justify-center gap-10">
 		<div class="page-container-wide page-padding">
-			<div class="mx-auto w-full max-w-5xl p-4"></div>
-			<slot />
+			<div class="mx-auto w-full max-w-5xl p-4">
+				<slot />
+			</div>
 		</div>
 	</div>
 </AppShell>
