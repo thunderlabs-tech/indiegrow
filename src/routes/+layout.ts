@@ -1,7 +1,7 @@
 import { createBrowserClient, createServerClient, isBrowser, parse } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
-import type { Database } from '$lib/supabase';
+import type { Database, Tables } from '$lib/supabase';
 
 export const ssr = true;
 export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
@@ -52,6 +52,11 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 		data: { user }
 	} = await supabase.auth.getUser();
 
+	const { data: projects, error } = await supabase.from('projects').select('*');
+	if (error) {
+		console.error('Error getting projects:', error);
+	}
+
 	let currentProject: Tables<'projects'> | null = null;
 
 	console.log('params', params);
@@ -69,5 +74,5 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 	}
 	console.log('currentProject:', currentProject);
 
-	return { supabase, session, user: session?.user, currentProject };
+	return { supabase, session, user: session?.user, currentProject, projects };
 };

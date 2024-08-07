@@ -35,7 +35,7 @@
 		<AppBar padding="p-2">
 			<svelte:fragment slot="lead">
 				<span class="logo xs:text-xs xs:p-0 p-1 xl:text-xl">
-					<!-- {#if $page.data.currentProject}
+					{#if $page.data.currentProject}
 						<button class="btn btn-sm p-0 lg:hidden" on:click={drawerOpen}>
 							<span>
 								<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
@@ -45,7 +45,7 @@
 								</svg>
 							</span>
 						</button>
-					{/if} -->
+					{/if}
 					<span class="strong text-white">
 						<a href="/">
 							<span class="font-bold"> indiegrow </span>
@@ -63,14 +63,9 @@
 				</span>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<!-- <a
-					class="variant-ghost-surface btn btn-sm"
-					href="https://discord.gg/EXqV7W8MtY"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Discord
-				</a> -->
+				{#if $page.data.projects?.length > 0}
+					<a class="variant-ghost-surface btn btn-sm" href="/projects"> Projects </a>
+				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
@@ -82,7 +77,8 @@
 	</svelte:fragment> -->
 
 	<div class="layout-docs page-padding flex items-start justify-center gap-10">
-		<div class="layout-docs-content page-container-aside w-full">
+		<div class="page-container-wide page-padding">
+			<div class="mx-auto w-full max-w-5xl p-4"></div>
 			<slot />
 		</div>
 	</div>
