@@ -1,9 +1,10 @@
 import { error } from '@sveltejs/kit';
 import contentfulFetch from '$lib/contentful-fetch';
 
-const categoriesQuery = `
+function categoriesQuery(preview: boolean) {
+	return `
 {
-	categoryCollection{
+	categoryCollection(preview: ${preview}){
     items{
 		slug
         title
@@ -11,10 +12,12 @@ const categoriesQuery = `
   }
 }
 `;
+}
 
-const postsQuery = `
+function postsQuery(preview: boolean) {
+	return `
 {
-  postCollection( limit: 100) {
+  postCollection( limit: 100, preview: ${preview}) {
     items {
       slug
       title
@@ -39,9 +42,10 @@ const postsQuery = `
   }
 }
 `;
+}
 
-async function loadCategories() {
-	const categoriesResponse = await contentfulFetch(categoriesQuery);
+async function loadCategories(preview: boolean) {
+	const categoriesResponse = await contentfulFetch(categoriesQuery(preview), preview);
 	if (!categoriesResponse.ok) {
 		throw error(categoriesResponse.status, {
 			message: categoriesResponse.statusText
@@ -52,8 +56,8 @@ async function loadCategories() {
 	return categories;
 }
 
-async function loadPosts() {
-	const postsResponse = await contentfulFetch(postsQuery);
+async function loadPosts(preview: boolean) {
+	const postsResponse = await contentfulFetch(postsQuery(preview), preview);
 	if (!postsResponse.ok) {
 		throw error(postsResponse.status, {
 			message: postsResponse.statusText
@@ -72,9 +76,10 @@ async function loadPosts() {
 	return posts;
 }
 
-export async function load() {
-	const categories = await loadCategories();
-	const posts = await loadPosts();
+export async function load({ url }) {
+	const preview = url.searchParams.get('preview') == 'true';
+	const categories = await loadCategories(preview);
+	const posts = await loadPosts(preview);
 
 	return {
 		categories,

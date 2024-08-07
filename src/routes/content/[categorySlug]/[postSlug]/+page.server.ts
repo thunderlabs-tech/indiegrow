@@ -1,10 +1,10 @@
 import { error } from '@sveltejs/kit';
 import contentfulFetch from '$lib/contentful-fetch';
 
-function postsQuery(postSlug: string) {
+function postsQuery(postSlug: string, preview: boolean) {
 	return `
 {
-	postCollection(where: { slug: "${postSlug}" }, limit: 1) {
+	postCollection(where: { slug: "${postSlug}"}, limit: 1, preview: ${preview}) {
 		items {
 			slug
 			title
@@ -51,9 +51,11 @@ function postsQuery(postSlug: string) {
 	`;
 }
 
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const postSlug = params.postSlug;
-	const postsResponse = await contentfulFetch(postsQuery(postSlug));
+	const preview = url.searchParams.get('preview') == 'true';
+	const query = postsQuery(postSlug, preview);
+	const postsResponse = await contentfulFetch(query, preview);
 	if (!postsResponse.ok) {
 		throw error(postsResponse.status, {
 			message: postsResponse.statusText
@@ -62,6 +64,11 @@ export async function load({ params }) {
 
 	const postsData = await postsResponse.json();
 	const posts = postsData.data.postCollection.items;
+	if (posts.length === 0) {
+		throw error(404, {
+			message: 'Post not found'
+		});
+	}
 	const post = posts[0];
 	post.publishedAt = new Date(post.sys.publishedAt).toLocaleDateString('en-US', {
 		year: 'numeric',
