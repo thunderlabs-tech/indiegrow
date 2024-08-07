@@ -11,7 +11,6 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 	 */
 	depends('supabase:auth');
 
-	console.log('layout - is browser?', isBrowser());
 	const supabase = isBrowser()
 		? createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 				global: {
@@ -59,7 +58,6 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 
 	let currentProject: Tables<'projects'> | null = null;
 
-	console.log('params', params);
 	if (params.projectId) {
 		const { data: project, error } = await supabase
 			.from('projects')
@@ -72,7 +70,6 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 			currentProject = project;
 		}
 	}
-	console.log('currentProject:', currentProject);
 
 	return { supabase, session, user: session?.user, currentProject, projects };
 };
