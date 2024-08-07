@@ -24,7 +24,7 @@
 					<span class="text-xs font-bold opacity-50">{post.category.title}</span>
 				</a>
 			</div>
-			<button class="variant-ghost-surface btn">Read post →</button>
+			<button class="variant-outline-primary btn">Read post →</button>
 		</div>
 	</article>
 </a>

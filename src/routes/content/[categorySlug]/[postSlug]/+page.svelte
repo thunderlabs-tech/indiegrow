@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Breadcrumbs from '$lib/components/content/Breadcrumbs.svelte';
 	import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 	import { BLOCKS } from '@contentful/rich-text-types';
 
@@ -11,7 +12,6 @@
 		const assetBlockMap = new Map();
 		// loop through the assets and add them to the map
 		for (const asset of links.assets.block) {
-			console.log('asset', asset);
 			assetBlockMap.set(asset.sys.id, asset);
 		}
 
@@ -47,11 +47,8 @@
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
-	<ol class="breadcrumb">
-		<li class="crumb"><a class="anchor" href="/blog">Blog</a></li>
-		<li class="crumb-separator" aria-hidden="true">›</li>
-		<li>Article</li>
-	</ol>
+	<Breadcrumbs category={post.category} />
+
 	<header class="space-y-4">
 		<div class="blog-meta flex items-center justify-between">
 			<time class="time block">{post.publishedAt}</time>
