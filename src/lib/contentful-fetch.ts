@@ -2,7 +2,6 @@ import { CONTENTFUL_SPACE_ID, CONTENTFUL_ACCESS_TOKEN } from '$env/static/privat
 
 const contentfulFetch = async (query) => {
 	const url = 'https://graphql.contentful.com/content/v1/spaces/' + CONTENTFUL_SPACE_ID;
-	console.log('token:', CONTENTFUL_ACCESS_TOKEN);
 
 	const response = await fetch(url, {
 		method: 'POST',
