@@ -47,7 +47,7 @@
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
-	<Breadcrumbs category={post.category} />
+	<Breadcrumbs category={post.category} {post} />
 
 	<header class="space-y-4">
 		<div class="blog-meta flex items-center justify-between">
