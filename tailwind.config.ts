@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { skeleton } from '@skeletonlabs/tw-plugin';
+// import fontawesome from 'tailwind-fontawesome';
 
 import { indiegrowTheme } from './indiegrowTheme';
 
@@ -18,6 +19,9 @@ export default {
 	plugins: [
 		forms,
 		typography,
+		// fontawesome({
+		// 	version: 6
+		// }),
 		skeleton({
 			themes: {
 				custom: [indiegrowTheme],

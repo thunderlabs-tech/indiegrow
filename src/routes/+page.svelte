@@ -45,6 +45,7 @@
 				<div class="space-y-2">
 					<h2
 						class="text-2xl font-bold tracking-tighter text-primary-500 sm:text-3xl md:text-4xl lg:text-5xl/none"
+						id="competitor-analysis"
 					>
 						Automated competitor analysis
 					</h2>
@@ -66,6 +67,7 @@
 				<div class="space-y-2">
 					<h2
 						class="text-2xl font-bold tracking-tighter text-primary-500 sm:text-3xl md:text-4xl lg:text-5xl/none"
+						id="appstore-content"
 					>
 						Improve your AppStore content
 					</h2>
@@ -102,6 +104,7 @@
 				<div class="space-y-2">
 					<h2
 						class="text-2xl font-bold tracking-tighter text-primary-500 sm:text-3xl md:text-4xl lg:text-5xl/none"
+						id="community-pulse"
 					>
 						Community Pulse
 					</h2>
