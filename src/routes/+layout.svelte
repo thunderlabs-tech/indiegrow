@@ -68,7 +68,7 @@
 				{#if $page.data.projects?.length > 0}
 					<a class="variant-ghost-surface btn btn-sm" href="/projects">Projects</a>
 				{/if}
-				<!-- <a class="variant-ghost-surface btn btn-sm" href="/content">Content</a> -->
+				<a class="variant-ghost-surface btn btn-sm" href="/content">Content</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
