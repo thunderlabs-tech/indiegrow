@@ -7,6 +7,8 @@
 	// https://www.contentful.com/developers/docs/concepts/rich-text/
 	// Create a bespoke renderOptions object to target
 	// BLOCKS.EMBEDDED_ASSET (linked assets e.g. images)
+
+	// more options on renderung: https://svelte.dev/repl/3340dd24a3944297952c8f17942960ea?version=4.2.18
 	function renderOptions(links) {
 		// create an asset block map
 		const assetBlockMap = new Map();
@@ -81,7 +83,7 @@
 			class="aspect-video w-full shadow-xl rounded-container-token"
 		/>
 	</header>
-	<article class="prose-lg max-w-full space-y-2">
+	<article class="post prose-lg max-w-full space-y-2">
 		{@html htmlContent}
 	</article>
 	<footer class="card variant-glass-surface mb-28 flex items-center justify-between p-4">
@@ -97,5 +99,8 @@
 <style>
 	:global(img.embedded-img) {
 		/* width: 40%; */
+	}
+	:global(article.post a) {
+		text-decoration: underline;
 	}
 </style>
