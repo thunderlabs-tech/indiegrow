@@ -47,24 +47,39 @@
 	}
 </script>
 
-<div class="max-w-[800px] space-y-4 md:text-xl">
+<div class="text-md max-w-[800px] space-y-4">
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
-		<h2 class="text-2xl font-medium text-primary-500">Closed alpha</h2>
-		<p class="text-primary-50">
+		<!-- <h2 class="text-2xl font-medium text-primary-500">Closed alpha</h2> -->
+		<p class="text-secondary-500">
 			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
 		</p>
 		<form class="space-y-4" on:submit={addToWaitingList}>
-			<input
-				bind:value={email}
-				class="input"
-				type="email"
-				name="email"
-				id="email"
-				placeholder="Your email"
-			/>
-			<button class="variant-filled-primary btn" type="submit">Apply for waiting list</button>
+			<div class="input-group flex">
+				<input
+					bind:value={email}
+					class="input"
+					type="email"
+					name="email"
+					placeholder="Enter your email address"
+				/>
+				<button class="variant-filled-secondary btn" type="submit">Apply for waiting list</button>
+			</div>
 		</form>
 	{/if}
 </div>
+
+<style lang="postcss">
+	.input,
+	input,
+	input::placeholder {
+		@apply bg-surface-100;
+		@apply text-slate-400;
+	}
+
+	.input-group {
+		@apply border-surface-100;
+		@apply bg-surface-100;
+	}
+</style>
