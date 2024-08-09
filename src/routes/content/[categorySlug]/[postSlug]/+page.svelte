@@ -66,7 +66,7 @@
 				<img
 					class="avatar-image w-full object-cover"
 					style=""
-					src="/images/ionut_profile.jpeg"
+					src="/images/ionut_profile.webp"
 					alt="Ionut Ciobotaru"
 				/>
 			</figure>

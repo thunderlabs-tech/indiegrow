@@ -22,7 +22,7 @@
 			</div>
 			<img
 				style="border-radius:80px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);;"
-				src="/screenshots/mobile-view.png"
+				src="/screenshots/mobile-view.webp"
 				alt="IndieGrow Screenshot"
 				class="mx-auto overflow-hidden rounded-xl object-cover object-center lg:order-last"
 			/>
@@ -36,7 +36,7 @@
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
 			<img
-				src="/screenshots/competition.png"
+				src="/screenshots/competition.webp"
 				width="650"
 				alt="Competitor Analysis"
 				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
@@ -80,7 +80,7 @@
 				</div>
 			</div>
 			<img
-				src="/screenshots/improve-appstore-content.png"
+				src="/screenshots/improve-appstore-content.webp"
 				width="650"
 				alt="App Store Content"
 				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full"
@@ -95,7 +95,7 @@
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
 			<img
-				src="/screenshots/community-pulse.png"
+				src="/screenshots/community-pulse.webp"
 				width="650"
 				alt="Community Pulse"
 				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
