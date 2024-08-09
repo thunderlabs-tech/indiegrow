@@ -64,7 +64,9 @@
 					name="email"
 					placeholder="Your email address"
 				/>
-				<button class="variant-filled-secondary btn" type="submit">Sign up for waiting list</button>
+				<button class="variant-filled-secondary btn btn-lg" type="submit"
+					>Sign up for waiting list</button
+				>
 			</div>
 		</form>
 	{/if}

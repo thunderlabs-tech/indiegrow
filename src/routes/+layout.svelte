@@ -45,9 +45,9 @@
 	});
 </script>
 
-<AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-64">
+<AppShell slotSidebarLeft="bg-surface-50/5 w-0 lg:w-64">
 	<svelte:fragment slot="header">
-		<AppBar padding="p-2">
+		<AppBar padding="p-2" background="bg-surface-50">
 			<svelte:fragment slot="lead">
 				<span class="logo xs:text-xs xs:p-0 p-1 xl:text-xl">
 					{#if $page.data.currentProject}
@@ -61,7 +61,7 @@
 							</span>
 						</button>
 					{/if}
-					<span class="strong text-white">
+					<span class="strong text-secondary-500">
 						<a href="/">
 							<span class="font-bold"> indiegrow </span>
 						</a>
@@ -79,9 +79,9 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				{#if $page.data.projects?.length > 0}
-					<a class="variant-ghost-surface btn btn-sm" href="/projects">Projects</a>
+					<a class="variant-filled-secondary btn btn-md" href="/projects">Projects</a>
 				{/if}
-				<a class="variant-ghost-surface btn btn-sm" href="/content">Content</a>
+				<a class="variant-filled-secondary btn btn-md" href="/content">Content</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
@@ -92,13 +92,15 @@
 		{/if}
 	</svelte:fragment> -->
 
-	<div class="layout-docs flex items-start justify-center">
-		<div class="page-container-wide page-padding">
-			<div class="mx-auto w-full">
-				<slot />
-			</div>
-		</div>
+	<!-- <div class="layout-docs flex items-start justify-center"> -->
+	<!-- <div class="page-container-wide page-padding"> -->
+	<!-- <div class="mx-auto w-full"> -->
+	<div>
+		<slot />
 	</div>
+	<!-- </div> -->
+	<!-- </div> -->
+	<!-- </div> -->
 	<svelte:fragment slot="pageFooter"
 		><footer id="page-footer" class="flex-none">
 			<div

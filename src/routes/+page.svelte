@@ -1,21 +1,22 @@
 <script lang="ts">
 	import WaitingListForm from '$lib/components/WaitingListForm.svelte';
+
+	const containerClasses = 'section-container mx-auto max-w-5xl px-4 md:px-8';
 </script>
 
-<section class="lg:py-18 w-full items-center bg-surface-50 py-12 md:py-16 xl:py-24">
-	<div class="container px-4 md:px-8">
-		<div class="mx-auto grid max-w-3xl items-center gap-4 lg:gap-8">
-			<div class="space-y-4 text-center">
-				<h1
-					class="h1 text-3xl font-bold text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none"
-				>
-					IndieGrow helps you grow your app - with zero budget!
-				</h1>
-				<p class=" text-secondary-500 md:text-xl">
-					Indiegrow is the easiest to use SaaS product for indie developers to grow their apps
-					without spending a dime.
-				</p>
-			</div>
+<header
+	id="hero"
+	class="hero-gradient bg-surface-900-50-token items-center py-12 md:py-16 xl:py-24"
+>
+	<div class={containerClasses}>
+		<div class="mx-auto grid grid-cols-1 gap-4 text-center lg:gap-8">
+			<h1 class="h1 text-3xl font-bold text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none">
+				IndieGrow helps you grow your app - with zero budget!
+			</h1>
+			<p class=" text-secondary-500 md:text-xl">
+				Indiegrow is the easiest to use SaaS product for indie developers to grow their apps without
+				spending a dime.
+			</p>
 			<WaitingListForm />
 			<!-- <img
 				style="border-radius:80px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);;"
@@ -25,10 +26,10 @@
 			/> -->
 		</div>
 	</div>
-</section>
+</header>
 
 <section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24">
-	<div class="container px-4 md:px-6">
+	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
@@ -56,9 +57,9 @@
 </section>
 
 <section class="w-full bg-surface-900 py-12 text-white md:py-16 xl:py-24">
-	<div class="container px-4 md:px-6">
+	<div class={containerClasses}>
 		<div
-			class="grid items-center gap-6 lg:grid-cols-[650px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
+			class="grid items-center gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px]"
 		>
 			<div class="flex flex-col justify-center space-y-4">
 				<div class="space-y-2">
@@ -70,9 +71,7 @@
 					</h2>
 					<p class="max-w-[600px] text-xl text-secondary-200">
 						Using best practices and AI Magic, we'll help you craft the perfect App Store content to
-						attract more users and boost your downloads. Our AI-powered tools analyze your
-						competition and provide personalized recommendations to optimize your app listings,
-						screenshots, and descriptions.
+						attract more users and boost your downloads.
 					</p>
 				</div>
 			</div>
@@ -87,7 +86,7 @@
 </section>
 
 <section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24">
-	<div class="container px-4 md:px-6">
+	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
@@ -116,9 +115,9 @@
 	</div>
 </section>
 
-<section class="w-full items-center bg-surface-900 py-12">
-	<div class="container px-4 md:px-8">
-		<div class="grid items-center gap-4 lg:grid-cols-[1fr_550px] lg:gap-8 xl:grid-cols-[1fr_650px]">
+<section class="w-full items-center bg-surface-50 py-12">
+	<div class={containerClasses}>
+		<div class="grid items-center gap-4">
 			<div class="flex flex-col justify-center space-y-4">
 				<WaitingListForm />
 			</div>
