@@ -47,14 +47,14 @@
 	}
 </script>
 
-<div class="text-md space-y-4">
+<div class="text-md items-center space-y-4">
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
 		<!-- <h2 class="text-2xl font-medium text-primary-500">Closed alpha</h2> -->
-		<!-- <p class="text-secondary-500">
+		<p class="text-secondary-300">
 			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
-		</p> -->
+		</p>
 		<form class="mx-auto" on:submit={addToWaitingList}>
 			<div class="input-group flex bg-surface-100">
 				<input
@@ -62,27 +62,28 @@
 					class="input"
 					type="email"
 					name="email"
-					placeholder="Enter your email address"
+					placeholder="Your email address"
 				/>
-				<button class="variant-filled-secondary btn" type="submit">Apply for waiting list</button>
+				<button class="variant-filled-secondary btn" type="submit">Sign up for waiting list</button>
 			</div>
 		</form>
 	{/if}
 </div>
 
 <style lang="postcss">
+	.form {
+		width: 450px;
+	}
 	.input-group {
 		@apply bg-surface-100;
+		@apply border-surface-100;
+		@apply border-0;
 	}
 	.input,
 	input,
 	input::placeholder {
 		@apply bg-surface-100;
 		@apply text-slate-400;
-	}
-
-	.input-group {
 		@apply border-surface-100;
-		@apply bg-surface-100;
 	}
 </style>
