@@ -10,6 +10,19 @@
 	import { onMount } from 'svelte';
 	import { initializeStores, getDrawerStore } from '@skeletonlabs/skeleton';
 
+	import posthog from 'posthog-js';
+	import { browser } from '$app/environment';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
+
+	if (browser) {
+		beforeNavigate(() => posthog.capture('$pageleave'));
+		afterNavigate(() => posthog.capture('$pageview'));
+	}
+
+	if ($page.data.user) {
+		posthog.identify($page.data.user?.id);
+	}
+
 	initializeStores();
 
 	const drawerStore = getDrawerStore();

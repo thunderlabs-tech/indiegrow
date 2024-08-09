@@ -2,6 +2,7 @@ import { createBrowserClient, createServerClient, isBrowser, parse } from '@supa
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
 import type { Database, Tables } from '$lib/supabase';
+import posthog from 'posthog-js';
 
 export const ssr = true;
 export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
@@ -10,6 +11,15 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 	 * session refresh.
 	 */
 	depends('supabase:auth');
+
+	if (isBrowser()) {
+		posthog.init('phc_fpBxU6Uzfzf4PqspH2dh6ac0xXlHclw6TrBa30sUH7r', {
+			api_host: 'https://us.i.posthog.com',
+			person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
+			capture_pageview: false,
+			capture_pageleave: false
+		});
+	}
 
 	const supabase = isBrowser()
 		? createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
