@@ -10,7 +10,7 @@
 >
 	<div class={containerClasses}>
 		<div class="mx-auto grid grid-cols-1 gap-4 text-center lg:gap-8">
-			<h1 class="h1 text-3xl font-bold text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none">
+			<h1 class="h1 text-3xl text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none">
 				IndieGrow helps you grow your app - with zero budget!
 			</h1>
 			<p class=" text-secondary-500 md:text-xl">
