@@ -4,8 +4,8 @@ export const indiegrowTheme: CustomThemeConfig = {
 	name: 'indiegrow',
 	properties: {
 		// =~= Theme Properties =~=
-		'--theme-font-family-base': `system-ui`,
-		'--theme-font-family-heading': `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace`,
+		'--theme-font-family-base': `Poppins`,
+		'--theme-font-family-heading': `KronaOne`,
 		'--theme-font-color-base': '0 0 0',
 		'--theme-font-color-dark': '255 255 255',
 		'--theme-rounded-base': '9999px',
