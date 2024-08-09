@@ -92,9 +92,9 @@
 		{/if}
 	</svelte:fragment> -->
 
-	<div class="layout-docs flex items-start justify-center gap-10">
+	<div class="layout-docs flex items-start justify-center">
 		<div class="page-container-wide page-padding">
-			<div class="mx-auto w-full max-w-5xl p-4">
+			<div class="mx-auto w-full">
 				<slot />
 			</div>
 		</div>
