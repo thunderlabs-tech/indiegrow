@@ -3,7 +3,7 @@ import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { skeleton } from '@skeletonlabs/tw-plugin';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
+// import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 // import fontawesome from 'tailwind-fontawesome';
 
 import { indiegrowTheme } from './indiegrowTheme';
@@ -18,7 +18,7 @@ export default {
 		extend: {}
 	},
 	plugins: [
-		purgeCss,
+		// purgeCss, // doesn't work for some reason
 		forms,
 		typography,
 		// fontawesome({
