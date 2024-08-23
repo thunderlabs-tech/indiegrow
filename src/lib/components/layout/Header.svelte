@@ -6,7 +6,7 @@
 <AppBar>
 	<svelte:fragment slot="lead">
 		<a href="/">
-			<img id="logo" src="/images/logo-2x.png" alt="IndieGrow" />
+			<img class="h-7" src="/images/logo-2x.png" alt="IndieGrow" />
 		</a>
 	</svelte:fragment>
 	<svelte:fragment slot="default">
@@ -24,9 +24,6 @@
 </AppBar>
 
 <style lang="postcss">
-	#logo {
-		height: 35px;
-	}
 	:global(.app-bar) {
 		width: 1200px;
 		/* height: 71px; */
