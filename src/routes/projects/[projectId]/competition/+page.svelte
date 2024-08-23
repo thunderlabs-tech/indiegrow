@@ -178,7 +178,7 @@
 	}
 </script>
 
-<div class="h-full w-full p-4">
+<div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Competition</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>

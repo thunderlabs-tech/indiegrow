@@ -171,15 +171,15 @@
 		padding: 8px;
 	}
 	pre.current {
-		background-color: theme('colors.secondary.800');
+		background-color: theme('colors.secondary.200');
 	}
 
 	pre.suggestion {
-		background-color: theme('colors.secondary.500');
+		background-color: theme('colors.secondary.300');
 	}
 
 	.explanation {
-		background-color: theme('colors.primary.800');
+		background-color: theme('colors.primary.500');
 		font-size: 16px;
 		margin-top: 3px;
 		padding: 8px;
