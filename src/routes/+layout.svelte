@@ -67,4 +67,11 @@
 	:global(.page-footer) {
 		background: #f6f8ed;
 	}
+
+	:global(body) {
+		@apply bg-[url('/images/ellipses.svg')];
+		@apply bg-center;
+		@apply bg-no-repeat;
+		/* @apply bg-cover; */
+	}
 </style>
