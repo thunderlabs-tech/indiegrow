@@ -72,6 +72,6 @@
 		@apply bg-[url('/images/ellipses.svg')];
 		@apply bg-center;
 		@apply bg-no-repeat;
-		/* @apply bg-cover; */
+		background-position: center 100px;
 	}
 </style>
