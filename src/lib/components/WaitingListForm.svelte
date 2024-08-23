@@ -47,7 +47,7 @@
 	}
 </script>
 
-<div class="text-md items-center space-y-4">
+<div class="text-md w-1/2 items-center space-y-4">
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
@@ -64,7 +64,7 @@
 					name="email"
 					placeholder="Your email address"
 				/>
-				<button class="variant-filled-secondary btn btn-lg" type="submit"
+				<button class="variant-filled-secondary btn btn-md" type="submit"
 					>Sign up for waiting list</button
 				>
 			</div>
