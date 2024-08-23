@@ -11,7 +11,7 @@
 	</svelte:fragment>
 	<svelte:fragment slot="default">
 		<div class="flex items-center justify-center gap-4">
-			<a href="#features" class="header-link">Features</a>
+			<a href="/#features" class="header-link">Features</a>
 			<a href="/content" class="header-link">Content</a>
 		</div>
 	</svelte:fragment>
