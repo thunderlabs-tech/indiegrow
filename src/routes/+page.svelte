@@ -2,11 +2,12 @@
 	import WaitingListForm from '$lib/components/WaitingListForm.svelte';
 
 	const containerClasses = 'section-container mx-auto max-w-5xl px-4 md:px-8';
+	const sectionPaddingClasses = 'py-12 md:py-16 md:pb-28 xl:py-24 xl:pb-36';
 </script>
 
 <header
 	id="hero"
-	class="hero-gradient bg-surface-500-50-token items-center py-12 md:py-16 xl:py-24"
+	class="hero-gradient bg-surface-500-50-token items-center {sectionPaddingClasses}"
 >
 	<div class={containerClasses}>
 		<div class="mx-auto grid-cols-1 items-center justify-center gap-4 text-center lg:gap-8">
@@ -32,7 +33,10 @@
 	</div>
 </header>
 
-<section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24" id="features">
+<section
+	class="rounded-top-corners w-full bg-surface-500 text-white {sectionPaddingClasses}"
+	id="features"
+>
 	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
@@ -60,7 +64,7 @@
 	</div>
 </section>
 
-<section class="w-full bg-surface-900 py-12 text-white md:py-16 xl:py-24">
+<section class="rounded-top-corners w-full bg-surface-900 text-white {sectionPaddingClasses}">
 	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px]"
@@ -89,7 +93,7 @@
 	</div>
 </section>
 
-<section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24">
+<section class=" rounded-top-corners w-full bg-surface-500 text-white {sectionPaddingClasses}">
 	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
@@ -119,7 +123,7 @@
 	</div>
 </section>
 
-<section class="w-full items-center bg-surface-50 py-12">
+<section class=" rounded-top-corners w-full items-center bg-surface-50 {sectionPaddingClasses}">
 	<div class={containerClasses}>
 		<div class="grid items-center gap-4">
 			<div class="mb-4 mt-4 flex justify-center">
