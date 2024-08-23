@@ -6,7 +6,7 @@
 
 <header
 	id="hero"
-	class="hero-gradient bg-surface-900-50-token items-center py-12 md:py-16 xl:py-24"
+	class="hero-gradient bg-surface-500-50-token items-center py-12 md:py-16 xl:py-24"
 >
 	<div class={containerClasses}>
 		<div class="mx-auto grid grid-cols-1 gap-4 text-center lg:gap-8">
@@ -28,7 +28,7 @@
 	</div>
 </header>
 
-<section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24">
+<section class="w-full bg-surface-500 py-12 text-white md:py-16 xl:py-24" id="features">
 	<div class={containerClasses}>
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"

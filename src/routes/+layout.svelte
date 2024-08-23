@@ -4,7 +4,7 @@
 
 	import '../app.postcss';
 	import { page } from '$app/stores';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell } from '@skeletonlabs/skeleton';
 
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -13,6 +13,7 @@
 	import posthog from 'posthog-js';
 	import { browser } from '$app/environment';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
+	import Header from '$lib/components/layout/Header.svelte';
 
 	if (browser) {
 		beforeNavigate(() => posthog.capture('$pageleave'));
@@ -47,32 +48,7 @@
 
 <AppShell slotSidebarLeft="bg-surface-50/5 w-0 lg:w-64">
 	<svelte:fragment slot="header">
-		<AppBar padding="p-2" background="bg-surface-50">
-			<svelte:fragment slot="lead">
-				<span class="logo xs:text-xs xs:p-0 p-1 xl:text-xl">
-					{#if $page.data.currentProject}
-						<button class="btn btn-sm p-0 lg:hidden" on:click={drawerOpen}>
-							<span>
-								<svg viewBox="0 0 100 80" class="fill-token h-4 w-4">
-									<rect width="100" height="20" />
-									<rect y="30" width="100" height="20" />
-									<rect y="60" width="100" height="20" />
-								</svg>
-							</span>
-						</button>
-					{/if}
-					<a href="/">
-						<img src="/images/logo-2x.png" alt="IndieGrow" />
-					</a>
-				</span>
-			</svelte:fragment>
-			<svelte:fragment slot="trail">
-				{#if $page.data.projects?.length > 0}
-					<a class="variant-filled-secondary btn btn-md" href="/projects">Projects</a>
-				{/if}
-				<a class="variant-filled-secondary btn btn-md" href="/content">Content</a>
-			</svelte:fragment>
-		</AppBar>
+		<Header />
 	</svelte:fragment>
 
 	<!-- <svelte:fragment slot="sidebarLeft">
@@ -81,15 +57,9 @@
 		{/if}
 	</svelte:fragment> -->
 
-	<!-- <div class="layout-docs flex items-start justify-center"> -->
-	<!-- <div class="page-container-wide page-padding"> -->
-	<!-- <div class="mx-auto w-full"> -->
 	<div>
 		<slot />
 	</div>
-	<!-- </div> -->
-	<!-- </div> -->
-	<!-- </div> -->
 	<svelte:fragment slot="pageFooter"
 		><footer id="page-footer" class="flex-none">
 			<div
@@ -197,17 +167,4 @@
 </AppShell>
 
 <style lang="postcss">
-	.logo {
-		background-color: none;
-		white-space: nowrap;
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-			'Courier New', monospace;
-		/* color: rgb(var(--color-primary-700) / var(--tw-text-opacity)); */
-		/* background-color: rgb(var(--color-primary-500) / 0.3); */
-		border-radius: 0.25rem;
-		padding-top: 0.125rem;
-		padding-bottom: 0.125rem;
-		padding-left: 0.25rem;
-		padding-right: 0.25rem;
-	}
 </style>
