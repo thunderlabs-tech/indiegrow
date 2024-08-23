@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class="rounded-top-corners page-footer border-t border-surface-500/10 bg-surface-50 text-xs dark:bg-surface-100-800-token md:text-base"
+	class="page-footer border-t border-surface-500/10 bg-surface-50 text-xs dark:bg-surface-100-800-token md:text-base"
 >
 	<div class="mx-auto w-full max-w-5xl space-y-10 p-4 py-12">
 		<hr class="opacity-20" />
