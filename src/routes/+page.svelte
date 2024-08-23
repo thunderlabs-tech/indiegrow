@@ -9,14 +9,16 @@
 	class="hero-gradient bg-surface-500-50-token items-center py-12 md:py-16 xl:py-24"
 >
 	<div class={containerClasses}>
-		<div class="mx-auto grid grid-cols-1 gap-4 text-center lg:gap-8">
+		<div class="mx-auto grid-cols-1 items-center justify-center gap-4 text-center lg:gap-8">
 			<h1 class="h1 text-3xl text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none">
 				IndieGrow helps you grow your app - with zero budget!
 			</h1>
-			<p class=" text-secondary-500 md:text-xl">
-				Indiegrow is the easiest to use SaaS product for indie developers to grow their apps without
-				spending a dime.
-			</p>
+			<div class="mb-4 mt-4 flex w-full justify-center">
+				<p class="w-2/3 text-secondary-500 md:text-xl">
+					Indiegrow is the easiest to use SaaS product for indie developers to grow their apps
+					without spending a dime.
+				</p>
+			</div>
 			<WaitingListForm />
 			<!-- <img
 				style="border-radius:80px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);;"
