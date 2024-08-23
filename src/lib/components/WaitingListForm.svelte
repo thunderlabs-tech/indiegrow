@@ -56,7 +56,7 @@
 			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
 		</p>
 		<form class="mx-auto" on:submit={addToWaitingList}>
-			<div class="input-group flex bg-surface-100">
+			<div class="input-group flex">
 				<input
 					bind:value={email}
 					class="input"
@@ -78,8 +78,11 @@
 	}
 	.input-group {
 		@apply bg-surface-100;
-		@apply border-surface-100;
-		@apply border-0;
+		@apply border-white;
+		@apply border;
+		padding: 5px;
+
+		backdrop-filter: blur(5px);
 	}
 	.input,
 	input,
