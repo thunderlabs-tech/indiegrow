@@ -122,7 +122,7 @@
 <section class="w-full items-center bg-surface-50 py-12">
 	<div class={containerClasses}>
 		<div class="grid items-center gap-4">
-			<div class="flex flex-col justify-center space-y-4">
+			<div class="mb-4 mt-4 flex justify-center">
 				<WaitingListForm />
 			</div>
 		</div>
