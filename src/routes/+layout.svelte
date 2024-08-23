@@ -61,20 +61,9 @@
 							</span>
 						</button>
 					{/if}
-					<span class="strong text-secondary-500">
-						<a href="/">
-							<span class="font-bold"> indiegrow </span>
-						</a>
-
-						<!-- {#if $page.data.currentProject}
-							<a href="/projects/{$page.data.currentProject.id}">
-								<span class="">
-									&#60;{$page.data.currentProject.name}&#62;
-								</span>
-							</a>
-						{/if} -->
-						$
-					</span>
+					<a href="/">
+						<img src="/images/logo-2x.png" alt="IndieGrow" />
+					</a>
 				</span>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
