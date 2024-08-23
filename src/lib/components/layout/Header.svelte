@@ -38,7 +38,7 @@
 		padding-bottom: 18px;
 	}
 
-	:global(#shell-header) {
+	:global(#page-header) {
 		padding-top: 20px;
 		padding-bottom: 20px;
 		/* this is what centers your element in the fixed wrapper*/
