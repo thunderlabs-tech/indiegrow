@@ -19,7 +19,7 @@
 		{#if $page.data.projects?.length > 0}
 			<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Projects</a>
 		{/if}
-		<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Sign up</a>
+		<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Sign up</a>
 	</svelte:fragment>
 </AppBar>
 

@@ -19,7 +19,7 @@
 					without spending a dime.
 				</p>
 			</div>
-			<div class="mb-4 mt-4 flex justify-center">
+			<div id="signup" class="mb-4 mt-4 flex justify-center">
 				<WaitingListForm />
 			</div>
 			<!-- <img
