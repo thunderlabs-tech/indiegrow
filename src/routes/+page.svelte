@@ -39,14 +39,8 @@
 >
 	<div class={containerClasses}>
 		<div
-			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
+			class="grid items-center gap-4 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
-			<img
-				src="/screenshots/competition.webp"
-				width="650"
-				alt="Competitor Analysis"
-				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
-			/>
 			<div class="flex flex-col justify-center space-y-4">
 				<div class="space-y-2">
 					<h2
@@ -60,6 +54,12 @@
 					</p>
 				</div>
 			</div>
+			<img
+				src="/screenshots/competition.webp"
+				width="650"
+				alt="Competitor Analysis"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+			/>
 		</div>
 	</div>
 </section>
@@ -98,12 +98,6 @@
 		<div
 			class="grid items-center gap-6 lg:grid-cols-[550px_1fr] lg:gap-12 xl:grid-cols-[650px_1fr]"
 		>
-			<img
-				src="/screenshots/community-pulse.webp"
-				width="650"
-				alt="Community Pulse"
-				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
-			/>
 			<div class="flex flex-col justify-center space-y-4">
 				<div class="space-y-2">
 					<h2
@@ -119,6 +113,12 @@
 					</p>
 				</div>
 			</div>
+			<img
+				src="/screenshots/community-pulse.webp"
+				width="650"
+				alt="Community Pulse"
+				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+			/>
 		</div>
 	</div>
 </section>
