@@ -19,7 +19,7 @@
 
 	async function loadCompetitors() {
 		if (!currentProject) {
-			console.log('No current project set');
+			console.error('No current project set');
 			return;
 		}
 		const { error, data } = await dbclient()
@@ -27,7 +27,7 @@
 			.select('*')
 			.or(`id.eq.${currentProject.id}, competitor_of.eq.${currentProject.id}`);
 		if (error) {
-			console.log(error);
+			console.error('Error loading competitors:', error);
 		} else {
 			competitors = data;
 		}
@@ -80,14 +80,13 @@
 			})
 			.select('*');
 		if (error) {
-			console.log('error inserting competitor', error);
+			console.error('Error inserting competitor:', error);
 		}
 		competitors = [...competitors, competitor];
 	}
 
 	async function addCompetitors() {
 		analyzingCompetitors = true;
-		console.log('Adding competitors:', competitorUrls);
 
 		try {
 			const urls = competitorUrls.split(' ').filter(Boolean);
@@ -124,7 +123,6 @@
 		try {
 			const response = await fetch(endpoint);
 			const data = await response.json();
-			console.log('data', data);
 			return data.results.map((app: any) => app.trackViewUrl);
 		} catch (error) {
 			console.error(`Error searching for term "${term}":`, error);
@@ -133,9 +131,6 @@
 	}
 
 	async function findCompetitors() {
-		console.log('finding competitors');
-		console.log('current project', currentProject.appstore_info.description);
-
 		let data: string[] = [];
 		const info = JSON.parse(currentProject.appstore_info);
 		analyzingCompetitors = true;
@@ -149,7 +144,6 @@
 			for await (const item of entityStream) {
 				if (item) {
 					data = item.data; // as unknown as ProductMarketingAnalysis;
-					console.log('partial response: ', item.data);
 				}
 			}
 
@@ -163,13 +157,10 @@
 				return bReviewCount - aReviewCount;
 			});
 			topCompetitors.forEach((competitor) => {
-				console.log('adding competitor:', competitor);
 				if (competitor?.name !== currentProject.name) {
 					addCompetitor(competitor);
 				}
 			});
-
-			console.log('topCompetitors:', topCompetitors);
 		} catch (error) {
 			console.error('Error running analysis:', error);
 		} finally {

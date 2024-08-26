@@ -56,8 +56,6 @@ export async function refineWithLLMStreaming(
 	prompt: string,
 	info: AppStoreInfo
 ): Promise<Stream<OpenAI.Chat.Completions.ChatCompletionChunk>> {
-	console.log(`Refining with LLM-Prompt: ${prompt} `);
-
 	const promptMessage: ChatCompletionSystemMessageParam = {
 		role: 'system',
 		content: prompt
@@ -83,7 +81,6 @@ export async function refineWithLLMStreaming(
 	});
 
 	const messages = [promptMessage, userMessage];
-	console.log('sending messages: ', messages);
 
 	const stream = await openai.chat.completions.create({
 		model: 'gpt-4-turbo',

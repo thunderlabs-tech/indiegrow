@@ -27,12 +27,10 @@
 		// validate the email:
 		const emailIsValid = email.includes('@');
 		if (!emailIsValid) {
-			console.log('email invalid');
 			return;
 		}
 
 		const entry = { email, user_id: uid };
-		console.log('Inserting: ', entry);
 		const { error } = await supabase.from('waiting_list').insert(entry);
 		if (error) {
 			console.error(error);

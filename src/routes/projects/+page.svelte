@@ -8,7 +8,7 @@
 	async function loadProjects() {
 		const { error, data } = await dbclient().from('projects').select('*').is('competitor_of', null);
 		if (error) {
-			console.log(error);
+			console.error(error);
 		} else {
 			projects = data;
 		}
@@ -31,7 +31,7 @@
 	async function deleteProject(id: string) {
 		const { error } = await dbclient().from('projects').delete().match({ id });
 		if (error) {
-			console.log(error);
+			console.error('Error deleting project:', error);
 		} else {
 			loadProjects();
 		}
