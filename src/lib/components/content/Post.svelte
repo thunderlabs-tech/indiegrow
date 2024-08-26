@@ -3,7 +3,7 @@
 </script>
 
 <a
-	class="block p-4 rounded-container-token hover:card hover:variant-soft"
+	class="block p-4 hover:card hover:variant-soft"
 	href="/content/{post.category.slug}/{post.slug}"
 	data-sveltekit-preload-data="hover"
 >
