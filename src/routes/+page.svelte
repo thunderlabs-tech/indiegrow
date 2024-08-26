@@ -58,7 +58,7 @@
 				src="/screenshots/competition.webp"
 				width="650"
 				alt="Competitor Analysis"
-				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+				class="mx-auto overflow-hidden rounded-xl border-[15px] border-surface-300/50 object-cover object-center sm:w-full lg:order-first"
 			/>
 		</div>
 	</div>
@@ -77,7 +77,7 @@
 					>
 						Improve your AppStore content
 					</h2>
-					<p class="max-w-[600px] text-xl text-secondary-200">
+					<p class="max-w-[600px] text-secondary-200 md:text-xl">
 						Using best practices and AI Magic, we'll help you craft the perfect App Store content to
 						attract more users and boost your downloads.
 					</p>
@@ -87,7 +87,7 @@
 				src="/screenshots/improve-appstore-content.webp"
 				width="650"
 				alt="App Store Content"
-				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full"
+				class="mx-auto overflow-hidden rounded-xl border-[15px] border-surface-300/50 object-cover object-center sm:w-full"
 			/>
 		</div>
 	</div>
@@ -106,7 +106,7 @@
 					>
 						Community Pulse
 					</h2>
-					<p class="max-w-[600px] dark:text-secondary-200 md:text-xl">
+					<p class="max-w-[600px] text-secondary-200 md:text-xl">
 						If you're solving a real problem there probably are thousands of people talking about it
 						in online communities like reddit. We can help you find the right community conversation
 						relevant for your app and generate a meaningful response promoting your app.
@@ -117,7 +117,7 @@
 				src="/screenshots/community-pulse.webp"
 				width="650"
 				alt="Community Pulse"
-				class="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-first"
+				class="mx-auto overflow-hidden rounded-xl border-[15px] border-surface-300/50 object-cover object-center sm:w-full lg:order-first"
 			/>
 		</div>
 	</div>
