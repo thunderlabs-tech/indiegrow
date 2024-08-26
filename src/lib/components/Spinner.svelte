@@ -8,12 +8,12 @@
 	<ProgressRadial
 		value={undefined}
 		stroke={100}
-		meter="stroke-primary-500"
-		track="stroke-primary-500/30"
+		meter="stroke-secondary-500"
+		track="stroke-secondary-500/30"
 		strokeLinecap="butt"
 		width="w-5"
 	/>
 	{#if text}
-		<span class="ml-2 flex-1 text-sm text-primary-500">{text}</span>
+		<span class="ml-2 flex-1 text-sm text-secondary-500">{text}</span>
 	{/if}
 </span>
