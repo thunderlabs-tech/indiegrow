@@ -84,14 +84,6 @@
 					title="X (Twitter)"
 					><Fa icon={faXTwitter} />
 				</a>
-				<!-- <a
-								class="opacity-75 hover:opacity-100"
-								href="https://discord.gg/EXqV7W8MtY"
-								target="_blank"
-								rel="noreferrer"
-								title="Discord"
-								><Fa icon={faDiscord} />
-							</a> -->
 			</div>
 		</section>
 	</div>

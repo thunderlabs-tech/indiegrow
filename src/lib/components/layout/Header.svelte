@@ -9,24 +9,24 @@
 
 <AppBar gap="none">
 	<svelte:fragment slot="lead">
-		<a href="/" class="w-32 md:w-auto">
+		<a href="/" class="w-32 lg:w-auto">
 			<img class="h-7 w-auto sm:h-9" src="/images/logo-2x.png" alt="IndieGrow" />
 		</a>
 	</svelte:fragment>
 	<svelte:fragment slot="default">
-		<div class="invisible flex items-center justify-center gap-4 sm:visible">
+		<div class="invisible flex items-center justify-center gap-4 lg:visible">
 			<a href="/#features" class="header-link">Features</a>
 			<a href="/content" class="header-link">Content</a>
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		<div class="invisible h-0 sm:visible sm:h-auto">
+		<div class="invisible h-0 lg:visible lg:h-auto">
 			{#if $page.data.projects?.length > 0}
 				<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Projects</a>
 			{/if}
 			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Get started</a>
 		</div>
-		<div class="visible w-4 sm:invisible sm:w-0">
+		<div class="visible lg:invisible">
 			<button on:click={drawerOpen}>
 				<Fa icon={faBars} />
 			</button>
