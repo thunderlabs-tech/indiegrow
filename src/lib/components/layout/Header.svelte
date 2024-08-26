@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { AppBar } from '@skeletonlabs/skeleton';
 	import Fa from 'svelte-fa';
 	import { faBars } from '@fortawesome/free-solid-svg-icons';
+
+	export let drawerOpen: () => void;
 </script>
 
 <AppBar gap="none">
@@ -25,7 +27,9 @@
 			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Sign up</a>
 		</div>
 		<div class="visible w-4 sm:invisible sm:w-0">
-			<Fa icon={faBars} />
+			<button on:click={drawerOpen}>
+				<Fa icon={faBars} />
+			</button>
 		</div>
 	</svelte:fragment>
 </AppBar>
@@ -81,7 +85,7 @@
 		font-weight: 500;
 		line-height: normal;
 	}
-	.header-link {
+	:global(.header-link) {
 		color: #001f3e;
 		font-family: Poppins;
 		font-size: 18px;
