@@ -94,6 +94,5 @@
 							</a> -->
 			</div>
 		</section>
-		<hr class="opacity-20" />
 	</div>
 </div>
