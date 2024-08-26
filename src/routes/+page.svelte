@@ -11,11 +11,11 @@
 >
 	<div class={containerClasses}>
 		<div class="mx-auto grid-cols-1 items-center justify-center gap-4 text-center lg:gap-8">
-			<h1 class="h1 text-3xl text-secondary-500 sm:text-4xl md:text-5xl lg:text-6xl/none">
+			<h1 class="h1 text-xl text-secondary-500 sm:text-3xl md:text-4xl lg:text-6xl/none">
 				IndieGrow helps you grow your app - with zero budget!
 			</h1>
 			<div class="mb-4 mt-4 flex w-full justify-center">
-				<p class="w-2/3 text-secondary-500 md:text-xl">
+				<p class="w-full text-xs text-secondary-500 md:w-3/4 md:text-lg lg:w-2/3">
 					Indiegrow is the easiest to use SaaS product for indie developers to grow their apps
 					without spending a dime.
 				</p>

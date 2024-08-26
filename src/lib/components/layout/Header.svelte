@@ -24,7 +24,7 @@
 			{#if $page.data.projects?.length > 0}
 				<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Projects</a>
 			{/if}
-			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Sign up</a>
+			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Get started</a>
 		</div>
 		<div class="visible w-4 sm:invisible sm:w-0">
 			<button on:click={drawerOpen}>

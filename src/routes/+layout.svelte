@@ -75,7 +75,7 @@
 			>
 		{/if}
 		<a class="header-btn variant-filled-secondary btn btn-md" on:click={drawerClose} href="/#signup"
-			>Sign up</a
+			>Join the waiting list</a
 		>
 		<hr class="my-8" />
 	</div>
