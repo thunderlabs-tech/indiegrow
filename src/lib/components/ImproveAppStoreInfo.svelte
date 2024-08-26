@@ -42,7 +42,6 @@
 			const entityStream = openAiHandler.process(stream);
 
 			for await (const item of entityStream) {
-				console.log(item);
 				if (item) {
 					suggestions = item.data as unknown as ImprovementSuggestions;
 				}

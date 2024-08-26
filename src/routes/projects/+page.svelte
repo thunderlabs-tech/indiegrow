@@ -74,11 +74,11 @@
 									{/if}
 								</td>
 								<td>
-									<a class="variant-filled-primary btn btn-sm mr-2" href="/projects/{project.id}"
+									<a class="variant-filled-primary btn btn-sm" href="/projects/{project.id}"
 										>Select</a
 									>
 									<button
-										class="variant-filled-error btn btn-sm mr-2"
+										class="variant-filled-error btn btn-sm"
 										on:click={() => deleteProject(project.id)}>Delete</button
 									>
 								</td>
