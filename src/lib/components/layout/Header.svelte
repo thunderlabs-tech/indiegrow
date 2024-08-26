@@ -1,11 +1,13 @@
 <script>
 	import { page } from '$app/stores';
 	import { AppBar } from '@skeletonlabs/skeleton';
+	import Fa from 'svelte-fa';
+	import { faBars } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <AppBar gap="none">
 	<svelte:fragment slot="lead">
-		<a href="/" class="w-32 lg:w-auto">
+		<a href="/" class="w-32 md:w-auto">
 			<img class="h-7 w-auto sm:h-9" src="/images/logo-2x.png" alt="IndieGrow" />
 		</a>
 	</svelte:fragment>
@@ -16,12 +18,15 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
-		<span class="invisible h-0 sm:visible sm:h-auto">
+		<div class="invisible h-0 sm:visible sm:h-auto">
 			{#if $page.data.projects?.length > 0}
 				<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Projects</a>
 			{/if}
 			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Sign up</a>
-		</span>
+		</div>
+		<div class="visible w-4 sm:invisible sm:w-0">
+			<Fa icon={faBars} />
+		</div>
 	</svelte:fragment>
 </AppBar>
 
@@ -55,6 +60,14 @@
 		flex-flow: column nowrap;
 		justify-content: center; /* aligns on vertical for column */
 		align-items: center; /* aligns on horizontal for column */
+	}
+
+	:global(.app-bar-slot-default) {
+		display: none;
+
+		@media screen(sm) {
+			display: block;
+		}
 	}
 
 	.header-btn {
