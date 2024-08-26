@@ -51,9 +51,9 @@
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<Breadcrumbs category={post.category} {post} />
 
-	<header class="space-y-4">
+	<div class="space-y-4">
 		<div class="blog-meta flex items-center justify-between">
-			<time class="time block">{post.publishedAt}</time>
+			<time class="time block text-secondary-300">{post.publishedAt}</time>
 			<span class="hidden text-xs opacity-50 md:block">{readingTime} min read</span>
 		</div>
 		<h1 class="h1">{post.title}</h1>
@@ -82,7 +82,7 @@
 			alt={post.image.title}
 			class="aspect-video w-full shadow-xl rounded-container-token"
 		/>
-	</header>
+	</div>
 	<article class="post prose-lg max-w-full space-y-2">
 		{@html htmlContent}
 	</article>
@@ -97,9 +97,6 @@
 </div>
 
 <style>
-	:global(img.embedded-img) {
-		/* width: 40%; */
-	}
 	:global(article.post a) {
 		text-decoration: underline;
 	}

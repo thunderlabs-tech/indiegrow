@@ -8,11 +8,11 @@
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<Breadcrumbs category={data.category} />
 
-	<header class="flex items-center justify-between space-y-4">
+	<div class="flex items-center justify-between space-y-4">
 		<div class="space-y-4">
 			<h2 class="h2">{data.category.title}</h2>
 		</div>
-	</header>
+	</div>
 	<hr class="my-8" />
 
 	<section class="blog-list space-y-8">
