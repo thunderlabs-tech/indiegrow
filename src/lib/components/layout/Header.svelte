@@ -10,7 +10,7 @@
 <AppBar gap="none">
 	<svelte:fragment slot="lead">
 		<a href="/" class="w-32 lg:w-auto">
-			<img class="h-7 w-auto sm:h-9" src="/images/logo-2x.png" alt="IndieGrow" />
+			<img class="h-7 w-auto" src="/images/logo-2x.png" alt="IndieGrow" />
 		</a>
 	</svelte:fragment>
 	<svelte:fragment slot="default">
