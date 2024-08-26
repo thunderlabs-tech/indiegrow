@@ -63,7 +63,6 @@
 					<table class="projects">
 						{#each projects as project}
 							<tr>
-								<!-- <span class="badge bg-primary-500 text-xl">{project.name[0]}</span> -->
 								<td>
 									<a href="/projects/{project.id}">
 										{project.name}
@@ -78,9 +77,9 @@
 									<a class="variant-filled-primary btn btn-sm mr-2" href="/projects/{project.id}"
 										>Select</a
 									>
-									<a
+									<button
 										class="variant-filled-error btn btn-sm mr-2"
-										on:click={deleteProject(project.id)}>Delete</a
+										on:click={() => deleteProject(project.id)}>Delete</button
 									>
 								</td>
 							</tr>

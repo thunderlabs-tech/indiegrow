@@ -6,29 +6,31 @@
 	export let onRemove: (id: string) => void;
 </script>
 
-<table class="table table-compact">
-	<tr>
-		<td>
-			<!-- Loading spinner... -->
-		</td>
-		<td>Logo</td>
-		<td>Name</td>
-		<td>Category</td>
-		<td>Screenshots</td>
-		<td>App Rating</td>
-		<td>One line pitch</td>
-		<td>Product Type</td>
-		<td>Target Audience</td>
-		<td>Key Benefits</td>
-		<td>Key Features</td>
-		<td>Positioning</td>
-		<td>Actions</td>
-	</tr>
+<div class="table-container">
+	<table class="table table-compact">
+		<tr>
+			<td>
+				<!-- Loading spinner... -->
+			</td>
+			<td>Logo</td>
+			<td>Name</td>
+			<td>Category</td>
+			<td>Screenshots</td>
+			<td>App Rating</td>
+			<td>One line pitch</td>
+			<td>Product Type</td>
+			<td>Target Audience</td>
+			<td>Key Benefits</td>
+			<td>Key Features</td>
+			<td>Positioning</td>
+			<td>Actions</td>
+		</tr>
 
-	{#each competitors as competitor, idx}
-		<CompetitorRow {competitor} {onRemove} />
-	{/each}
-</table>
+		{#each competitors as competitor, idx}
+			<CompetitorRow {competitor} {onRemove} />
+		{/each}
+	</table>
+</div>
 
 <style lang="postcss">
 	tr {

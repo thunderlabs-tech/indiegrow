@@ -204,8 +204,9 @@
 		{#if analyzingCompetitors}
 			<Spinner text="Loading competitors..." />
 		{/if}
-		{#if competitors}
-			<CompetitorsTable {competitors} onRemove={removeCompetitor} />
-		{/if}
 	</div>
 </div>
+
+{#if competitors}
+	<CompetitorsTable {competitors} onRemove={removeCompetitor} />
+{/if}

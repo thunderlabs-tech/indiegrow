@@ -5,12 +5,13 @@
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
-	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import Screenshots from './Screenshots.svelte';
 	import type { AppStoreInfo, ImprovementSuggestions } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
+	import Spinner from './Spinner.svelte';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
@@ -68,17 +69,7 @@
 {/if} -->
 
 {#if loadingRefinements}
-	<span class="flex">
-		<ProgressRadial
-			value={undefined}
-			stroke={100}
-			meter="stroke-primary-500"
-			track="stroke-primary-500/30"
-			strokeLinecap="butt"
-			width="w-5"
-		/>
-		<span class="ml-2 flex-1 text-sm text-primary-500">Loading suggestions...</span>
-	</span>
+	<Spinner text="Loading suggestions..." />
 {/if}
 
 <div class="appstore-content">
