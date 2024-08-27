@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
 	import { faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+	import { LightSwitch } from '@skeletonlabs/skeleton';
 </script>
 
 <div
@@ -14,7 +15,8 @@
 			<div
 				class="grid w-2/5 grid-cols-1 place-content-center place-items-center gap-2 md:place-items-start"
 			>
-				<img src="/images/logo-2x.png" alt="IndieGrow" class="h-7" />
+				<img class="h-7 w-auto dark:hidden" src="/images/logo-2x.png" alt="IndieGrow" />
+				<img class="hidden h-7 w-auto dark:block" src="/images/logo-2x-white.png" alt="IndieGrow" />
 			</div>
 			<div class="space-y-2 md:space-y-4">
 				<h6 class="h6">Content</h6>
@@ -86,5 +88,6 @@
 				</a>
 			</div>
 		</section>
+		<LightSwitch height="h-8" width="w-16" />
 	</div>
 </div>

@@ -51,7 +51,7 @@
 	{:else}
 		<!-- <p class="text-secondary-300">We are currently in a closed alpha.</p> -->
 		<form class="mx-auto" on:submit={addToWaitingList}>
-			<div class="input-group flex flex-col sm:flex-row">
+			<div class="dark:border- input-group flex flex-col sm:flex-row">
 				<input
 					bind:value={email}
 					class="input"
@@ -59,9 +59,7 @@
 					name="email"
 					placeholder="Your email address"
 				/>
-				<button class="variant-filled-secondary btn btn-sm" type="submit"
-					>Join the waiting list</button
-				>
+				<button class="variant-filled btn btn-sm" type="submit">Join the waiting list</button>
 			</div>
 		</form>
 	{/if}
@@ -69,19 +67,6 @@
 
 <style lang="postcss">
 	.input-group {
-		@apply bg-surface-100;
-		@apply border-white;
-		@apply border;
-		/* padding: 5px; */
 		@apply p-1;
-
-		backdrop-filter: blur(5px);
-	}
-	.input,
-	input,
-	input::placeholder {
-		@apply bg-surface-100;
-		@apply text-slate-400;
-		@apply border-surface-100;
 	}
 </style>

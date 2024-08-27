@@ -3,13 +3,11 @@ import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { skeleton } from '@skeletonlabs/tw-plugin';
-// import { purgeCss } from 'vite-plugin-tailwind-purgecss';
-// import fontawesome from 'tailwind-fontawesome';
 
 import { indiegrowTheme } from './indiegrowTheme';
 
 export default {
-	darkMode: 'class',
+	darkMode: 'selector',
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
 		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')

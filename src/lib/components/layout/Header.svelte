@@ -10,7 +10,8 @@
 <AppBar gap="none">
 	<svelte:fragment slot="lead">
 		<a href="/" class="w-32 lg:w-auto">
-			<img class="h-7 w-auto" src="/images/logo-2x.png" alt="IndieGrow" />
+			<img class="h-7 w-auto dark:hidden" src="/images/logo-2x.png" alt="IndieGrow" />
+			<img class="hidden h-7 w-auto dark:block" src="/images/logo-2x-white.png" alt="IndieGrow" />
 		</a>
 	</svelte:fragment>
 	<svelte:fragment slot="default">
@@ -22,9 +23,9 @@
 	<svelte:fragment slot="trail">
 		<div class="invisible h-0 lg:visible lg:h-auto">
 			{#if $page.data.projects?.length > 0}
-				<a class="header-btn variant-filled-secondary btn btn-md" href="/projects">Projects</a>
+				<a class="header-btn variant-filled btn btn-md" href="/projects">Projects</a>
 			{/if}
-			<a class="header-btn variant-filled-secondary btn btn-md" href="/#signup">Get started</a>
+			<a class="header-btn variant-filled btn btn-md" href="/#signup">Get started</a>
 		</div>
 		<div class="visible lg:invisible">
 			<button on:click={drawerOpen}>
@@ -76,7 +77,7 @@
 
 	.header-btn {
 		height: 40px;
-		color: #f6f8ed;
+		/* color: #f6f8ed; */
 
 		text-align: center;
 		font-family: Poppins;
@@ -86,7 +87,7 @@
 		line-height: normal;
 	}
 	:global(.header-link) {
-		color: #001f3e;
+		/* color: #001f3e; */
 		font-family: Poppins;
 		font-size: 18px;
 		font-style: normal;
