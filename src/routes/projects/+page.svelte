@@ -3,19 +3,23 @@
 	import ProjectForm from '$lib/components/ProjectForm.svelte';
 	import type { Tables } from '$lib/supabase';
 	import { dbclient } from '$lib/dbclient';
+	import Spinner from '$lib/components/Spinner.svelte';
 	let projects: Tables<'projects'>[] = [];
 
+	let loading = false;
 	async function loadProjects() {
+		loading = true;
 		const { error, data } = await dbclient().from('projects').select('*').is('competitor_of', null);
 		if (error) {
 			console.error(error);
 		} else {
 			projects = data;
 		}
+		loading = false;
 	}
 
 	onMount(async () => {
-		loadProjects();
+		await loadProjects();
 	});
 
 	let showNewProjectForm = false;
@@ -48,7 +52,9 @@
 			<span>
 				<button class="variant-filled btn btn-sm" on:click={newProject}>Add project</button>
 			</span>
-			{#if projects.length === 0}
+			{#if loading}
+				<Spinner text="Loading projects..." />
+			{:else if projects.length === 0}
 				<p>No projects yet</p>
 			{:else}
 				<section class="card text-token w-full space-y-4 p-4">
