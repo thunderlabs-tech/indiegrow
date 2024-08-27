@@ -27,7 +27,7 @@
 			{/if}
 			<a class="header-btn variant-filled btn btn-md" href="/#signup">Get started</a>
 		</div>
-		<div class="visible lg:invisible">
+		<div class="visible lg:invisible lg:w-0">
 			<button on:click={drawerOpen}>
 				<Fa icon={faBars} />
 			</button>
@@ -75,6 +75,9 @@
 		}
 	}
 
+	:global(.app-bar-slot-trail) {
+		@apply space-x-0;
+	}
 	.header-btn {
 		height: 40px;
 		/* color: #f6f8ed; */
