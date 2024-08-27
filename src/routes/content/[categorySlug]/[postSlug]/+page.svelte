@@ -86,14 +86,6 @@
 	<article class="post prose-lg max-w-full space-y-2">
 		{@html htmlContent}
 	</article>
-	<footer class="card variant-glass-surface mb-28 flex items-center justify-between p-4">
-		<div class="flex items-center space-x-4">
-			<a href="/content/{post.category.slug}" class="text-sm font-bold capitalize opacity-50"
-				>{post.category.title}</a
-			>
-		</div>
-		<button class="variant-ghost-surface btn">Scroll to Top ↑</button>
-	</footer>
 </div>
 
 <style>
