@@ -90,7 +90,7 @@
 	</td>
 	<td class="space-y-2">
 		<button
-			class="variant-filled-primary btn btn-sm"
+			class="variant-filled btn btn-sm"
 			on:click={() => {
 				suggestResponse();
 			}}>Respond</button

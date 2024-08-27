@@ -182,14 +182,12 @@
 					type="text"
 					placeholder="URLs of your competitors"
 				/>
-				<button class="variant-filled-secondary">Add manually</button>
+				<button class="variant-filled">Add manually</button>
 			</div>
 		</form>
 
 		<p>
-			<button class="variant-filled-secondary btn btn-md" on:click={findCompetitors}
-				>Automatic search</button
-			>
+			<button class="variant-filled btn btn-md" on:click={findCompetitors}>Automatic search</button>
 		</p>
 
 		{#if analyzingCompetitors}

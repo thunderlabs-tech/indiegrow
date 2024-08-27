@@ -44,17 +44,9 @@
 
 		{#if showNewProjectForm}
 			<ProjectForm project={{}} {onSave} />
-			<span>
-				<button
-					class="variant-filled-gray btn btn-sm"
-					on:click={() => {
-						showNewProjectForm = false;
-					}}>Cancel</button
-				>
-			</span>
 		{:else}
 			<span>
-				<button class="variant-filled-primary btn btn-sm" on:click={newProject}>Add project</button>
+				<button class="variant-filled btn btn-sm" on:click={newProject}>Add project</button>
 			</span>
 			{#if projects.length === 0}
 				<p>No projects yet</p>
@@ -74,9 +66,7 @@
 									{/if}
 								</td>
 								<td>
-									<a class="variant-filled-primary btn btn-sm" href="/projects/{project.id}"
-										>Select</a
-									>
+									<a class="variant-filled btn btn-sm" href="/projects/{project.id}">Select</a>
 									<button
 										class="variant-filled-error btn btn-sm"
 										on:click={() => deleteProject(project.id)}>Delete</button

@@ -108,7 +108,7 @@
 		<p>Let's find communities talking about the problems your app is solving.</p>
 
 		<p>
-			<button class="variant-filled-primary btn btn-md" on:click={callAgent}
+			<button class="variant-filled btn btn-md" on:click={callAgent}
 				>Find relevant conversations</button
 			>
 		</p>

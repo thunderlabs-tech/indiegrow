@@ -70,10 +70,7 @@
 	{/if}
 
 	<p>
-		<button
-			on:click={createProject}
-			class="variant-filled-primary btn btn-sm"
-			disabled={!saveActive}
+		<button on:click={createProject} class="variant-filled btn btn-sm" disabled={!saveActive}
 			>Create project
 		</button>
 	</p>

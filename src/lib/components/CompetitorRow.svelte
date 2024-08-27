@@ -162,7 +162,7 @@
 		{#if pma?.keyBenefits}
 			<span transition:effect>
 				{#each pma.keyBenefits as benefit}
-					<span class="variant-outline-primary chip">{benefit}</span>
+					<span class="variant-outline chip">{benefit}</span>
 				{/each}
 			</span>
 		{:else if loadingPma}

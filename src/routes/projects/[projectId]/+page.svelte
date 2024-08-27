@@ -16,9 +16,8 @@
 					Analyze your competition based on their website and AppStore presence.
 				</section>
 				<footer class="card-footer">
-					<a
-						class="variant-filled-primary btn btn-sm"
-						href="/projects/{currentProject.id}/competition">Analyze your competition</a
+					<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/competition"
+						>Analyze your competition</a
 					>
 				</footer>
 			</div>
@@ -30,7 +29,7 @@
 						Improve your AppStore content to increase your visibility and downloads.
 					</section>
 					<footer class="card-footer">
-						<a class="variant-filled-primary btn btn-sm" href="/projects/{currentProject.id}/aso"
+						<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/aso"
 							>Improve AppStore content</a
 						>
 					</footer>
@@ -43,9 +42,8 @@
 					Find the right community conversations for your app - on reddit, discord, or slack.
 				</section>
 				<footer class="card-footer">
-					<a
-						class="variant-filled-primary btn btn-sm"
-						href="/projects/{currentProject.id}/communities">Find relevant conversations</a
+					<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/communities"
+						>Find relevant conversations</a
 					>
 				</footer>
 			</div>
