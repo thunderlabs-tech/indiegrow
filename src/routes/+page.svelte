@@ -12,12 +12,11 @@
 	<div class={containerClasses}>
 		<div class="mx-auto grid-cols-1 items-center justify-center gap-4 text-center lg:gap-8">
 			<h1 class="h1 text-xl sm:text-3xl md:text-4xl lg:text-6xl/none">
-				IndieGrow helps you grow your app - with zero budget!
+				Grow Your App’s User Base with <strong> IndieGrow </strong> — No Budget Required!
 			</h1>
 			<div class="mb-4 mt-4 flex w-full justify-center">
 				<p class="w-full text-xs md:w-3/4 md:text-lg lg:w-2/3">
-					Indiegrow is the easiest to use SaaS product for indie developers to grow their apps
-					without spending a dime.
+					The simplest way for indie developers to boost app growth — without breaking the bank. 
 				</p>
 			</div>
 			<div id="signup" class="mb-4 mt-4 flex justify-center">
@@ -47,10 +46,10 @@
 						class="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl/none"
 						id="competitor-analysis"
 					>
-						Automated competitor analysis
+						Automated Competitor Analysis
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						Learn from your competition, improve your positioning and differentiation.
+						Track competitors with real-time data on their app rankings, user reviews, and marketing strategies. See what key benefits they’re targeting and get insights on their top-performing features to stay ahead.
 					</p>
 				</div>
 			</div>
@@ -75,18 +74,17 @@
 						class=":text-3xl text-2xl font-bold tracking-tighter md:text-4xl lg:text-5xl/none"
 						id="appstore-content"
 					>
-						Improve your AppStore content
+						AppStore Search Optimization (ASO) Improvements
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						Using best practices and AI Magic, we'll help you craft the perfect App Store content to
-						attract more users and boost your downloads.
+						Get AI-driven suggestions for your app’s title, description, and keywords, optimized for visibility and user engagement. These insights are based on successful apps in your category and ASO best practices.
 					</p>
 				</div>
 			</div>
 			<img
 				src="/screenshots/improve-appstore-content.webp"
 				width="650"
-				alt="App Store Content"
+				alt="App Store Search Optimization - ASO - Content"
 				class="mx-auto overflow-hidden rounded-xl border-[15px] border-surface-300/50 object-cover object-center sm:w-full"
 			/>
 		</div>
@@ -107,9 +105,7 @@
 						Community Pulse
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						If you're solving a real problem there probably are thousands of people talking about it
-						in online communities like reddit. We can help you find the right community conversation
-						relevant for your app and generate a meaningful response promoting your app.
+						If you're solving a real problem there are probably thousands of people talking about it in online communities like Reddit. We can help you find the right conversations relevant for your app and generate meaningful responses promoting your app
 					</p>
 				</div>
 			</div>
