@@ -61,9 +61,12 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 		data: { session }
 	} = await supabase.auth.getSession();
 
-	const {
-		data: { user }
-	} = await supabase.auth.getUser();
+	if (!session) {
+		const { error } = await supabase.auth.signInAnonymously();
+		if (error) {
+			console.error('Error signing in anonymously:', error);
+		}
+	}
 
 	const { data: projects, error } = await supabase.from('projects').select('*');
 	if (error) {
