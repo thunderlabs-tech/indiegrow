@@ -33,7 +33,6 @@
 		if (insertProjectResult.error) {
 			console.error('Failed to insert', newProject, insertProjectResult.error);
 		} else {
-			console.log('Project inserted', insertProjectResult.data);
 			project = insertProjectResult.data;
 			onSave();
 		}
@@ -44,9 +43,7 @@
 		appStoreInfo = undefined;
 		try {
 			if (project.appstore_url) {
-				console.log('Scraping app store info', project.appstore_url);
 				appStoreInfo = await scrapeAppStoreInfo(project.appstore_url);
-				console.log('App store info', appStoreInfo);
 			}
 			// project.suggestions = undefined;
 		} catch (error) {
@@ -73,10 +70,7 @@
 	{/if}
 
 	<p>
-		<button
-			on:click={createProject}
-			class="variant-filled-primary btn btn-sm"
-			disabled={!saveActive}
+		<button on:click={createProject} class="variant-filled btn btn-sm" disabled={!saveActive}
 			>Create project
 		</button>
 	</p>

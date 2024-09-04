@@ -3,7 +3,7 @@
 </script>
 
 <a
-	class="block p-4 rounded-container-token hover:card hover:variant-soft"
+	class="block p-4 hover:card hover:variant-soft"
 	href="/content/{post.category.slug}/{post.slug}"
 	data-sveltekit-preload-data="hover"
 >
@@ -24,7 +24,7 @@
 					<span class="text-xs font-bold opacity-50">{post.category.title}</span>
 				</a>
 			</div>
-			<button class="variant-outline-primary btn">Read post →</button>
+			<button class="variant-filled btn">Read post →</button>
 		</div>
 	</article>
 </a>

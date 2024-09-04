@@ -1,0 +1,22 @@
+<svg width="1440" height="1721" viewBox="0 0 1440 1721" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_f_99_58)">
+<circle cx="719.5" cy="745.5" r="107.778" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="194.4" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="281.022" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="367.644" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="454.267" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="540.889" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="627.511" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="714.133" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="800.756" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="887.378" stroke="#001F3E" stroke-opacity="0.04"/>
+<circle cx="719.5" cy="745.5" r="974" stroke="#001F3E" stroke-opacity="0.04"/>
+</g>
+<defs>
+<filter id="filter0_f_99_58" x="-256" y="-230" width="1951" height="1951" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="0.5" result="effect1_foregroundBlur_99_58"/>
+</filter>
+</defs>
+</svg>

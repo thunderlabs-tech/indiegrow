@@ -33,8 +33,7 @@ function postsQuery(categorySlug: string) {
 
 async function loadPosts(categorySlug: string) {
 	const query = postsQuery(categorySlug);
-	console.log('query', query);
-	const postsResponse = await contentfulFetch(query);
+	const postsResponse = await contentfulFetch(query, false);
 	if (!postsResponse.ok) {
 		throw error(postsResponse.status, {
 			message: postsResponse.statusText

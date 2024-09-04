@@ -102,13 +102,13 @@
 	}
 </script>
 
-<div class="h-full w-full p-4">
+<div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Community pulse</h1>
 		<p>Let's find communities talking about the problems your app is solving.</p>
 
 		<p>
-			<button class="variant-filled-primary btn btn-md" on:click={callAgent}
+			<button class="variant-filled btn btn-md" on:click={callAgent}
 				>Find relevant conversations</button
 			>
 		</p>

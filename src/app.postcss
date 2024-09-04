@@ -8,9 +8,26 @@ body {
 	@apply h-full overflow-hidden;
 }
 
-/* rocket theme */
+/* IndieGrow custom theme */
 @font-face {
-	font-family: 'Space Grotesk';
-	src: url('/fonts/SpaceGrotesk.ttf');
+	font-family: 'KronaOne';
+	src: url('/fonts/KronaOne/KronaOne-Regular.ttf');
 	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins/Poppins-Regular.ttf');
+	font-display: swap;
+}
+
+.rounded-top-corners {
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+	margin-top: -30px;
+	@media screen(md) {
+		border-top-left-radius: 50px;
+		border-top-right-radius: 50px;
+		margin-top: -50px;
+	}
 }

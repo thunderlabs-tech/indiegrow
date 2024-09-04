@@ -27,12 +27,10 @@
 		// validate the email:
 		const emailIsValid = email.includes('@');
 		if (!emailIsValid) {
-			console.log('email invalid');
 			return;
 		}
 
 		const entry = { email, user_id: uid };
-		console.log('Inserting: ', entry);
 		const { error } = await supabase.from('waiting_list').insert(entry);
 		if (error) {
 			console.error(error);
@@ -47,24 +45,28 @@
 	}
 </script>
 
-<div class="max-w-[800px] space-y-4 md:text-xl">
+<div class="text-md w-full items-center space-y-4 lg:w-2/3">
 	{#if submitted}
 		<p class="text-green-500">You are now on the waiting list!</p>
 	{:else}
-		<h2 class="text-2xl font-medium text-primary-500">Closed alpha</h2>
-		<p class="text-primary-50">
-			We are currently in a closed alpha. We'll send you an email when we are ready for more users.
-		</p>
-		<form class="space-y-4" on:submit={addToWaitingList}>
-			<input
-				bind:value={email}
-				class="input"
-				type="email"
-				name="email"
-				id="email"
-				placeholder="Your email"
-			/>
-			<button class="variant-filled-primary btn" type="submit">Apply for waiting list</button>
+		<!-- <p class="text-secondary-300">We are currently in a closed alpha.</p> -->
+		<form class="mx-auto" on:submit={addToWaitingList}>
+			<div class="dark:border- input-group flex flex-col sm:flex-row">
+				<input
+					bind:value={email}
+					class="input"
+					type="email"
+					name="email"
+					placeholder="Your email address"
+				/>
+				<button class="variant-filled btn btn-sm" type="submit">Join the waiting list</button>
+			</div>
 		</form>
 	{/if}
 </div>
+
+<style lang="postcss">
+	.input-group {
+		@apply p-1;
+	}
+</style>

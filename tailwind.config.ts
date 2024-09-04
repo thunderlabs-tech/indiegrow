@@ -7,7 +7,7 @@ import { skeleton } from '@skeletonlabs/tw-plugin';
 import { indiegrowTheme } from './indiegrowTheme';
 
 export default {
-	darkMode: 'class',
+	darkMode: 'selector',
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
 		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
@@ -16,8 +16,12 @@ export default {
 		extend: {}
 	},
 	plugins: [
+		// purgeCss, // doesn't work for some reason
 		forms,
 		typography,
+		// fontawesome({
+		// 	version: 6
+		// }),
 		skeleton({
 			themes: {
 				custom: [indiegrowTheme],

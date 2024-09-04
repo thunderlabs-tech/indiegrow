@@ -59,7 +59,6 @@ export async function searchSubReddits(query: string) {
 		}
 
 		const responseData = await response.json();
-		console.log(responseData);
 	} catch (error) {
 		console.error('Error searching subreddits:', error.message);
 	}
@@ -79,7 +78,6 @@ export async function searchPostsInSubreddit(subreddit: string, query: string) {
 	});
 
 	const url = `https://oauth.reddit.com/r/${subreddit}/search?${params.toString()}`;
-	console.log('url: ', url);
 	const response = await fetch(url, {
 		headers: headers
 	});
@@ -107,7 +105,6 @@ export async function getCommentsOfArticle(articleId: string) {
 	};
 
 	const url = `https://oauth.reddit.com/comments/${articleId}`;
-	console.log('url: ', url);
 	const response = await fetch(url, {
 		headers: headers
 	});
@@ -118,14 +115,11 @@ export async function getCommentsOfArticle(articleId: string) {
 
 	const responseData = await response.json();
 
-	for (const comment of responseData) {
-		console.log(comment.data.children);
-	}
+	return comments.data.children;
 }
 
 // await searchSubReddits('neighbors');
 // const posts = await searchPostsInSubreddit('berlin', 'Communicate with neighbors');
-// console.log(posts);
 
 // https://www.reddit.com/r/berlin/comments/12ul8cd/how_do_you_communicate_with_neighbors_in_same/
 const comments = await getCommentsOfArticle('12ul8cd');

@@ -5,47 +5,45 @@
 	const currentProject = $page.data.currentProject;
 </script>
 
-<div class="h-full w-full p-6">
+<div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
 		<!-- <h1 class="h1">{currentProject.name}</h1> -->
 
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<div class="card">
-				<header class="card-header font-bold">Competition</header>
+				<div class="card-header font-bold">Competition</div>
 				<section class="p-4">
 					Analyze your competition based on their website and AppStore presence.
 				</section>
 				<footer class="card-footer">
-					<a
-						class="variant-filled-primary btn btn-md"
-						href="/projects/{currentProject.id}/competition">Analyze your competition</a
+					<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/competition"
+						>Analyze your competition</a
 					>
 				</footer>
 			</div>
 
 			{#if currentProject.appstore_url}
 				<div class="card">
-					<header class="card-header font-bold">ASO</header>
+					<div class="card-header font-bold">ASO</div>
 					<section class="p-4">
 						Improve your AppStore content to increase your visibility and downloads.
 					</section>
 					<footer class="card-footer">
-						<a class="variant-filled-primary btn btn-md" href="/projects/{currentProject.id}/aso"
-							>Improve your AppStore content</a
+						<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/aso"
+							>Improve AppStore content</a
 						>
 					</footer>
 				</div>
 			{/if}
 
 			<div class="card">
-				<header class="card-header font-bold">Community pulse</header>
+				<div class="card-header font-bold">Community pulse</div>
 				<section class="p-4">
 					Find the right community conversations for your app - on reddit, discord, or slack.
 				</section>
 				<footer class="card-footer">
-					<a
-						class="variant-filled-primary btn btn-md"
-						href="/projects/{currentProject.id}/communities">Find relevant conversations</a
+					<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/communities"
+						>Find relevant conversations</a
 					>
 				</footer>
 			</div>

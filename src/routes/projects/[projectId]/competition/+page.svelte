@@ -19,7 +19,7 @@
 
 	async function loadCompetitors() {
 		if (!currentProject) {
-			console.log('No current project set');
+			console.error('No current project set');
 			return;
 		}
 		const { error, data } = await dbclient()
@@ -27,7 +27,7 @@
 			.select('*')
 			.or(`id.eq.${currentProject.id}, competitor_of.eq.${currentProject.id}`);
 		if (error) {
-			console.log(error);
+			console.error('Error loading competitors:', error);
 		} else {
 			competitors = data;
 		}
@@ -80,14 +80,13 @@
 			})
 			.select('*');
 		if (error) {
-			console.log('error inserting competitor', error);
+			console.error('Error inserting competitor:', error);
 		}
 		competitors = [...competitors, competitor];
 	}
 
 	async function addCompetitors() {
 		analyzingCompetitors = true;
-		console.log('Adding competitors:', competitorUrls);
 
 		try {
 			const urls = competitorUrls.split(' ').filter(Boolean);
@@ -124,7 +123,6 @@
 		try {
 			const response = await fetch(endpoint);
 			const data = await response.json();
-			console.log('data', data);
 			return data.results.map((app: any) => app.trackViewUrl);
 		} catch (error) {
 			console.error(`Error searching for term "${term}":`, error);
@@ -133,9 +131,6 @@
 	}
 
 	async function findCompetitors() {
-		console.log('finding competitors');
-		console.log('current project', currentProject.appstore_info.description);
-
 		let data: string[] = [];
 		const info = JSON.parse(currentProject.appstore_info);
 		analyzingCompetitors = true;
@@ -149,7 +144,6 @@
 			for await (const item of entityStream) {
 				if (item) {
 					data = item.data; // as unknown as ProductMarketingAnalysis;
-					console.log('partial response: ', item.data);
 				}
 			}
 
@@ -163,13 +157,10 @@
 				return bReviewCount - aReviewCount;
 			});
 			topCompetitors.forEach((competitor) => {
-				console.log('adding competitor:', competitor);
 				if (competitor?.name !== currentProject.name) {
 					addCompetitor(competitor);
 				}
 			});
-
-			console.log('topCompetitors:', topCompetitors);
 		} catch (error) {
 			console.error('Error running analysis:', error);
 		} finally {
@@ -178,7 +169,7 @@
 	}
 </script>
 
-<div class="h-full w-full p-4">
+<div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Competition</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>
@@ -191,21 +182,20 @@
 					type="text"
 					placeholder="URLs of your competitors"
 				/>
-				<button class="variant-filled-secondary">Add manually</button>
+				<button class="variant-filled">Add manually</button>
 			</div>
 		</form>
 
 		<p>
-			<button class="variant-filled-secondary btn btn-md" on:click={findCompetitors}
-				>Automatic search</button
-			>
+			<button class="variant-filled btn btn-md" on:click={findCompetitors}>Automatic search</button>
 		</p>
 
 		{#if analyzingCompetitors}
 			<Spinner text="Loading competitors..." />
 		{/if}
-		{#if competitors}
-			<CompetitorsTable {competitors} onRemove={removeCompetitor} />
-		{/if}
 	</div>
 </div>
+
+{#if competitors}
+	<CompetitorsTable {competitors} onRemove={removeCompetitor} />
+{/if}

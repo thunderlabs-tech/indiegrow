@@ -5,12 +5,13 @@
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import AnalysisHelpers from '$lib/components/AnalysisHelpers.svelte';
 
-	import { ProgressRadial, SlideToggle } from '@skeletonlabs/skeleton';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import Screenshots from './Screenshots.svelte';
 	import type { AppStoreInfo, ImprovementSuggestions } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
+	import Spinner from './Spinner.svelte';
 
 	let loadingRefinements = false;
 	let prompt = refinementPrompt;
@@ -41,7 +42,6 @@
 			const entityStream = openAiHandler.process(stream);
 
 			for await (const item of entityStream) {
-				console.log(item);
 				if (item) {
 					suggestions = item.data as unknown as ImprovementSuggestions;
 				}
@@ -68,17 +68,7 @@
 {/if} -->
 
 {#if loadingRefinements}
-	<span class="flex">
-		<ProgressRadial
-			value={undefined}
-			stroke={100}
-			meter="stroke-primary-500"
-			track="stroke-primary-500/30"
-			strokeLinecap="butt"
-			width="w-5"
-		/>
-		<span class="ml-2 flex-1 text-sm text-primary-500">Loading suggestions...</span>
-	</span>
+	<Spinner text="Loading suggestions..." />
 {/if}
 
 <div class="appstore-content">
@@ -171,15 +161,15 @@
 		padding: 8px;
 	}
 	pre.current {
-		background-color: theme('colors.secondary.800');
+		background-color: theme('colors.secondary.200');
 	}
 
 	pre.suggestion {
-		background-color: theme('colors.secondary.500');
+		background-color: theme('colors.secondary.300');
 	}
 
 	.explanation {
-		background-color: theme('colors.primary.800');
+		background-color: theme('colors.primary.500');
 		font-size: 16px;
 		margin-top: 3px;
 		padding: 8px;

@@ -7,8 +7,9 @@
 		type AnalysisResult
 	} from '$lib/analysis';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
-	import { ProgressRadial, Tab, TabGroup } from '@skeletonlabs/skeleton';
+	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import { fade } from 'svelte/transition';
+	import Spinner from './Spinner.svelte';
 
 	$: currentProject = $page.data.currentProject;
 
@@ -93,17 +94,7 @@
 	</TabGroup>
 </div>
 {#if loadingAnalysis}
-	<span class="flex">
-		<ProgressRadial
-			value={undefined}
-			stroke={100}
-			meter="stroke-primary-500"
-			track="stroke-primary-500/30"
-			strokeLinecap="butt"
-			width="w-5"
-		/>
-		<span class="ml-2 flex-1 text-sm text-primary-500">Loading analysis...</span>
-	</span>
+	<Spinner text="Loading analysis..." />
 {/if}
 {#if analysisResult?.analysis}
 	<h2 class="h2 mb-2 mt-4">Analysis result</h2>
