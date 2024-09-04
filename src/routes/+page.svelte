@@ -16,7 +16,7 @@
 			</h1>
 			<div class="mb-4 mt-4 flex w-full justify-center">
 				<p class="w-full text-xs md:w-3/4 md:text-lg lg:w-2/3">
-					The simplest way for indie developers to boost app growth — without breaking the bank. 
+					The simplest way for indie developers to boost app growth — without breaking the bank.
 				</p>
 			</div>
 			<div id="signup" class="mb-4 mt-4 flex justify-center">
@@ -49,7 +49,9 @@
 						Automated Competitor Analysis
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						Track competitors with real-time data on their app rankings, user reviews, and marketing strategies. See what key benefits they’re targeting and get insights on their top-performing features to stay ahead.
+						Track competitors with real-time data on their app rankings, user reviews, and marketing
+						strategies. See what key benefits they’re targeting and get insights on their
+						top-performing features to stay ahead.
 					</p>
 				</div>
 			</div>
@@ -74,17 +76,19 @@
 						class=":text-3xl text-2xl font-bold tracking-tighter md:text-4xl lg:text-5xl/none"
 						id="appstore-content"
 					>
-						AppStore Search Optimization (ASO) Improvements
+						App Store Optimization (ASO) Improvements
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						Get AI-driven suggestions for your app’s title, description, and keywords, optimized for visibility and user engagement. These insights are based on successful apps in your category and ASO best practices.
+						Get AI-driven suggestions for your app’s title, description, and keywords, optimized for
+						visibility and user engagement. These insights are based on successful apps in your
+						category and ASO best practices.
 					</p>
 				</div>
 			</div>
 			<img
 				src="/screenshots/improve-appstore-content.webp"
 				width="650"
-				alt="App Store Search Optimization - ASO - Content"
+				alt="App Store Optimization - ASO - Content"
 				class="mx-auto overflow-hidden rounded-xl border-[15px] border-surface-300/50 object-cover object-center sm:w-full"
 			/>
 		</div>
@@ -105,7 +109,9 @@
 						Community Pulse
 					</h2>
 					<p class="max-w-[600px] text-secondary-200 md:text-xl">
-						If you're solving a real problem there are probably thousands of people talking about it in online communities like Reddit. We can help you find the right conversations relevant for your app and generate meaningful responses promoting your app
+						If you're solving a real problem there are probably thousands of people talking about it
+						in online communities like Reddit. We can help you find the right conversations relevant
+						for your app and generate meaningful responses promoting your app
 					</p>
 				</div>
 			</div>
