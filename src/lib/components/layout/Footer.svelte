@@ -69,7 +69,14 @@
 				>
 				was made with ❤️ in Berlin, Germany.
 			</p>
-			<a href="https://topfreeaitools.com/ai/indiegrow" target="_blank"><img src="https://ff65dcf08ebd5eb1c022b44dd88016ac.cdn.bubble.io/f1724746116087x632750678197528400/badge%20white.png?_gl=1*1wvcbnr*_gcl_au*MTg3MzI0ODMyLjE3MjE2MjAzNjA.*_ga*NTIyODE4MzEyLjE3MDU5OTg0MTc.*_ga_BFPVR2DEE2*MTcyNDc0NTM2OS4yMjkuMS4xNzI0NzQ2MjY2LjYwLjAuMA..” style="width: 230px; height: 54px;" width="230" height="54" /></a>
+			<a href="https://topfreeaitools.com/ai/indiegrow" target="_blank">
+				<img
+					src="https://ff65dcf08ebd5eb1c022b44dd88016ac.cdn.bubble.io/f1724746116087x632750678197528400/badge%20white.png?_gl=1*1wvcbnr*_gcl_au*MTg3MzI0ODMyLjE3MjE2MjAzNjA.*_ga*NTIyODE4MzEyLjE3MDU5OTg0MTc.*_ga_BFPVR2DEE2*MTcyNDc0NTM2OS4yMjkuMS4xNzI0NzQ2MjY2LjYwLjAuMA.."
+					style="width: 230px; height: 54px;"
+					width="230"
+					height="54"
+				/></a
+			>
 			<div class="flex gap-6">
 				<a
 					class="opacity-75 hover:opacity-100"
