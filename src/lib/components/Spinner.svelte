@@ -5,14 +5,7 @@
 </script>
 
 <span class="flex">
-	<ProgressRadial
-		value={undefined}
-		stroke={100}
-		meter="stroke-secondary-500"
-		track="stroke-secondary-500/30"
-		strokeLinecap="butt"
-		width="w-5"
-	/>
+	<ProgressRadial value={undefined} stroke={100} strokeLinecap="butt" width="w-5" />
 	{#if text}
 		<span class="ml-2 flex-1 text-sm">{text}</span>
 	{/if}

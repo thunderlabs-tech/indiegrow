@@ -13,12 +13,9 @@
 
 	let loading = false;
 
-	let suggestedResponse: string | undefined = undefined;
-	$: suggestedResponse;
-
 	async function suggestResponse() {
 		loading = true;
-		suggestedResponse = '';
+		post.suggested_response = '';
 
 		const briefing = `You are an expert at generating responses to community posts to promote apps.
 		You will be given a post on reddit and an appstore url of an app in question.
@@ -56,7 +53,15 @@
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
-				suggestedResponse += value;
+				post.suggested_response += value;
+			}
+
+			const { error } = await supabase
+				.from('community_posts')
+				.update({ suggested_response: post.suggested_response })
+				.eq('id', post.id);
+			if (error) {
+				console.error('Error updating suggested response', error);
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -104,6 +109,7 @@
 			target="_blank"
 		>
 			{idx + 1}.
+			{post.published_at}
 			{post.title}
 		</a>
 		<p class=" text-sm {post.visited ? '' : ''}">{post.content}</p>
@@ -111,12 +117,14 @@
 		{#if loading}
 			<Spinner text="Generating a response..." />
 		{/if}
-		{#if suggestedResponse}
+		{#if post.suggested_response}
 			<dd class="card mt-2 p-2">
 				<h3 class="h4">Suggested response:</h3>
-				<p class="italic">{@html marked(suggestedResponse)}</p>
-				<button type="button" class="variant-soft btn btn-sm mt-2" use:clipboard={suggestedResponse}
-					>Copy</button
+				<p class="italic">{@html marked(post.suggested_response)}</p>
+				<button
+					type="button"
+					class="variant-soft btn btn-sm mt-2"
+					use:clipboard={post.suggested_response}>Copy</button
 				>
 			</dd>
 		{/if}

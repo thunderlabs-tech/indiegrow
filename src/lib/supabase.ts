@@ -17,6 +17,7 @@ export type Database = {
           project_id: string
           relevant: boolean | null
           score: number
+          suggested_response: string | null
           title: string
           updated_at: string
           url: string
@@ -29,6 +30,7 @@ export type Database = {
           project_id: string
           relevant?: boolean | null
           score: number
+          suggested_response?: string | null
           title: string
           updated_at?: string
           url: string
@@ -41,6 +43,7 @@ export type Database = {
           project_id?: string
           relevant?: boolean | null
           score?: number
+          suggested_response?: string | null
           title?: string
           updated_at?: string
           url?: string
