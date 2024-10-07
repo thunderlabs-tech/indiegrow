@@ -91,14 +91,4 @@ export const emptyProject: Project = {
 	suggestions: undefined
 };
 
-export type CommunityPost = {
-	url: string;
-	title: string;
-	content: string;
-	score: number;
-};
-
-export type CommunitySearchResult = {
-	searchTerm: string;
-	posts: CommunityPost[];
-};
+export type CommunityPost = Tables<'community_posts'>;

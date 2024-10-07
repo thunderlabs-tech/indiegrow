@@ -6,28 +6,28 @@ import { ChatOpenAI } from '@langchain/openai';
 
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
-export const briefing = `You're a helpful marketing assistant to an indie app developer.
-Your goal is to find conversations on reddit.com that are relevant to the use cases of the app.
+export const briefing = `You're a helpful marketing assistant to an app developer.
+Your goal is to find posts on reddit.com that are relevant to the use cases of the app.
 You will be given the app store url of the app.
 
 Tasks:
 - get the info about the app from the url you're given
-- from the app info compile a list of search terms that you can use to find relevant user questions like "How do I do X?", "What's the best app to do X?" where X is some of the use cases of the app.
-- use the tools to find relevant posts on reddit.com using the search terms, return 10 posts per search term. Only search for posts on site:reddit.com and no other sites.
-- rank the posts by how relevant they are to the app and return the top 5 posts per search term.
-
-After you're done, respond with a JSON array of objects, where each object has a "searchTerm" and "posts" property.
-Don't talk about technical details.
-Don't announce returning the array - just return it.
-Enclose the JSON array with "\`\`\`json"
-`;
+- from the app info compile a list of 5 search terms that you can use to find relevant user questions about problems the app is solving, like: "How do I do X?", "What's the best app to do X?", "any advice on how to do X?" where X is some of the use cases of the app.
+- do exactly one search using all the search terms to find relevant posts on the multi search tool.
+- if the content of the post is sth generic like 'Reddit - Dive into anything Get app Get the Reddit app Log In Log in to Reddit Log In / Sign Up Advertise on Reddit Shop Collectible Avatars.." - ignore it and replace it with an empty string
+- for each post you found, calculate a relevance score ranging from 0 to 1, depending on in how well the app can solve the problem in the post. 0 means the app can't solve the problem at all, 1 means the app can solve the problem perfectly.
+- keep the top 20 posts with the highest relevance scores.
+- save the top posts to the database using the savePost tool.
+- don't return any other output
+ `;
+// Comment on what you're doing so the user knows what's happening - only outline the steps you're taking not the specific details of the content you're processing.
 
 export async function createAgentExecutor(
 	tools: AgentExecutorInput['tools']
 ): Promise<AgentExecutor> {
 	const llm = new ChatOpenAI({
 		model: 'gpt-4o',
-		temperature: 0
+		temperature: 1
 	});
 
 	// Prompt template must have "input" and "agent_scratchpad input variables"

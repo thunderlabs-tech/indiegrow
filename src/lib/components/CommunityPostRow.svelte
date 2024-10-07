@@ -6,27 +6,26 @@
 	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let post: CommunityPost;
-	export let idx: number | undefined;
+	export let idx: number;
 	$: currentProject = $page.data.currentProject;
 
-	export let removePost: (post: CommunityPost) => void;
+	$: supabase = $page.data.supabase;
 
 	let loading = false;
 
-	let suggestedResponse: string | undefined = undefined;
-	$: suggestedResponse;
-	// suggestedResponse = "It looks like you're enjoying connecting with your neighbors.".repeat(10);
-
 	async function suggestResponse() {
 		loading = true;
-		suggestedResponse = '';
+		post.suggested_response = '';
 
 		const briefing = `You are an expert at generating responses to community posts to promote apps.
 		You will be given a post on reddit and an appstore url of an app in question.
 		First, get the app info from the app store.
 		Then, generate a response that tells the user about the app and how it might be able to solve their problem.
+		Write in a typical reddit tone and be very brief - only 2-3 sentences.
+		Avoid formal language and marketing speak and jargon. Use very simple and natural language that a happy user would use to recommend it to others.
+
 		If the app is not likely to be of use to the user, or if the user is not likely to be able to benefit from the app, then do not suggest it - just respond: The app is not relevant.
-		Your response should be in the same language as the post.
+		Your response should be in the same language as the post's content.
 		Return a markdown formatted text.
 
 		# App Url: ${currentProject.appstore_url}`;
@@ -54,7 +53,15 @@
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
-				suggestedResponse += value;
+				post.suggested_response += value;
+			}
+
+			const { error } = await supabase
+				.from('community_posts')
+				.update({ suggested_response: post.suggested_response })
+				.eq('id', post.id);
+			if (error) {
+				console.error('Error updating suggested response', error);
 			}
 		} catch (error) {
 			console.error('Error:', error);
@@ -62,33 +69,76 @@
 			loading = false;
 		}
 	}
+
+	async function markIrrelevant() {
+		console.log('marking irrelevant', post);
+		const { error } = await supabase
+			.from('community_posts')
+			.update({ relevant: false })
+			.eq('id', post.id);
+		if (error) {
+			console.error('Error marking irrelevant', error);
+		}
+	}
+
+	async function markVisited() {
+		console.log('marking visited', post);
+
+		const { error } = await supabase
+			.from('community_posts')
+			.update({ visited: true })
+			.eq('id', post.id);
+		if (error) {
+			console.error('Error marking visited', error);
+		}
+
+		post.visited = true;
+	}
 </script>
 
 <tr>
-	<td class="text-center text-xl">💬</td>
+	<td class="text-center text-xl">
+		{#if post.relevance}
+			<span class="variant-filled-primary badge"> {post.relevance}</span>
+		{/if}</td
+	>
 	<td>
-		<a href={post.url} class="font-bold" target="_blank">
-			{idx + 1}.
+		<a
+			href={post.url}
+			on:click={() => {
+				markVisited();
+				window.open(post.url, '_blank');
+			}}
+			class=" {post.visited ? '' : 'font-semibold'} underline"
+			target="_blank"
+		>
 			{post.title}
 		</a>
-		<p>{post.content}</p>
+		<!-- <p class=" text-sm {post.visited ? '' : ''}">{post.content}</p> -->
 
 		{#if loading}
 			<Spinner text="Generating a response..." />
 		{/if}
-		{#if suggestedResponse}
-			<dd class="mt-2 bg-slate-700 p-2">
-				<p class="text-primary-500">Suggested response:</p>
-				<p class="italic">{@html marked(suggestedResponse)}</p>
+		{#if post.suggested_response}
+			<dd class="card mt-2 p-2">
+				<h3 class="h4">Suggested response:</h3>
+				<p class="italic">{@html marked(post.suggested_response)}</p>
+				<button
+					type="button"
+					class="variant-soft btn btn-sm mt-2"
+					use:clipboard={post.suggested_response}>Copy</button
+				>
 			</dd>
-			<button
-				type="button"
-				class="variant-soft btn btn-sm mt-2 !text-white"
-				use:clipboard={suggestedResponse}>Copy</button
-			>
 		{/if}
 	</td>
 	<td class="space-y-2">
+		<!-- <button
+			class="variant-filled btn btn-sm"
+			on:click={() => {
+				markVisited();
+				window.open(post.url, '_blank');
+			}}>See post</button
+		> -->
 		<button
 			class="variant-filled btn btn-sm"
 			on:click={() => {
@@ -97,9 +147,9 @@
 		>
 		<button
 			class="variant-filled-error btn btn-sm"
-			on:click={() => {
-				removePost(post);
-			}}>Remove</button
+			on:click={async () => {
+				markIrrelevant();
+			}}>Irrelevant</button
 		>
 	</td>
 </tr>

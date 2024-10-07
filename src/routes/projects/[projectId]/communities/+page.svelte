@@ -2,70 +2,26 @@
 	import { page } from '$app/stores';
 	import { briefing } from '$lib/agent/agent';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import type { CommunitySearchResult } from '$lib/types';
 
 	import { parse } from 'best-effort-json-parser';
-	import CommunityTable from '$lib/components/CommunityTable.svelte';
+	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
+	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
+	import { CodeBlock } from '@skeletonlabs/skeleton';
 
 	$: currentProject = $page.data.currentProject;
+	let posts: CommunityPost[] = [];
 
 	let rawOutput = '';
 	let output: string;
 	$: output = '';
-
-	let results: CommunitySearchResult[];
-	$: results = [];
-
-	// // for testing layout:
-	// $: results = [
-	// 	{
-	// 		searchTerm: 'best app to connect with neighbors site:reddit.com',
-	// 		posts: [
-	// 			{
-	// 				title: 'Best App for communicating with neighbors in LA? : r/AskLosAngeles - Reddit',
-	// 				url: 'https://www.reddit.com/r/AskLosAngeles/comments/tu3k6p/best_app_for_communicating_with_neighbors_in_la/',
-	// 				content:
-	// 					'Nextdoor - straight up for NIMBYs, annoying af Citizen - for the same group as above but to also drive up your anxieties on crime Facebook - local groups do nothing but complain about homeless living in the neighborhood and people doing take overs, so basically same as the others.',
-	// 				score: 0.97296
-	// 			},
-	// 			{
-	// 				title: 'Does anyone here have experience using the Nextdoor app in the ... - Reddit',
-	// 				url: 'https://www.reddit.com/r/washingtondc/comments/8d703r/does_anyone_here_have_experience_using_the/',
-	// 				content:
-	// 					'It is a great way to quickly tune into neighborhood issues and events, but it can also get quite catty. You can set how much personal info you want to share in the app. My neighborhood uses it and it is very active. I joined in the last year or so, and it seems like everyone is using it or has heard about posts on it.',
-	// 				score: 0.98518
-	// 			},
-	// 			{
-	// 				title: 'Are there any sites which connect neighbors with things to ... - Reddit',
-	// 				url: 'https://www.reddit.com/r/simpleliving/comments/fgfg10/are_there_any_sites_which_connect_neighbors_with/',
-	// 				content:
-	// 					"All my neighbors just complain about the trash (like literal trash, often complaining neighbors aren't bagging it so some is flying into the street when the dump truck dumps it) and if they've lost a cat or dog. Apparently, there's someone stealing dogs out of yards and selling them to a drug dealer in another nearby neighborhood.",
-	// 				score: 0.98232
-	// 			},
-	// 			{
-	// 				title: 'Chat with people who live nearby - Reddit',
-	// 				url: 'https://www.reddit.com/r/ChatWithNeighbors/',
-	// 				content:
-	// 					'Connect with people in your location! Create a post for your geographic area (your town, state or neighborhood). Use Reddit\'s built-in "live chat" feature and/or provide a link to a chat service such as Discord, Zoom or any other platform you like. Don\'t be a jerk. Keep it clean and family-friendly. Have fun!',
-	// 				score: 0.97042
-	// 			},
-	// 			{
-	// 				title: 'Want to connect with neighbors on other social platforms?',
-	// 				url: 'https://www.reddit.com/r/neighbors_of_BHVG/comments/pzkj06/want_to_connect_with_neighbors_on_other_social/',
-	// 				content:
-	// 					'Facebook Neighbors of Baldwin Hills Village Gardens. Nextdoor: Baldwin Hills Village Gardens (enter your address for the right info to show in your feed) Reviews & Recommendations on Yelp: Share your service experience with the Baldwin Hills Village Gardens Homes Association, Inc. on Yelp (Increase transparency in the community; please note Yelp reviews are informal, unofficial, social media ...',
-	// 				score: 0.94546
-	// 			}
-	// 		]
-	// 	}
-	// ];
 
 	let loading = false;
 
 	async function callAgent() {
 		loading = true;
 
-		const input = `App url is ${currentProject.appstore_url}`;
+		const input = `App url is ${currentProject.appstore_url}. The project id is ${currentProject.id}.`;
+		output = '';
 
 		try {
 			const response = await fetch('/api/agent', {
@@ -91,7 +47,7 @@
 				output = text;
 				if (partialJson && partialJson.length > 10) {
 					const cleanedJson = partialJson.replaceAll('```', '');
-					results = parse(cleanedJson) as CommunitySearchResult[];
+					results = parse(cleanedJson);
 				}
 			}
 		} catch (error) {
@@ -103,20 +59,39 @@
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
+	<Breadcrumbs />
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Community pulse</h1>
 		<p>Let's find communities talking about the problems your app is solving.</p>
 
 		<p>
 			<button class="variant-filled btn btn-md" on:click={callAgent}
-				>Find relevant conversations</button
+				>Find
+				{#if posts.length > 0}
+					more
+				{/if}
+				relevant posts</button
 			>
 		</p>
+		{#if posts.length > 0}
+			<p>
+				Found {posts.length} potentially relevant posts. The list is not exhaustive - but it's a good
+				starting point. You can always try to find more posts by hitting the button again. New posts
+				will be integrated into the list below, which is sorted by relevance.
+			</p>
+		{/if}
 
 		{#if loading}
 			<Spinner text="Loading community conversations..." />
 		{/if}
-		<pre class="text-sm">{output}</pre>
-		<CommunityTable {results} />
+		<!-- <pre class="text-sm">{output}</pre> -->
+		<CodeBlock
+			language={'AI output'}
+			code={output}
+			lineNumbers={false}
+			buttonLabel={''}
+			button={'text-left'}
+		></CodeBlock>
+		<CommunityPostsTable bind:posts />
 	</div>
 </div>
