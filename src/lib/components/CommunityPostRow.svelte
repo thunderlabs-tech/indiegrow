@@ -109,7 +109,6 @@
 			target="_blank"
 		>
 			{idx + 1}.
-			{post.published_at}
 			{post.title}
 		</a>
 		<p class=" text-sm {post.visited ? '' : ''}">{post.content}</p>
