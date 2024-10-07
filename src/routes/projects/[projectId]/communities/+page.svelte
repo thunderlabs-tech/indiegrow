@@ -6,8 +6,10 @@
 	import { parse } from 'best-effort-json-parser';
 	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
 	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
+	import { CodeBlock } from '@skeletonlabs/skeleton';
 
 	$: currentProject = $page.data.currentProject;
+	let posts: CommunityPost[] = [];
 
 	let rawOutput = '';
 	let output: string;
@@ -19,6 +21,7 @@
 		loading = true;
 
 		const input = `App url is ${currentProject.appstore_url}. The project id is ${currentProject.id}.`;
+		output = '';
 
 		try {
 			const response = await fetch('/api/agent', {
@@ -63,14 +66,32 @@
 
 		<p>
 			<button class="variant-filled btn btn-md" on:click={callAgent}
-				>Find relevant conversations</button
+				>Find
+				{#if posts.length > 0}
+					more
+				{/if}
+				relevant posts</button
 			>
 		</p>
+		{#if posts.length > 0}
+			<p>
+				Found {posts.length} potentially relevant posts. The list is not exhaustive - but it's a good
+				starting point. You can always try to find more posts by hitting the button again. New posts
+				will be integrated into the list below, which is sorted by relevance.
+			</p>
+		{/if}
 
 		{#if loading}
 			<Spinner text="Loading community conversations..." />
 		{/if}
-		<pre class="text-sm">{output}</pre>
-		<CommunityPostsTable />
+		<!-- <pre class="text-sm">{output}</pre> -->
+		<CodeBlock
+			language={'AI output'}
+			code={output}
+			lineNumbers={false}
+			buttonLabel={''}
+			button={'text-left'}
+		></CodeBlock>
+		<CommunityPostsTable bind:posts />
 	</div>
 </div>

@@ -97,7 +97,11 @@
 </script>
 
 <tr>
-	<td class="text-center text-xl">💬</td>
+	<td class="text-center text-xl">
+		{#if post.relevance}
+			<span class="variant-filled-primary badge"> {post.relevance}</span>
+		{/if}</td
+	>
 	<td>
 		<a
 			href={post.url}
@@ -105,13 +109,12 @@
 				markVisited();
 				window.open(post.url, '_blank');
 			}}
-			class=" {post.visited ? '' : 'font-semibold'}"
+			class=" {post.visited ? '' : 'font-semibold'} underline"
 			target="_blank"
 		>
-			{idx + 1}.
 			{post.title}
 		</a>
-		<p class=" text-sm {post.visited ? '' : ''}">{post.content}</p>
+		<!-- <p class=" text-sm {post.visited ? '' : ''}">{post.content}</p> -->
 
 		{#if loading}
 			<Spinner text="Generating a response..." />
@@ -129,13 +132,13 @@
 		{/if}
 	</td>
 	<td class="space-y-2">
-		<button
+		<!-- <button
 			class="variant-filled btn btn-sm"
 			on:click={() => {
 				markVisited();
 				window.open(post.url, '_blank');
 			}}>See post</button
-		>
+		> -->
 		<button
 			class="variant-filled btn btn-sm"
 			on:click={() => {

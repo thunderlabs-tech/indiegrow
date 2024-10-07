@@ -2,17 +2,16 @@
 	import type { CommunityPost } from '$lib/types';
 	import CommunityPostRow from './CommunityPostRow.svelte';
 
-	let posts: CommunityPost[] = [];
+	export let posts: CommunityPost[] = [];
 	$: posts = posts;
 
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	function handleDbChange(payload: any) {
 		console.log('Change received!', payload);
 		loadPosts()
 			.then((data) => {
-				console.log('new posts loaded!', data);
 				posts = data;
 			})
 			.catch((error) => {
@@ -24,12 +23,15 @@
 	$: currentProject = $page.data.currentProject;
 
 	async function loadPosts(): Promise<CommunityPost[]> {
+		if (!currentProject) {
+			return [];
+		}
 		const { data: posts, error } = await supabase
 			.from('community_posts')
 			.select('*')
 			.eq('project_id', currentProject.id)
 			.is('relevant', null)
-			.order('created_at', { ascending: true });
+			.order('relevance', { ascending: false });
 		if (error) {
 			console.error('Error loading posts', error);
 		}
@@ -40,11 +42,12 @@
 		posts = await loadPosts();
 	});
 
+	const channelName = 'community_posts_changes';
 	$: {
 		if (supabase) {
 			console.log('subscribing to changes in the database');
 			supabase
-				.channel('room1')
+				.channel(channelName)
 				.on(
 					'postgres_changes',
 					{ event: '*', schema: 'public', table: 'community_posts' },
@@ -53,21 +56,27 @@
 				.subscribe();
 		}
 	}
+
+	onDestroy(() => {
+		if (supabase) {
+			console.log('unsubscribing from changes in the database');
+			supabase.channel(channelName).unsubscribe();
+		}
+	});
 </script>
 
-<table class="table table-compact">
-	<tr>
-		<td colspan="2" class="text-xl">
-			<h4>
-				<span class="font-bold">Posts:</span>
-			</h4>
-		</td>
-		<td> Actions </td>
-	</tr>
-	{#each posts as post, idx}
-		<CommunityPostRow {idx} {post} />
-	{/each}
-</table>
+{#if posts.length > 0}
+	<table class="table">
+		<tr>
+			<td class="text-sm">Relevance </td>
+			<td class="text-sm">Content </td>
+			<td class="text-sm"> Actions </td>
+		</tr>
+		{#each posts as post, idx}
+			<CommunityPostRow {idx} {post} />
+		{/each}
+	</table>
+{/if}
 
 <style lang="postcss">
 	tr {
