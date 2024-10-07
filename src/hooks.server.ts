@@ -16,7 +16,12 @@ const supabase: Handle = async ({ event, resolve }) => {
 				return event.cookies.get(key);
 			},
 			set: (key, value, options) => {
-				return event.cookies.set(key, value, options);
+				try {
+					return event.cookies.set(key, value, options);
+				} catch (error) {
+					console.error('Error setting cookie', error);
+					return null;
+				}
 			},
 			remove: (key, options) => {
 				return event.cookies.delete(key, options);
