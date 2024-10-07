@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
 
 	/** @type {import('./$types').PageData} */
 	const currentProject = $page.data.currentProject;
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
+	<Breadcrumbs />
 	<div class="flex flex-col space-y-4">
-		<!-- <h1 class="h1">{currentProject.name}</h1> -->
-
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			<div class="card">
 				<div class="card-header font-bold">Competition</div>

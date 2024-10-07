@@ -10,6 +10,7 @@
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
 	import { compileProductMarketingAnalysis, findCompetitorsPrompt } from '$lib/competition';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
+	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
 
 	let competitorUrls = '';
 
@@ -170,6 +171,7 @@
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
+	<Breadcrumbs />
 	<div class="flex flex-col space-y-4">
 		<h1 class="h1">Competition</h1>
 		<p>Let's compile a list of your competitors. Add a list of your competitor URLs.</p>
