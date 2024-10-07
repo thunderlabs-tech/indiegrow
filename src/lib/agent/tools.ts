@@ -25,12 +25,19 @@ export function initTools(db: any) {
 		return existingUrls;
 	}
 
+	const sitesToSearch = ['reddit.com', 'quora.com'];
 	const multiSearchTool = tool(
 		async (input: { queries: string[] }): Promise<string> => {
 			console.log('multiSearchTool - input', input);
+			const searchQueries = input.queries
+				.map((query) => {
+					return sitesToSearch.map((site) => `site:${site} ${query}`);
+				})
+				.flat();
 
 			const results = await Promise.all(
-				input.queries.map(async (query) => {
+				searchQueries.map(async (query) => {
+					console.log('multiSearchTool - searching for', query);
 					const search = new TavilySearchResults({
 						maxResults: 10
 					});
@@ -50,13 +57,20 @@ export function initTools(db: any) {
 
 			const existing = await existingPosts(sortedResults.map((result) => result.url));
 
-			const newUrls = sortedResults.filter((result) => {
+			let newResults = sortedResults.filter((result) => {
 				return !existing.includes(result.url);
 			});
 
-			console.log('multiSearchTool - new results', newUrls.length);
+			console.log('multiSearchTool - new results', newResults.length);
 
-			return JSON.stringify(newUrls);
+			newResults = newResults.map((result) => {
+				return {
+					url: result.url,
+					title: result.title
+				};
+			});
+
+			return JSON.stringify(newResults);
 		},
 		{
 			name: 'multiQuerySearch',
