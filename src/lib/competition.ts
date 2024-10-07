@@ -88,14 +88,15 @@ export const findCompetitorsPrompt = `Given the following details of an app in t
 your goal is to find the most similar competitors in the AppStore.
 
 Task:
-From the description, come up with a search term that can be used to find the competitors.
+From the description, come up with 10 search terms that can be used to find the competitors apps on the app store.
+Rank the search terms by specificity and return the most specific first and the most general last.
 Return the search term as a JSON Object of the following schema:
 {
-	"search_term": 'search term'
+	"search_terms": ['search term 1', 'search term 2', 'search term 3', 'search term 4', 'search term 5']
 }
 `;
 
-export async function findCompetitors(
+export async function competitorSearchTerms(
 	openai: OpenAI,
 	prompt: string,
 	appStoreInfo: AppStoreInfo
@@ -126,10 +127,9 @@ export async function findCompetitors(
 		response_format: {
 			type: 'json_object'
 		},
-		temperature: 0,
+		temperature: 1,
 		max_tokens: 1024,
 		stream: true,
-		tool_choice: 'auto',
 		messages
 	});
 	return stream;

@@ -193,7 +193,7 @@
 	<td>
 		{#if competitor.id !== currentProject.id}
 			<button class="variant-outline-warning btn btn-sm" on:click={onRemove(competitor.id)}
-				>Remove</button
+				>Not relevant</button
 			>
 		{/if}
 	</td>

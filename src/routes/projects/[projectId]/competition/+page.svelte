@@ -8,7 +8,7 @@
 	import { onMount } from 'svelte';
 	import { scrapeAppStoreInfo } from '$lib/scraping/scrapingClientSide';
 	import { openAiBrowserClient } from '$lib/openaiBrowserClient';
-	import { compileProductMarketingAnalysis, findCompetitorsPrompt } from '$lib/competition';
+	import { competitorSearchTerms, findCompetitorsPrompt } from '$lib/competition';
 	import { OpenAiHandler, StreamMode } from 'openai-partial-stream';
 	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
 
@@ -26,7 +26,8 @@
 		const { error, data } = await dbclient()
 			.from('projects')
 			.select('*')
-			.or(`id.eq.${currentProject.id}, competitor_of.eq.${currentProject.id}`);
+			.or(`id.eq.${currentProject.id}, competitor_of.eq.${currentProject.id}`)
+			.is('relevant', null);
 		if (error) {
 			console.error('Error loading competitors:', error);
 		} else {
@@ -38,7 +39,7 @@
 		loadCompetitors();
 	});
 
-	let analyzingCompetitors = false;
+	let loadingCompetitors = false;
 	const appStoreUrlRegex =
 		/https?:\/\/(itunes\.apple\.com|apps\.apple\.com)\/[a-z]{2}\/app\/(?:[^\/]+\/)?id\d+/i;
 
@@ -71,23 +72,45 @@
 		return competitor;
 	}
 
-	async function addCompetitor(competitor: Partial<Competitor>) {
-		const { error } = await dbclient()
+	async function competitorExists(appstore_url: string) {
+		const { data, error: existingError } = await dbclient()
 			.from('projects')
-			.insert({
-				user_id: currentProject.user_id,
-				competitor_of: currentProject.id,
-				...competitor
-			})
-			.select('*');
+			.select('*')
+			.eq('competitor_of', currentProject.id)
+			.eq('appstore_url', appstore_url);
+		if (existingError) {
+			console.error('Error checking for existing competitor:', existingError);
+			return false;
+		}
+		return data && data.length > 0;
+	}
+
+	async function addCompetitor(competitor: Partial<Competitor>) {
+		if (await competitorExists(competitor.appstore_url)) {
+			console.info('competitor already exists:', competitor.appstore_url);
+			return;
+		}
+
+		const insertData = {
+			user_id: currentProject.user_id,
+			competitor_of: currentProject.id,
+			...competitor
+		};
+
+		const { data: newCompetitor, error } = await dbclient()
+			.from('projects')
+			.insert(insertData)
+			.select('*')
+			.single();
 		if (error) {
 			console.error('Error inserting competitor:', error);
+		} else {
+			competitors = [...competitors, newCompetitor];
 		}
-		competitors = [...competitors, competitor];
 	}
 
 	async function addCompetitors() {
-		analyzingCompetitors = true;
+		loadingCompetitors = true;
 
 		try {
 			const urls = competitorUrls.split(' ').filter(Boolean);
@@ -102,18 +125,18 @@
 		} catch (error) {
 			console.error('Error adding competitors:', error);
 		} finally {
-			analyzingCompetitors = false;
+			loadingCompetitors = false;
 		}
 	}
 
-	function removeCompetitor(id: string) {
+	function markIrrelevant(id: string) {
 		dbclient()
 			.from('projects')
-			.delete()
+			.update({ relevant: false })
 			.eq('id', id)
 			.then((res) => {
 				if (res.error) {
-					console.error('Error deleting competitor:', res.error);
+					console.error('Error marking competitor as irrelevant:', res.error);
 				}
 			});
 		competitors = competitors.filter((competitor) => competitor.id !== id);
@@ -134,10 +157,10 @@
 	async function findCompetitors() {
 		let data: string[] = [];
 		const info = JSON.parse(currentProject.appstore_info);
-		analyzingCompetitors = true;
+		loadingCompetitors = true;
 		try {
 			const openai = openAiBrowserClient();
-			const stream = await compileProductMarketingAnalysis(openai, findCompetitorsPrompt, info);
+			const stream = await competitorSearchTerms(openai, findCompetitorsPrompt, info);
 
 			const openAiHandler = new OpenAiHandler(StreamMode.StreamObjectKeyValue);
 			const entityStream = openAiHandler.process(stream);
@@ -147,17 +170,27 @@
 					data = item.data; // as unknown as ProductMarketingAnalysis;
 				}
 			}
+			console.log('using search terms', data.search_terms);
 
-			const competitorUrls = await searchAppStore(data.search_term);
+			const allSearchResults = await Promise.all(data.search_terms.map(searchAppStore));
+
+			// flatten the array:
+			const competitorUrls = allSearchResults.flat();
 
 			const allCompetitors = await Promise.all(competitorUrls.map(competitorFromUrl));
 
-			const topCompetitors = allCompetitors.sort((a, b) => {
+			const uniqueCompetitors = allCompetitors.filter(
+				async (competitor, index, self) =>
+					index === self.findIndex((t) => t?.appstore_url === competitor?.appstore_url) &&
+					!(await competitorExists(competitor?.appstore_url))
+			);
+
+			const sortedCompetitors = uniqueCompetitors.sort((a, b) => {
 				const aReviewCount = JSON.parse(a?.appstore_info || '{}').aggregateRating?.reviewCount || 1;
 				const bReviewCount = JSON.parse(b?.appstore_info || '{}').aggregateRating?.reviewCount || 1;
 				return bReviewCount - aReviewCount;
 			});
-			topCompetitors.forEach((competitor) => {
+			sortedCompetitors.slice(0, 10).forEach((competitor) => {
 				if (competitor?.name !== currentProject.name) {
 					addCompetitor(competitor);
 				}
@@ -165,7 +198,7 @@
 		} catch (error) {
 			console.error('Error running analysis:', error);
 		} finally {
-			analyzingCompetitors = false;
+			loadingCompetitors = false;
 		}
 	}
 </script>
@@ -192,12 +225,17 @@
 			<button class="variant-filled btn btn-md" on:click={findCompetitors}>Automatic search</button>
 		</p>
 
-		{#if analyzingCompetitors}
+		{#if loadingCompetitors}
+			<Spinner text="Loading competitors..." />
+		{/if}
+
+		{#if competitors}
+			<CompetitorsTable {competitors} onRemove={markIrrelevant} />
+		{/if}
+		{#if loadingCompetitors}
 			<Spinner text="Loading competitors..." />
 		{/if}
 	</div>
+	<button class="variant-filled btn btn-md" on:click={findCompetitors}>Find more competitors</button
+	>
 </div>
-
-{#if competitors}
-	<CompetitorsTable {competitors} onRemove={removeCompetitor} />
-{/if}
