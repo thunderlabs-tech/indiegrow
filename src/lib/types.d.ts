@@ -92,13 +92,9 @@ export const emptyProject: Project = {
 };
 
 export type CommunityPost = {
+	id: string;
 	url: string;
 	title: string;
 	content: string;
 	score: number;
-};
-
-export type CommunitySearchResult = {
-	searchTerm: string;
-	posts: CommunityPost[];
 };

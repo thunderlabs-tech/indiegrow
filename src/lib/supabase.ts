@@ -9,6 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      community_posts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          project_id: string
+          relevant: boolean | null
+          score: number
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          project_id: string
+          relevant?: boolean | null
+          score: number
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+          relevant?: boolean | null
+          score?: number
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           appstore_info: Json | null
@@ -19,6 +63,7 @@ export type Database = {
           id: string
           name: string
           pma: Json | null
+          relevant: boolean | null
           updated_at: string
           user_id: string
         }
@@ -31,6 +76,7 @@ export type Database = {
           id?: string
           name: string
           pma?: Json | null
+          relevant?: boolean | null
           updated_at?: string
           user_id: string
         }
@@ -43,6 +89,7 @@ export type Database = {
           id?: string
           name?: string
           pma?: Json | null
+          relevant?: boolean | null
           updated_at?: string
           user_id?: string
         }
