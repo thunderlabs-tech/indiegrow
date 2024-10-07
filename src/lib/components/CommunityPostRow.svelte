@@ -6,16 +6,26 @@
 	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let post: CommunityPost;
-	export let idx: number | undefined;
+	export let idx: number;
 	$: currentProject = $page.data.currentProject;
 
-	export let removePost: (post: CommunityPost) => void;
+	$: supabase = $page.data.supabase;
+
+	async function markIrrelevant() {
+		console.log('marking irrelevant', post);
+		const { error } = await supabase
+			.from('community_posts')
+			.update({ relevant: false })
+			.eq('id', post.id);
+		if (error) {
+			console.error('Error marking irrelevant', error);
+		}
+	}
 
 	let loading = false;
 
 	let suggestedResponse: string | undefined = undefined;
 	$: suggestedResponse;
-	// suggestedResponse = "It looks like you're enjoying connecting with your neighbors.".repeat(10);
 
 	async function suggestResponse() {
 		loading = true;
@@ -97,9 +107,9 @@
 		>
 		<button
 			class="variant-filled-error btn btn-sm"
-			on:click={() => {
-				removePost(post);
-			}}>Remove</button
+			on:click={async () => {
+				markIrrelevant();
+			}}>Mark irrelevant</button
 		>
 	</td>
 </tr>

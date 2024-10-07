@@ -70,7 +70,7 @@ export const load: LayoutLoad = async ({ data, depends, fetch, params }) => {
 
 	const { data: projects, error } = await supabase.from('projects').select('*');
 	if (error) {
-		console.error('Error getting projects:', error);
+		console.error('Layout: Error getting projects:', error);
 	}
 
 	let currentProject: Tables<'projects'> | null = null;
