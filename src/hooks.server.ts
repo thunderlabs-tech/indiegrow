@@ -12,13 +12,27 @@ const supabase: Handle = async ({ event, resolve }) => {
 	 */
 	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		cookies: {
-			getAll: () => event.cookies.getAll(),
+			get: (key) => {
+				return event.cookies.get(key);
+			},
+			set: (key, value, options) => {
+				return event.cookies.set(key, value, options);
+			},
+			remove: (key, options) => {
+				return event.cookies.delete(key, options);
+			},
+
+			getAll: () => {
+				console.log('getAll called');
+				return event.cookies.getAll();
+			},
 			/**
 			 * SvelteKit's cookies API requires `path` to be explicitly set in
 			 * the cookie options. Setting `path` to `/` replicates previous/
 			 * standard behavior.
 			 */
 			setAll: (cookiesToSet) => {
+				console.log('getAll called', cookiesToSet);
 				cookiesToSet.forEach(({ name, value, options }) => {
 					event.cookies.set(name, value, { ...options, path: '/' });
 				});
@@ -36,6 +50,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 			data: { session }
 		} = await event.locals.supabase.auth.getSession();
 		if (!session) {
+			console.log('safeGetSession: no session!');
 			return { session: null, user: null };
 		}
 

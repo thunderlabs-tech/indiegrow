@@ -35,8 +35,11 @@
 		You will be given a post on reddit and an appstore url of an app in question.
 		First, get the app info from the app store.
 		Then, generate a response that tells the user about the app and how it might be able to solve their problem.
+		Write in a typical reddit tone and be very brief - only 2-3 sentences.
+		Avoid formal language and marketing speak and jargon. Use very simple and natural language that a happy user would use to recommend it to others.
+
 		If the app is not likely to be of use to the user, or if the user is not likely to be able to benefit from the app, then do not suggest it - just respond: The app is not relevant.
-		Your response should be in the same language as the post.
+		Your response should be in the same language as the post's content.
 		Return a markdown formatted text.
 
 		# App Url: ${currentProject.appstore_url}`;
@@ -87,15 +90,13 @@
 			<Spinner text="Generating a response..." />
 		{/if}
 		{#if suggestedResponse}
-			<dd class="mt-2 bg-slate-700 p-2">
-				<p class="text-primary-500">Suggested response:</p>
+			<dd class="card mt-2 p-2">
+				<h3 class="h3">Suggested response:</h3>
 				<p class="italic">{@html marked(suggestedResponse)}</p>
+				<button type="button" class="variant-soft btn btn-sm mt-2" use:clipboard={suggestedResponse}
+					>Copy</button
+				>
 			</dd>
-			<button
-				type="button"
-				class="variant-soft btn btn-sm mt-2 !text-white"
-				use:clipboard={suggestedResponse}>Copy</button
-			>
 		{/if}
 	</td>
 	<td class="space-y-2">

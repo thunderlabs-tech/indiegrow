@@ -7,19 +7,18 @@ import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 export const briefing = `You're a helpful marketing assistant to an indie app developer.
-Your goal is to find conversations on reddit.com that are relevant to the use cases of the app.
+Your goal is to find and store conversations on reddit.com that are relevant to the use cases of the app.
 You will be given the app store url of the app.
 
 Tasks:
 - get the info about the app from the url you're given
-- from the app info compile a list of search terms that you can use to find relevant user questions like "How do I do X?", "What's the best app to do X?" where X is some of the use cases of the app.
+- from the app info compile a list of 10 search terms that you can use to find relevant user questions like "How do I do X?", "What's the best app to do X?" where X is some of the use cases of the app.
 - use the tools to find relevant posts on reddit.com using the search terms, return 10 posts per search term. Only search for posts on site:reddit.com and no other sites.
-- rank the posts by how relevant they are to the app and return the top 5 posts per search term.
+- rank the posts from 0 to 10 by how relevant they are to the app and return the top 5 posts per search term.
+- return the calculated rank in the "score" property of the post.
+- save each relevant post to the database
 
-After you're done, respond with a JSON array of objects, where each object has a "searchTerm" and "posts" property.
-Don't talk about technical details.
-Don't announce returning the array - just return it.
-Enclose the JSON array with "\`\`\`json"
+Comment on what you're doing so the user knows what's happening.
 `;
 
 export async function createAgentExecutor(

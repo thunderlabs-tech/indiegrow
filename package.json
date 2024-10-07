@@ -49,7 +49,7 @@
 		"@langchain/openai": "^0.2.1",
 		"@sparticuz/chromium-min": "^123.0.1",
 		"@supabase/ssr": "^0.3.0",
-		"@supabase/supabase-js": "^2.43.1",
+		"@supabase/supabase-js": "^2.45.4",
 		"best-effort-json-parser": "^1.1.2",
 		"cheerio": "^1.0.0-rc.12",
 		"dotenv": "^16.4.5",
