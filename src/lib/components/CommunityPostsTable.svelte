@@ -28,7 +28,8 @@
 			.from('community_posts')
 			.select('*')
 			.eq('project_id', currentProject.id)
-			.is('relevant', null);
+			.is('relevant', null)
+			.order('created_at', { ascending: true });
 		if (error) {
 			console.error('Error loading posts', error);
 		}

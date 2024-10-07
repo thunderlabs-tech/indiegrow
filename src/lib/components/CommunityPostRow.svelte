@@ -11,17 +11,6 @@
 
 	$: supabase = $page.data.supabase;
 
-	async function markIrrelevant() {
-		console.log('marking irrelevant', post);
-		const { error } = await supabase
-			.from('community_posts')
-			.update({ relevant: false })
-			.eq('id', post.id);
-		if (error) {
-			console.error('Error marking irrelevant', error);
-		}
-	}
-
 	let loading = false;
 
 	let suggestedResponse: string | undefined = undefined;
@@ -75,23 +64,56 @@
 			loading = false;
 		}
 	}
+
+	async function markIrrelevant() {
+		console.log('marking irrelevant', post);
+		const { error } = await supabase
+			.from('community_posts')
+			.update({ relevant: false })
+			.eq('id', post.id);
+		if (error) {
+			console.error('Error marking irrelevant', error);
+		}
+	}
+
+	async function markVisited() {
+		console.log('marking visited', post);
+
+		const { error } = await supabase
+			.from('community_posts')
+			.update({ visited: true })
+			.eq('id', post.id);
+		if (error) {
+			console.error('Error marking visited', error);
+		}
+
+		post.visited = true;
+	}
 </script>
 
 <tr>
 	<td class="text-center text-xl">💬</td>
 	<td>
-		<a href={post.url} class="font-bold" target="_blank">
+		<a
+			href={post.url}
+			on:click={() => {
+				markVisited();
+				window.open(post.url, '_blank');
+			}}
+			class=" {post.visited ? '' : 'font-semibold'}"
+			target="_blank"
+		>
 			{idx + 1}.
 			{post.title}
 		</a>
-		<p>{post.content}</p>
+		<p class=" text-sm {post.visited ? '' : ''}">{post.content}</p>
 
 		{#if loading}
 			<Spinner text="Generating a response..." />
 		{/if}
 		{#if suggestedResponse}
 			<dd class="card mt-2 p-2">
-				<h3 class="h3">Suggested response:</h3>
+				<h3 class="h4">Suggested response:</h3>
 				<p class="italic">{@html marked(suggestedResponse)}</p>
 				<button type="button" class="variant-soft btn btn-sm mt-2" use:clipboard={suggestedResponse}
 					>Copy</button
@@ -103,6 +125,13 @@
 		<button
 			class="variant-filled btn btn-sm"
 			on:click={() => {
+				markVisited();
+				window.open(post.url, '_blank');
+			}}>See post</button
+		>
+		<button
+			class="variant-filled btn btn-sm"
+			on:click={() => {
 				suggestResponse();
 			}}>Respond</button
 		>
@@ -110,7 +139,7 @@
 			class="variant-filled-error btn btn-sm"
 			on:click={async () => {
 				markIrrelevant();
-			}}>Mark irrelevant</button
+			}}>Irrelevant</button
 		>
 	</td>
 </tr>

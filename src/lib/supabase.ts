@@ -20,6 +20,7 @@ export type Database = {
           title: string
           updated_at: string
           url: string
+          visited: boolean | null
         }
         Insert: {
           content: string
@@ -31,6 +32,7 @@ export type Database = {
           title: string
           updated_at?: string
           url: string
+          visited?: boolean | null
         }
         Update: {
           content?: string
@@ -42,6 +44,7 @@ export type Database = {
           title?: string
           updated_at?: string
           url?: string
+          visited?: boolean | null
         }
         Relationships: [
           {
