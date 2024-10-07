@@ -236,6 +236,9 @@
 			<Spinner text="Loading competitors..." />
 		{/if}
 	</div>
-	<button class="variant-filled btn btn-md" on:click={findCompetitors}>Find more competitors</button
-	>
+	{#if competitors.length > 1}
+		<button class="variant-filled btn btn-md" on:click={findCompetitors}
+			>Find more competitors</button
+		>
+	{/if}
 </div>
