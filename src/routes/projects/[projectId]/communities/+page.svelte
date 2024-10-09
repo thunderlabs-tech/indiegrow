@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { briefing } from '$lib/agent/agent';
+	import { communityPostsBriefing } from '$lib/agent/briefings';
 	import Spinner from '$lib/components/Spinner.svelte';
 
 	import { parse } from 'best-effort-json-parser';
 	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
 	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
 	import { CodeBlock } from '@skeletonlabs/skeleton';
+	import type { CommunityPost } from '$lib/types';
 
 	$: currentProject = $page.data.currentProject;
 	let posts: CommunityPost[] = [];
@@ -26,7 +27,7 @@
 		try {
 			const response = await fetch('/api/agent', {
 				method: 'POST',
-				body: JSON.stringify({ briefing, input }),
+				body: JSON.stringify({ briefing: communityPostsBriefing, input }),
 				headers: {
 					'Content-Type': 'application/json'
 				}

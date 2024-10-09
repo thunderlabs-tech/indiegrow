@@ -17,34 +17,7 @@ export function createGraphAgent(tools: AgentExecutorInput['tools'], briefing: s
 	return agent;
 }
 
-export async function invokeStreamingAgent(
-	executor: AgentExecutor,
-	agentParams: any
-): Promise<ReadableStream> {
-	const logStream = await executor.streamLog(agentParams);
-	const stream = new ReadableStream({
-		async start(controller) {
-			// 'Creative filtering" - the agent framework doesn't support streaming out of the box right now
-			// 	based on: https://js.langchain.com/v0.1/docs/modules/agents/how_to/streaming/
-			for await (const chunk of logStream) {
-				if (chunk.ops?.length > 0 && chunk.ops[0].op === 'add') {
-					const addOp = chunk.ops[0];
-					if (
-						addOp.path.startsWith('/logs/ChatOpenAI') &&
-						typeof addOp.value === 'string' &&
-						addOp.value.length
-					) {
-						const newVal = addOp.value;
-						controller.enqueue(newVal);
-					}
-				}
-			}
-			controller.close();
-		}
-	});
-	return stream;
-}
-
+// based on: https://langchain-ai.github.io/langgraphjs/how-tos/stream-tokens/#streaming-final-responses
 export async function invokeStreamingGraphAgent(
 	agent: any,
 
