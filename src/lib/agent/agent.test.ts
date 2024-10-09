@@ -3,7 +3,7 @@ import { createClient, type User } from '@supabase/supabase-js';
 import { type Database, type Tables } from '../supabase';
 
 import dotenv from 'dotenv';
-import { createGraphAgent, invokeStreamingGraphAgent } from './graph-agent';
+import { createAgent, invokeStreamingAgent } from './agent';
 import { communityPostsBriefing } from './briefings';
 dotenv.config();
 
@@ -27,7 +27,7 @@ const supabaseService = createClient<Database>(
 const tools = initTools(supabaseAnon, true);
 const toolsArray = [tools.multiSearchTool, tools.getAppInfoTool, tools.saveCommunityPost];
 
-const graphAgent = createGraphAgent(toolsArray, communityPostsBriefing);
+const graphAgent = createAgent(toolsArray, communityPostsBriefing);
 
 async function aggregateStream(stream: ReadableStream): Promise<string> {
 	const reader = stream.getReader();
@@ -85,12 +85,12 @@ describe('Agents', () => {
 		jest.clearAllMocks();
 	});
 
-	describe('graph agent', () => {
-		it('streaming', async () => {
+	describe('agent', () => {
+		it('calls tools and returns a stream', async () => {
 			if (!project) throw new Error('Project not found');
 
 			const saveSpy = jest.spyOn(tools.saveCommunityPost, 'func');
-			const stream = await invokeStreamingGraphAgent(
+			const stream = await invokeStreamingAgent(
 				graphAgent,
 				`App url is ${project.appstore_url}. The project id is ${project.id}.`
 			);

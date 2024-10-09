@@ -3,7 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import type { AIMessageChunk } from '@langchain/core/messages';
 
-export function createGraphAgent(tools: AgentExecutorInput['tools'], briefing: string) {
+export function createAgent(tools: AgentExecutorInput['tools'], briefing: string) {
 	const llm = new ChatOpenAI({
 		model: 'gpt-4o',
 		temperature: 1
@@ -18,7 +18,7 @@ export function createGraphAgent(tools: AgentExecutorInput['tools'], briefing: s
 }
 
 // based on: https://langchain-ai.github.io/langgraphjs/how-tos/stream-tokens/#streaming-final-responses
-export async function invokeStreamingGraphAgent(
+export async function invokeStreamingAgent(
 	agent: any,
 
 	input: string
