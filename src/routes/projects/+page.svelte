@@ -44,11 +44,11 @@
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
-		<h1 class="h1">Your projects</h1>
-
 		{#if showNewProjectForm}
+			<h1 class="h1">New project</h1>
 			<ProjectForm project={{}} {onSave} />
 		{:else}
+			<h1 class="h1">Your projects</h1>
 			<span>
 				<button class="variant-filled btn btn-sm" on:click={newProject}>Add project</button>
 			</span>

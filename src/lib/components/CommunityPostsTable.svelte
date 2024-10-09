@@ -63,9 +63,22 @@
 			supabase.channel(channelName).unsubscribe();
 		}
 	});
+
+	async function deleteAllPosts() {
+		const { error } = await supabase
+			.from('community_posts')
+			.delete()
+			.eq('project_id', currentProject.id);
+		if (error) {
+			console.error('Error deleting posts', error);
+		}
+	}
 </script>
 
 {#if posts.length > 0}
+	<button class="btn-primary variant-filled-error btn-sm" on:click={deleteAllPosts}
+		>Delete all</button
+	>
 	<table class="table">
 		<tr>
 			<td class="text-sm">Relevance </td>

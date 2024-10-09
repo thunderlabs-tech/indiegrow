@@ -4,7 +4,10 @@
 	import type { Tables } from '$lib/supabase';
 	import type { AppStoreInfo } from '$lib/types';
 
-	export let project: Partial<Tables<'projects'>>;
+	export let project: Partial<Tables<'projects'>> = {
+		name: undefined,
+		description: undefined
+	};
 	export let onSave: () => void;
 
 	let appStoreInfo: AppStoreInfo | undefined = undefined;
@@ -44,7 +47,10 @@
 		try {
 			if (project.appstore_url) {
 				appStoreInfo = await scrapeAppStoreInfo(project.appstore_url);
+				project.name = appStoreInfo.name;
+				project.description = appStoreInfo.description;
 			}
+
 			// project.suggestions = undefined;
 		} catch (error) {
 			console.error('Error scraping app store', error);
@@ -53,20 +59,52 @@
 			loadingContent = false;
 		}
 	}
+
+	const projectTypes = ['app', 'website', 'other'];
+	let projectType = projectTypes[0];
 </script>
 
 <form class="space-y-2">
-	<p>App Store URL:</p>
-	<input
-		bind:value={project.appstore_url}
-		type="text"
-		class="input"
-		placeholder="App Store URL"
-		on:change={updateAppStoreInfo}
-		on:input={updateAppStoreInfo}
-	/>
-	{#if project?.appstore_info !== undefined}
-		📱 {project.appstore_info?.name}
+	<label for="projectType"
+		>Project type
+
+		<label>
+			<input bind:group={projectType} type="radio" name="amount" value="app" /> App
+		</label>
+		<label>
+			<input bind:group={projectType} type="radio" name="amount" value="website" /> Website
+		</label>
+		<label>
+			<input bind:group={projectType} type="radio" name="amount" value="other" /> Other
+		</label>
+	</label>
+
+	{#if projectType === 'app'}
+		<label for="appstore_url" class="label"
+			>App Store URL:
+			<input
+				bind:value={project.appstore_url}
+				type="text"
+				class="input"
+				placeholder="App Store URL"
+				on:change={updateAppStoreInfo}
+				on:input={updateAppStoreInfo}
+			/>
+		</label>
+	{/if}
+
+	{#if project.name !== undefined}
+		<label for="name"
+			>Name
+			<input type="text" id="name" class="input" bind:value={project.name} />
+		</label>
+	{/if}
+
+	{#if project.description !== undefined}
+		<label for="description"
+			>Description
+			<textarea rows={10} id="description" class="textarea" bind:value={project.description} />
+		</label>
 	{/if}
 
 	<p>
