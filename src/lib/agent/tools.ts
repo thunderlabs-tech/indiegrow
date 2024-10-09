@@ -13,7 +13,7 @@ type SearchResult = {
 	content: string;
 	score: number;
 };
-export function initTools(db: any) {
+export function initTools(db: any, testmode: boolean = false) {
 	async function existingPosts(urls: string[]): Promise<string[]> {
 		const { data, error } = await db.from('community_posts').select('url').in('url', urls);
 		if (error) {
@@ -29,17 +29,21 @@ export function initTools(db: any) {
 	const multiSearchTool = tool(
 		async (input: { queries: string[] }): Promise<string> => {
 			console.log('multiSearchTool - input', input);
-			const searchQueries = input.queries
+			let searchQueries = input.queries
 				.map((query) => {
 					return sitesToSearch.map((site) => `site:${site} ${query}`);
 				})
 				.flat();
 
+			if (testmode) {
+				searchQueries = searchQueries.slice(0, 1);
+			}
+
 			const results = await Promise.all(
 				searchQueries.map(async (query) => {
 					console.log('multiSearchTool - searching for', query);
 					const search = new TavilySearchResults({
-						maxResults: 10
+						maxResults: testmode ? 1 : 10
 					});
 
 					return await search.invoke(query);
@@ -140,14 +144,20 @@ export function initTools(db: any) {
 				relevance: input.relevance
 				// published_at: input.publishedAt
 			};
-			const { error } = await db.from('community_posts').insert(insert);
-			if (error) {
-				console.error('Error saving community post', error);
-				throw new Error('Error saving community post');
+
+			if (testmode) {
+				console.log('test mode - skipping insert');
+			} else {
+				const { error } = await db.from('community_posts').insert(insert);
+				if (error) {
+					const errorMessage = `Error saving community post: ${error.message}`;
+					console.error(errorMessage);
+					return errorMessage;
+				}
 			}
 			return 'Community post saved';
 		}
 	});
 
-	return [multiSearchTool, getAppInfoTool, saveCommunityPost];
+	return { multiSearchTool, getAppInfoTool, saveCommunityPost };
 }
