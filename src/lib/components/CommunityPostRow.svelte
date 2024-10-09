@@ -6,7 +6,6 @@
 	import { clipboard } from '@skeletonlabs/skeleton';
 
 	export let post: CommunityPost;
-	export let idx: number;
 	$: currentProject = $page.data.currentProject;
 
 	$: supabase = $page.data.supabase;

@@ -72,8 +72,8 @@
 			<td class="text-sm">Content </td>
 			<td class="text-sm"> Actions </td>
 		</tr>
-		{#each posts as post, idx}
-			<CommunityPostRow {idx} {post} />
+		{#each posts as post}
+			<CommunityPostRow {post} />
 		{/each}
 	</table>
 {/if}
