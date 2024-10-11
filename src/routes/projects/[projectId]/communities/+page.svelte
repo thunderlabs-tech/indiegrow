@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CommunityPosts from '$lib/components/CommunityPosts.svelte';
-	import Breadcrumbs from '$lib/components/content/Breadcrumbs.svelte';
+	import Breadcrumbs from '$lib/components/layout/Breadcrumbs.svelte';
 </script>
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">

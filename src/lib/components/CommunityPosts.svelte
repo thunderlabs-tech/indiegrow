@@ -15,7 +15,6 @@
 	let searchTerms: string[] | undefined = undefined;
 	let relevantCriteria: string | undefined = undefined;
 	let irrelevantCriteria: string | undefined = undefined;
-	// searchTerms = ['test', 'test2'];
 
 	let sites: string[] = ['reddit.com'];
 
@@ -88,6 +87,7 @@
 	}
 
 	async function findPosts() {
+		loading = true;
 		try {
 			const response = await fetch('/api/search', {
 				method: 'POST',
@@ -95,6 +95,7 @@
 					projectId: currentProject.id,
 					terms: searchTerms,
 					sites: sites,
+					projectInfo,
 					resultsPerQuery
 				}),
 				headers: {
@@ -173,15 +174,15 @@
 		</p>
 	{/if}
 </div>
-{#if loading}
-	<Spinner />
-{/if}
 <!-- <pre class="text-sm">{output}</pre> -->
-<CodeBlock
+<!-- <CodeBlock
 	language={'AI output'}
 	code={output}
 	lineNumbers={false}
 	buttonLabel={''}
 	button={'text-left'}
-></CodeBlock>
+></CodeBlock> -->
+{#if loading}
+	<Spinner />
+{/if}
 <CommunityPostsTable bind:posts />

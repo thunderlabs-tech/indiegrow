@@ -16,7 +16,8 @@ export type Database = {
           id: string
           project_id: string
           published_at: string | null
-          relevance: number | null
+          relevance_explanation: string | null
+          relevance_score: number | null
           relevant: boolean | null
           score: number
           suggested_response: string | null
@@ -31,7 +32,8 @@ export type Database = {
           id?: string
           project_id: string
           published_at?: string | null
-          relevance?: number | null
+          relevance_explanation?: string | null
+          relevance_score?: number | null
           relevant?: boolean | null
           score: number
           suggested_response?: string | null
@@ -46,7 +48,8 @@ export type Database = {
           id?: string
           project_id?: string
           published_at?: string | null
-          relevance?: number | null
+          relevance_explanation?: string | null
+          relevance_score?: number | null
           relevant?: boolean | null
           score?: number
           suggested_response?: string | null

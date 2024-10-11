@@ -5,7 +5,7 @@ import type { AIMessageChunk } from '@langchain/core/messages';
 
 export function createAgent(tools: AgentExecutorInput['tools'], briefing: string) {
 	const llm = new ChatOpenAI({
-		model: 'gpt-4o',
+		model: 'gpt-4o-mini',
 		temperature: 1
 	});
 

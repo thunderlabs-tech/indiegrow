@@ -8,6 +8,8 @@
 	import { page } from '$app/stores';
 	import { onDestroy, onMount } from 'svelte';
 
+	let loading = false;
+
 	function handleDbChange(payload: any) {
 		console.log('Change received!', payload);
 		loadPosts()
@@ -26,15 +28,17 @@
 		if (!currentProject) {
 			return [];
 		}
+		loading = true;
 		const { data: posts, error } = await supabase
 			.from('community_posts')
 			.select('*')
 			.eq('project_id', currentProject.id)
 			.is('relevant', null)
-			.order('relevance', { ascending: false });
+			.order('relevance_score', { ascending: false, nullsFirst: false });
 		if (error) {
 			console.error('Error loading posts', error);
 		}
+		loading = false;
 		return posts;
 	}
 
@@ -99,6 +103,17 @@
 			<CommunityPostRow {post} />
 		{/each}
 	</table>
+{:else if loading}
+	<section class="card w-full">
+		<div class="space-y-4 p-4">
+			<div class="placeholder" />
+			<div class="grid grid-cols-3 gap-8">
+				<div class="placeholder" />
+				<div class="placeholder" />
+				<div class="placeholder" />
+			</div>
+		</div>
+	</section>
 {/if}
 
 <style lang="postcss">

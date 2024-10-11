@@ -97,10 +97,12 @@
 
 <tr>
 	<td class="text-center text-xl">
-		{#if post.relevance}
-			<span class="variant-filled-primary badge"> {post.relevance}</span>
-		{/if}</td
-	>
+		{#if post.relevance_score}
+			<span class="variant-filled-primary badge"> {post.relevance_score}</span>
+		{:else}
+			<p class="placeholder-circle animate-pulse"></p>
+		{/if}
+	</td>
 	<td>
 		<a
 			href={post.url}
@@ -114,7 +116,11 @@
 			{post.title}
 		</a>
 		<!-- <p class=" text-sm {post.visited ? '' : ''}">{post.content}</p> -->
-
+		{#if post.relevance_explanation}
+			<p class="text-sm">{post.relevance_explanation}</p>
+		{:else}
+			<p class="placeholder animate-pulse"></p>
+		{/if}
 		{#if loading}
 			<Spinner text="Generating a response..." />
 		{/if}
