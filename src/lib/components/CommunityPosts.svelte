@@ -7,6 +7,7 @@
 	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
 	import type { CommunityPost } from '$lib/types';
 	import SearchTerms from './SearchTerms.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 
 	$: currentProject = $page.data.currentProject;
 
@@ -33,7 +34,7 @@
 		projectInfo = `Name: ${currentProject.name} \n\nDescription:${currentProject.description}`;
 	}
 
-	async function compileSearchTerms() {
+	async function compileSearchParams() {
 		loading = true;
 
 		const input = `Project info: ${projectInfo}\n\n`;
@@ -114,8 +115,11 @@
 	}
 
 	async function runAll() {
-		await compileSearchTerms();
+		await compileSearchParams();
+		await findPosts();
 	}
+
+	let showCustom = false;
 </script>
 
 <p>
@@ -127,52 +131,57 @@
 		relevant posts</button
 	>
 </p>
-<div class="card space-y-4 p-4">
-	<h3 class="h3">Search parameters</h3>
-	<label for="productInfo" class="label"
-		>Product info
-		<textarea
-			rows={Math.max(projectInfo ? projectInfo.split('\n').length : 0, 3)}
-			class="textarea"
-			id="productInfo"
-			bind:value={projectInfo}
-		></textarea>
-	</label>
-
-	<p>
-		<button class="variant-filled btn btn-sm" on:click={compileSearchTerms}>
-			Compile search terms
-		</button>
-	</p>
-
-	{#if searchTerms && searchTerms.length > 0}
-		<label for="searchTerms" class="label"
-			>Search terms
-			<SearchTerms bind:searchTerms />
-		</label>
-		<label for="relevantCriteria" class="label"
-			>Relevant criteria
+<SlideToggle name="showCustom" bind:checked={showCustom} label="Customize search">
+	Customize search
+</SlideToggle>
+{#if showCustom}
+	<div class="card space-y-4 p-4">
+		<h3 class="h3">Search parameters</h3>
+		<label for="productInfo" class="label"
+			>Product info
 			<textarea
-				rows={Math.max(relevantCriteria ? relevantCriteria.split('\n').length : 0, 3)}
+				rows={Math.max(projectInfo ? projectInfo.split('\n').length : 0, 3)}
 				class="textarea"
-				id="relevantCriteria"
-				bind:value={relevantCriteria}
+				id="productInfo"
+				bind:value={projectInfo}
 			></textarea>
 		</label>
-		<label for="irrelevantCriteria" class="label"
-			>Irrelevant criteria
-			<textarea
-				rows={Math.max(irrelevantCriteria ? irrelevantCriteria.split('\n').length : 0, 3)}
-				class="textarea"
-				id="irrelevantCriteria"
-				bind:value={irrelevantCriteria}
-			></textarea>
-		</label>
+
 		<p>
-			<button class="variant-filled btn btn-sm" on:click={findPosts}>Find relevant posts</button>
+			<button class="variant-filled btn btn-sm" on:click={compileSearchParams}>
+				Compile search terms
+			</button>
 		</p>
-	{/if}
-</div>
+
+		{#if searchTerms && searchTerms.length > 0}
+			<label for="searchTerms" class="label"
+				>Search terms
+				<SearchTerms bind:searchTerms />
+			</label>
+			<label for="relevantCriteria" class="label"
+				>Relevant criteria
+				<textarea
+					rows={Math.max(relevantCriteria ? relevantCriteria.split('\n').length : 0, 3)}
+					class="textarea"
+					id="relevantCriteria"
+					bind:value={relevantCriteria}
+				></textarea>
+			</label>
+			<label for="irrelevantCriteria" class="label"
+				>Irrelevant criteria
+				<textarea
+					rows={Math.max(irrelevantCriteria ? irrelevantCriteria.split('\n').length : 0, 3)}
+					class="textarea"
+					id="irrelevantCriteria"
+					bind:value={irrelevantCriteria}
+				></textarea>
+			</label>
+			<p>
+				<button class="variant-filled btn btn-sm" on:click={findPosts}>Find relevant posts</button>
+			</p>
+		{/if}
+	</div>
+{/if}
 <!-- <pre class="text-sm">{output}</pre> -->
 <!-- <CodeBlock
 	language={'AI output'}
