@@ -65,6 +65,7 @@
 				project.description = info.description;
 			}
 
+			validate();
 			// project.suggestions = undefined;
 		} catch (error) {
 			console.error('Error scraping app store', error);
@@ -82,7 +83,12 @@
 			const info = await scrapeWebsiteInfo(project.website_url);
 			project.website_info = JSON.stringify(info);
 			project.name = info.ogObject?.ogTitle;
-			project.description = info.ogObject?.ogDescription;
+			if (info.text) {
+				project.description = info.text;
+			} else {
+				project.description = info.ogObject?.ogDescription;
+			}
+			validate();
 		} catch (error) {
 			console.error('Error scraping app store', error);
 		} finally {
