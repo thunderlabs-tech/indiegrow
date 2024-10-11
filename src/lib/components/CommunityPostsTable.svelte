@@ -76,9 +76,12 @@
 </script>
 
 {#if posts.length > 0}
-	<button class="btn-primary variant-filled-error btn-sm" on:click={deleteAllPosts}
-		>Delete all</button
-	>
+	<h3 class="h3">Posts</h3>
+	<p>
+		<button class="btn-primary variant-filled-error btn-sm" on:click={deleteAllPosts}>
+			Delete all posts</button
+		>
+	</p>
 	<table class="table">
 		<tr>
 			<td class="text-sm">Relevance </td>
