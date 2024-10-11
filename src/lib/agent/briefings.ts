@@ -1,3 +1,13 @@
+export const searchTermsBriefing = `You're a helpful assistant to an indie developer.
+Your goal is to find relevant posts on sites like reddit and quora where users talk about the problems the app is solving.
+You will be given the name and description of the project.
+
+Tasks:
+- from the project info compile a list of 10 search terms that you can use to find relevant user questions about problems the app is solving, like: "How do I do X?", "What's the best app to do X?", "any advice on how to do X?" where X is some of the use cases of the project.
+- respond with a json object of the search terms like this: {"searchTerms": ["term1", "term2", "term3"]}
+- don't return any other output, only the json object without any annotations
+`;
+
 export const communityPostsBriefing = `You're a helpful marketing assistant to an app developer.
 Your goal is to find posts on community sites that are relevant to the use cases of the app.
 You will be given the app store url of the app.

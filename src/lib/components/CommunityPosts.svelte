@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { communityPostsBriefing } from '$lib/agent/briefings';
+	import { searchTermsBriefing } from '$lib/agent/briefings';
 
 	import { parse } from 'best-effort-json-parser';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
 	import { CodeBlock } from '@skeletonlabs/skeleton';
 	import type { CommunityPost } from '$lib/types';
+	import SearchTerms from './SearchTerms.svelte';
 
 	$: currentProject = $page.data.currentProject;
 
-	let searchTerms: string | undefined = undefined;
-	let productInfo: string | undefined = undefined;
+	let projectInfo: string | undefined = undefined;
+	let searchTerms: string[] | undefined = undefined;
+
+	searchTerms = ['test', 'test2'];
 
 	let posts: CommunityPost[] = [];
 
-	let rawOutput = '';
 	let output: string;
 	$: output = '';
 
@@ -25,20 +27,20 @@
 		console.log('currentProject', currentProject);
 	}
 
-	$: if (!productInfo && currentProject) {
-		productInfo = `Name: ${currentProject.name} \n\nDescription:${currentProject.description}`;
+	$: if (!projectInfo && currentProject) {
+		projectInfo = `Name: ${currentProject.name} \n\nDescription:${currentProject.description}`;
 	}
 
-	async function callAgent() {
+	async function compileSearchTerms() {
 		loading = true;
 
-		const input = `App url is ${currentProject.appstore_url}. The project id is ${currentProject.id}.`;
-		output = '';
+		const input = `Project info: ${projectInfo}\n\n`;
+		searchTerms = undefined;
 
 		try {
 			const response = await fetch('/api/agent', {
 				method: 'POST',
-				body: JSON.stringify({ briefing: communityPostsBriefing, input }),
+				body: JSON.stringify({ briefing: searchTermsBriefing, input }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -50,16 +52,16 @@
 			const stream = response.body.pipeThrough(new TextDecoderStream());
 			const reader = stream.getReader();
 
+			let partialJson = '';
+			let result: { searchTerms: string[] } | undefined = undefined;
 			while (true) {
 				const { done, value } = await reader.read();
 				if (done) break;
-				rawOutput += value;
+				partialJson += value;
+				result = parse(partialJson);
 
-				const [text, partialJson] = rawOutput.split('```json');
-				output = text;
-				if (partialJson && partialJson.length > 10) {
-					const cleanedJson = partialJson.replaceAll('```', '');
-					results = parse(cleanedJson);
+				if (result?.searchTerms) {
+					searchTerms = result.searchTerms;
 				}
 			}
 		} catch (error) {
@@ -68,10 +70,14 @@
 			loading = false;
 		}
 	}
+
+	async function findPosts() {
+		await compileSearchTerms();
+	}
 </script>
 
 <p>
-	<button class="variant-filled btn btn-md" on:click={callAgent}
+	<button class="variant-filled btn btn-md" on:click={findPosts}
 		>Find
 		{#if posts.length > 0}
 			more
@@ -89,12 +95,12 @@
 
 <label for="productInfo" class="label"
 	>Product info
-	<textarea rows="10" class="textarea" id="productInfo" bind:value={productInfo}></textarea>
+	<textarea rows="10" class="textarea" id="productInfo" bind:value={projectInfo}></textarea>
 </label>
 
 <label for="searchTerms" class="label"
 	>Search terms
-	<textarea class="textarea" id="searchTerms" bind:value={searchTerms}></textarea>
+	<SearchTerms bind:searchTerms />
 </label>
 
 {#if loading}
