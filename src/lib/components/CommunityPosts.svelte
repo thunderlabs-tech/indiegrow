@@ -131,7 +131,12 @@
 	<h3 class="h3">Search parameters</h3>
 	<label for="productInfo" class="label"
 		>Product info
-		<textarea rows="10" class="textarea" id="productInfo" bind:value={projectInfo}></textarea>
+		<textarea
+			rows={Math.max(projectInfo ? projectInfo.split('\n').length : 0, 3)}
+			class="textarea"
+			id="productInfo"
+			bind:value={projectInfo}
+		></textarea>
 	</label>
 
 	<p>
@@ -147,12 +152,20 @@
 		</label>
 		<label for="relevantCriteria" class="label"
 			>Relevant criteria
-			<textarea rows="10" class="textarea" id="relevantCriteria" bind:value={relevantCriteria}
+			<textarea
+				rows={Math.max(relevantCriteria ? relevantCriteria.split('\n').length : 0, 3)}
+				class="textarea"
+				id="relevantCriteria"
+				bind:value={relevantCriteria}
 			></textarea>
 		</label>
 		<label for="irrelevantCriteria" class="label"
 			>Irrelevant criteria
-			<textarea rows="10" class="textarea" id="irrelevantCriteria" bind:value={irrelevantCriteria}
+			<textarea
+				rows={Math.max(irrelevantCriteria ? irrelevantCriteria.split('\n').length : 0, 3)}
+				class="textarea"
+				id="irrelevantCriteria"
+				bind:value={irrelevantCriteria}
 			></textarea>
 		</label>
 		<p>
