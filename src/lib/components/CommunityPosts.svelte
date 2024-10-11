@@ -13,8 +13,9 @@
 
 	let projectInfo: string | undefined = undefined;
 	let searchTerms: string[] | undefined = undefined;
+	// searchTerms = ['test', 'test2'];
 
-	searchTerms = ['test', 'test2'];
+	let sites: string[] = ['reddit.com'];
 
 	let posts: CommunityPost[] = [];
 
@@ -72,12 +73,37 @@
 	}
 
 	async function findPosts() {
+		try {
+			const response = await fetch('/api/search', {
+				method: 'POST',
+				body: JSON.stringify({
+					projectId: currentProject.id,
+					terms: searchTerms,
+					sites: sites
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) throw new Error('Reponse not ok!');
+			if (!response.body) throw new Error('No body found!');
+			const results = await response.json();
+			console.log('results', results);
+		} catch (error) {
+			console.error('Error:', error);
+		} finally {
+			loading = false;
+		}
+	}
+
+	async function runAll() {
 		await compileSearchTerms();
 	}
 </script>
 
 <p>
-	<button class="variant-filled btn btn-md" on:click={findPosts}
+	<button class="variant-filled btn btn-md" on:click={runAll}
 		>Find
 		{#if posts.length > 0}
 			more
@@ -98,13 +124,24 @@
 	<textarea rows="10" class="textarea" id="productInfo" bind:value={projectInfo}></textarea>
 </label>
 
-<label for="searchTerms" class="label"
-	>Search terms
-	<SearchTerms bind:searchTerms />
-</label>
+<p>
+	<button class="variant-filled btn btn-sm" on:click={compileSearchTerms}>
+		Compile search terms
+	</button>
+</p>
+
+{#if searchTerms && searchTerms.length > 0}
+	<label for="searchTerms" class="label"
+		>Search terms
+		<SearchTerms bind:searchTerms />
+	</label>
+	<p>
+		<button class="variant-filled btn btn-sm" on:click={findPosts}>Find relevant posts</button>
+	</p>
+{/if}
 
 {#if loading}
-	<Spinner text="Loading community conversations..." />
+	<Spinner />
 {/if}
 <!-- <pre class="text-sm">{output}</pre> -->
 <CodeBlock
