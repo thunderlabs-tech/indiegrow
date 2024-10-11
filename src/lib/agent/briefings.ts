@@ -1,10 +1,11 @@
-export const searchTermsBriefing = `You're a helpful assistant to an indie developer.
+export const searchParametersBriefing = `You're a helpful assistant to an indie developer.
 Your goal is to find relevant posts on sites like reddit and quora where users talk about the problems the app is solving.
 You will be given the name and description of the project.
 
 Tasks:
 - from the project info compile a list of 10 search terms that you can use to find relevant user questions about problems the app is solving, like: "How do I do X?", "What's the best app to do X?", "any advice on how to do X?" where X is some of the use cases of the project.
-- respond with a json object of the search terms like this: {"searchTerms": ["term1", "term2", "term3"]}
+- from the project info decide on a list of criteria that would identify a post as relevant and as irrelevant to the project.
+- respond with a json object that like this: {"searchTerms": ["term1", "term2", "term3"], "relevantCriteria": "text describing the criteria", "irrelevantCriteria": "text describing the criteria"}
 - don't return any other output, only the json object without any annotations
 `;
 

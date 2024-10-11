@@ -77,6 +77,13 @@
 
 {#if posts.length > 0}
 	<h3 class="h3">Posts</h3>
+	{#if posts.length > 0}
+		<p>
+			Found {posts.length} potentially relevant posts. The list is not exhaustive - but it's a good starting
+			point. You can always try to find more posts by customizing the search parameters and running the
+			search again. New posts will be integrated into the list below, which is sorted by relevance.
+		</p>
+	{/if}
 	<p>
 		<button class="btn-primary variant-filled-error btn-sm" on:click={deleteAllPosts}>
 			Delete all posts</button
