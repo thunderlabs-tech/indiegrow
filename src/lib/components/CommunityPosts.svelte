@@ -23,6 +23,7 @@
 	$: output = '';
 
 	let loading = false;
+	let resultsPerQuery = 1;
 
 	$: {
 		console.log('currentProject', currentProject);
@@ -79,7 +80,8 @@
 				body: JSON.stringify({
 					projectId: currentProject.id,
 					terms: searchTerms,
-					sites: sites
+					sites: sites,
+					resultsPerQuery
 				}),
 				headers: {
 					'Content-Type': 'application/json'

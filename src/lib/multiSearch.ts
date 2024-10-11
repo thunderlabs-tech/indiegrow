@@ -1,7 +1,7 @@
 import { TavilySearchResults } from '@langchain/community/tools/tavily_search';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-type SearchResult = {
+export type SearchResult = {
 	url: string;
 	title: string;
 	content: string;
@@ -32,24 +32,20 @@ export async function multiSearch(
 	projectId: string,
 	queries: string[],
 	sitesToSearch: string[],
-	testmode: boolean = false
+	resultsPerQuery: number = 10
 ): Promise<SearchResult[]> {
-	console.log('multiSearchTool - queries:', queries, 'sites:', sitesToSearch);
+	// console.log('multiSearchTool - queries:', queries, 'sites:', sitesToSearch);
 	let searchQueries = queries
 		.map((query) => {
 			return sitesToSearch.map((site) => `site:${site} ${query}`);
 		})
 		.flat();
 
-	if (testmode) {
-		searchQueries = searchQueries.slice(0, 1);
-	}
-
 	const results = await Promise.all(
 		searchQueries.map(async (query) => {
 			console.log('multiSearchTool - searching for', query);
 			const search = new TavilySearchResults({
-				maxResults: testmode ? 1 : 10
+				maxResults: resultsPerQuery
 			});
 
 			return await search.invoke(query);
@@ -63,7 +59,11 @@ export async function multiSearch(
 		.flat() as SearchResult[];
 	console.log('multiSearchTool - all results', flattenedResults.length);
 
-	const sortedResults = flattenedResults.sort((a, b) => b.score - a.score);
+	const uniqueResults = flattenedResults.filter(
+		(result, index, self) => index === self.findIndex((t) => t.url === result.url)
+	);
+
+	const sortedResults = uniqueResults.sort((a, b) => b.score - a.score);
 
 	const existing = await existingPosts(
 		db,
@@ -74,8 +74,6 @@ export async function multiSearch(
 	let newResults = sortedResults.filter((result) => {
 		return !existing.includes(result.url);
 	});
-
-	console.log('multiSearchTool - new results', newResults.length);
 
 	return newResults;
 }
