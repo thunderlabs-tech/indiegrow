@@ -97,7 +97,7 @@
 
 <tr>
 	<td class="text-center text-xl">
-		{#if post.relevance_score}
+		{#if post.relevance_score !== null}
 			<span class="variant-filled-primary badge"> {post.relevance_score}</span>
 		{:else}
 			<p class="placeholder-circle animate-pulse"></p>

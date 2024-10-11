@@ -57,3 +57,21 @@ export async function updatePostRelevance(
 		throw error;
 	}
 }
+
+export async function updatePostsRelevances(
+	supabase: SupabaseClient,
+	posts: CommunityPost[],
+	projectInfo: string,
+	relevantCriteria: string,
+	irrelevantCriteria: string
+) {
+	const batchSize = 10;
+	for (let i = 0; i < posts.length; i += batchSize) {
+		const batch = posts.slice(i, i + batchSize);
+		await Promise.all(
+			batch.map((post) =>
+				updatePostRelevance(supabase, post, projectInfo, relevantCriteria, irrelevantCriteria)
+			)
+		);
+	}
+}

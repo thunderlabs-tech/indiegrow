@@ -5,7 +5,6 @@
 	import { parse } from 'best-effort-json-parser';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import CommunityPostsTable from '$lib/components/CommunityPostsTable.svelte';
-	import { CodeBlock } from '@skeletonlabs/skeleton';
 	import type { CommunityPost } from '$lib/types';
 	import SearchTerms from './SearchTerms.svelte';
 
@@ -24,7 +23,7 @@
 	$: output = '';
 
 	let loading = false;
-	let resultsPerQuery = 1;
+	let resultsPerQuery = 10;
 
 	$: {
 		console.log('currentProject', currentProject);
