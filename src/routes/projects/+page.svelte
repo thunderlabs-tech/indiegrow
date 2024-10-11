@@ -58,17 +58,21 @@
 				<p>No projects yet</p>
 			{:else}
 				<section class="card text-token w-full space-y-4 p-4">
-					<table class="projects">
+					<table class="projects table">
 						{#each projects as project}
 							<tr>
 								<td>
-									<a href="/projects/{project.id}">
+									<a href="/projects/{project.id}" class="font-bold">
 										{project.name}
 									</a>
 								</td>
 								<td>
 									{#if project.description}
-										{project.description}
+										{#if project.description.length > 100}
+											{project.description.slice(0, 100) + '...'}
+										{:else}
+											{project.description}
+										{/if}
 									{/if}
 								</td>
 								<td>
