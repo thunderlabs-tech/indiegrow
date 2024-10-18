@@ -27,6 +27,18 @@ async function existingPosts(
 	return existingUrls;
 }
 
+export async function search(query: string, maxResults: number): Promise<SearchResult[]> {
+	console.log('multiSearchTool - searching for', query);
+	try {
+		const search = new TavilySearchResults({ maxResults });
+		const resultsJson = await search.invoke(query);
+		return JSON.parse(resultsJson);
+	} catch (error) {
+		console.error('Error searching for', query, error.message);
+		return [];
+	}
+}
+
 export async function multiSearch(
 	db: SupabaseClient,
 	projectId: string,
@@ -34,29 +46,19 @@ export async function multiSearch(
 	sitesToSearch: string[],
 	resultsPerQuery: number = 10
 ): Promise<SearchResult[]> {
-	// console.log('multiSearchTool - queries:', queries, 'sites:', sitesToSearch);
-	let searchQueries = queries
+	let queriesBySite = queries
 		.map((query) => {
 			return sitesToSearch.map((site) => `site:${site} ${query}`);
 		})
 		.flat();
 
 	const results = await Promise.all(
-		searchQueries.map(async (query) => {
-			console.log('multiSearchTool - searching for', query);
-			const search = new TavilySearchResults({
-				maxResults: resultsPerQuery
-			});
-
-			return await search.invoke(query);
+		queriesBySite.map(async (query) => {
+			return await search(query, resultsPerQuery);
 		})
 	);
 
-	const flattenedResults = results
-		.map((result) => {
-			return JSON.parse(result);
-		})
-		.flat() as SearchResult[];
+	const flattenedResults = results.flat() as SearchResult[];
 	console.log('multiSearchTool - all results', flattenedResults.length);
 
 	const uniqueResults = flattenedResults.filter(

@@ -3,7 +3,7 @@ Your goal is to find relevant posts on sites like reddit and quora where users a
 You will be given the name and description of the project.
 
 Tasks:
-- from the project info compile a list of 10 search terms that you can use to find relevant user questions about problems the project is solving, like: "How do I do X?", "What's the best app to do X?", "any advice on how to do X?" where X is some of the use cases of the project.
+- from the project info compile a list of 5 search terms that you can use to find relevant user questions about problems the project is solving, like: "How do I do X?", "What's the best app to do X?", "any advice on how to do X?" where X is some of the use cases of the project.
 - from the project info decide on a list of criteria that would identify a post as relevant and as irrelevant to the project. Highest relevance should be given to posts that ask about how to solve a problem that the project is solving and lowest relevance to posts that are not related to the problems the project is solving. If the post from a person or company that provides a solution, it should be less relevant.
 - respond with a json object that like this: {"searchTerms": ["term1", "term2", "term3"], "relevantCriteria": "text describing the criteria", "irrelevantCriteria": "text describing the criteria"}
 - don't return any other output, only the json object without any annotations

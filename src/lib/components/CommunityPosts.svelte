@@ -16,7 +16,7 @@
 	let relevantCriteria: string | undefined = undefined;
 	let irrelevantCriteria: string | undefined = undefined;
 
-	let sites: string[] = ['reddit.com'];
+	let sitesToSearch: string = 'reddit.com, quora.com';
 
 	let posts: CommunityPost[] = [];
 
@@ -24,7 +24,7 @@
 	$: output = '';
 
 	let loading = false;
-	let resultsPerQuery = 10;
+	let resultsPerQuery = 5;
 
 	$: {
 		console.log('currentProject', currentProject);
@@ -89,6 +89,7 @@
 	async function findPosts() {
 		loading = true;
 		try {
+			const sites = sitesToSearch.split(',').map((site) => site.trim());
 			const response = await fetch('/api/search', {
 				method: 'POST',
 				body: JSON.stringify({
@@ -131,29 +132,29 @@
 		relevant posts</button
 	>
 </p>
-<SlideToggle name="showCustom" bind:checked={showCustom} label="Customize search">
-	Customize search
-</SlideToggle>
-{#if showCustom}
-	<div class="card space-y-4 p-4">
-		<h3 class="h3">Search parameters</h3>
-		<label for="productInfo" class="label"
-			>Product info
-			<textarea
-				rows={Math.max(projectInfo ? projectInfo.split('\n').length : 0, 3)}
-				class="textarea"
-				id="productInfo"
-				bind:value={projectInfo}
-			></textarea>
-		</label>
+{#if searchTerms && searchTerms.length > 0}
+	<SlideToggle name="showCustom" bind:checked={showCustom} label="Customize search">
+		Customize search
+	</SlideToggle>
+	{#if showCustom}
+		<div class="card space-y-4 p-4">
+			<h3 class="h3">Search parameters</h3>
+			<label for="productInfo" class="label"
+				>Product info
+				<textarea
+					rows={Math.max(projectInfo ? projectInfo.split('\n').length : 0, 3)}
+					class="textarea"
+					id="productInfo"
+					bind:value={projectInfo}
+				></textarea>
+			</label>
 
-		<p>
-			<button class="variant-filled btn btn-sm" on:click={compileSearchParams}>
-				Compile search terms
-			</button>
-		</p>
+			<p>
+				<button class="variant-filled btn btn-sm" on:click={compileSearchParams}>
+					Compile search terms from description
+				</button>
+			</p>
 
-		{#if searchTerms && searchTerms.length > 0}
 			<label for="searchTerms" class="label"
 				>Search terms
 				<SearchTerms bind:searchTerms />
@@ -176,20 +177,17 @@
 					bind:value={irrelevantCriteria}
 				></textarea>
 			</label>
+
+			<label for="sites" class="label"
+				>Sites to search
+				<input type="text" class="input" id="sites" bind:value={sitesToSearch} />
+			</label>
 			<p>
-				<button class="variant-filled btn btn-sm" on:click={findPosts}>Find relevant posts</button>
+				<button class="variant-filled btn btn-sm" on:click={findPosts}>Run custom search</button>
 			</p>
-		{/if}
-	</div>
+		</div>
+	{/if}
 {/if}
-<!-- <pre class="text-sm">{output}</pre> -->
-<!-- <CodeBlock
-	language={'AI output'}
-	code={output}
-	lineNumbers={false}
-	buttonLabel={''}
-	button={'text-left'}
-></CodeBlock> -->
 {#if loading}
 	<Spinner />
 {/if}
