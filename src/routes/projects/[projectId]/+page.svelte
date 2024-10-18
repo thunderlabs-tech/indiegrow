@@ -10,19 +10,19 @@
 	<Breadcrumbs />
 	<div class="flex flex-col space-y-4">
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-			<div class="card">
-				<div class="card-header font-bold">Competition</div>
-				<section class="p-4">
-					Analyze your competition based on their website and AppStore presence.
-				</section>
-				<footer class="card-footer">
-					<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/competition"
-						>Analyze your competition</a
-					>
-				</footer>
-			</div>
+			{#if currentProject.type === 'app'}
+				<div class="card">
+					<div class="card-header font-bold">Competition</div>
+					<section class="p-4">
+						Analyze your competition based on their website and AppStore presence.
+					</section>
+					<footer class="card-footer">
+						<a class="variant-filled btn btn-sm" href="/projects/{currentProject.id}/competition"
+							>Analyze your competition</a
+						>
+					</footer>
+				</div>
 
-			{#if currentProject.appstore_url}
 				<div class="card">
 					<div class="card-header font-bold">ASO</div>
 					<section class="p-4">
