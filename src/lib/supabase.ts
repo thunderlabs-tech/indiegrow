@@ -16,7 +16,8 @@ export type Database = {
           id: string
           project_id: string
           published_at: string | null
-          relevance: number | null
+          relevance_explanation: string | null
+          relevance_score: number | null
           relevant: boolean | null
           score: number
           suggested_response: string | null
@@ -31,7 +32,8 @@ export type Database = {
           id?: string
           project_id: string
           published_at?: string | null
-          relevance?: number | null
+          relevance_explanation?: string | null
+          relevance_score?: number | null
           relevant?: boolean | null
           score: number
           suggested_response?: string | null
@@ -46,7 +48,8 @@ export type Database = {
           id?: string
           project_id?: string
           published_at?: string | null
-          relevance?: number | null
+          relevance_explanation?: string | null
+          relevance_score?: number | null
           relevant?: boolean | null
           score?: number
           suggested_response?: string | null
@@ -76,8 +79,11 @@ export type Database = {
           name: string
           pma: Json | null
           relevant: boolean | null
+          type: Database["public"]["Enums"]["project_type"] | null
           updated_at: string
           user_id: string
+          website_info: Json | null
+          website_url: string | null
         }
         Insert: {
           appstore_info?: Json | null
@@ -89,8 +95,11 @@ export type Database = {
           name: string
           pma?: Json | null
           relevant?: boolean | null
+          type?: Database["public"]["Enums"]["project_type"] | null
           updated_at?: string
           user_id: string
+          website_info?: Json | null
+          website_url?: string | null
         }
         Update: {
           appstore_info?: Json | null
@@ -102,8 +111,11 @@ export type Database = {
           name?: string
           pma?: Json | null
           relevant?: boolean | null
+          type?: Database["public"]["Enums"]["project_type"] | null
           updated_at?: string
           user_id?: string
+          website_info?: Json | null
+          website_url?: string | null
         }
         Relationships: [
           {
@@ -152,7 +164,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      project_type: "app" | "website" | "other"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -44,11 +44,11 @@
 
 <div class="mx-auto max-w-5xl space-y-8 p-4 md:p-12">
 	<div class="flex flex-col space-y-4">
-		<h1 class="h1">Your projects</h1>
-
 		{#if showNewProjectForm}
+			<h1 class="h1">New project</h1>
 			<ProjectForm project={{}} {onSave} />
 		{:else}
+			<h1 class="h1">Your projects</h1>
 			<span>
 				<button class="variant-filled btn btn-sm" on:click={newProject}>Add project</button>
 			</span>
@@ -58,17 +58,21 @@
 				<p>No projects yet</p>
 			{:else}
 				<section class="card text-token w-full space-y-4 p-4">
-					<table class="projects">
+					<table class="projects table">
 						{#each projects as project}
 							<tr>
 								<td>
-									<a href="/projects/{project.id}">
+									<a href="/projects/{project.id}" class="font-bold">
 										{project.name}
 									</a>
 								</td>
 								<td>
 									{#if project.description}
-										{project.description}
+										{#if project.description.length > 100}
+											{project.description.slice(0, 100) + '...'}
+										{:else}
+											{project.description}
+										{/if}
 									{/if}
 								</td>
 								<td>

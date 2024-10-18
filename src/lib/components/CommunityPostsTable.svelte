@@ -8,6 +8,8 @@
 	import { page } from '$app/stores';
 	import { onDestroy, onMount } from 'svelte';
 
+	let loading = false;
+
 	function handleDbChange(payload: any) {
 		console.log('Change received!', payload);
 		loadPosts()
@@ -26,15 +28,17 @@
 		if (!currentProject) {
 			return [];
 		}
+		loading = true;
 		const { data: posts, error } = await supabase
 			.from('community_posts')
 			.select('*')
 			.eq('project_id', currentProject.id)
 			.is('relevant', null)
-			.order('relevance', { ascending: false });
+			.order('relevance_score', { ascending: false, nullsFirst: false });
 		if (error) {
 			console.error('Error loading posts', error);
 		}
+		loading = false;
 		return posts;
 	}
 
@@ -63,19 +67,53 @@
 			supabase.channel(channelName).unsubscribe();
 		}
 	});
+
+	async function deleteAllPosts() {
+		const { error } = await supabase
+			.from('community_posts')
+			.delete()
+			.eq('project_id', currentProject.id);
+		if (error) {
+			console.error('Error deleting posts', error);
+		}
+	}
 </script>
 
 {#if posts.length > 0}
+	<h3 class="h3">Posts</h3>
+	{#if posts.length > 0}
+		<p>
+			Found {posts.length} potentially relevant posts. The list is not exhaustive - but it's a good starting
+			point. You can always try to find more posts by customizing the search parameters and running the
+			search again. New posts will be integrated into the list below, which is sorted by relevance.
+		</p>
+	{/if}
+	<p>
+		<button class="btn-primary variant-filled-error btn-sm" on:click={deleteAllPosts}>
+			Delete all posts</button
+		>
+	</p>
 	<table class="table">
 		<tr>
 			<td class="text-sm">Relevance </td>
 			<td class="text-sm">Content </td>
 			<td class="text-sm"> Actions </td>
 		</tr>
-		{#each posts as post, idx}
-			<CommunityPostRow {idx} {post} />
+		{#each posts as post}
+			<CommunityPostRow {post} />
 		{/each}
 	</table>
+{:else if loading}
+	<section class="card w-full">
+		<div class="space-y-4 p-4">
+			<div class="placeholder" />
+			<div class="grid grid-cols-3 gap-8">
+				<div class="placeholder" />
+				<div class="placeholder" />
+				<div class="placeholder" />
+			</div>
+		</div>
+	</section>
 {/if}
 
 <style lang="postcss">

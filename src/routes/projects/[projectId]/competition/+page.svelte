@@ -232,11 +232,11 @@
 		{#if competitors}
 			<CompetitorsTable {competitors} onRemove={markIrrelevant} />
 		{/if}
+	</div>
+	{#if competitors.length > 1}
 		{#if loadingCompetitors}
 			<Spinner text="Loading competitors..." />
 		{/if}
-	</div>
-	{#if competitors.length > 1}
 		<button class="variant-filled btn btn-md" on:click={findCompetitors}
 			>Find more competitors</button
 		>

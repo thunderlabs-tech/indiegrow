@@ -1,82 +1,30 @@
 import extractor from 'unfluff';
 
-import { TavilySearchResults } from '@langchain/community/tools/tavily_search';
 import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
 import { load } from 'cheerio';
 
 import { DynamicStructuredTool } from '@langchain/core/tools';
+import { multiSearch } from '$lib/multiSearch';
 
-type SearchResult = {
-	url: string;
-	title: string;
-	content: string;
-	score: number;
-};
-export function initTools(db: any) {
-	async function existingPosts(urls: string[]): Promise<string[]> {
-		const { data, error } = await db.from('community_posts').select('url').in('url', urls);
-		if (error) {
-			console.error('Error getting existing posts', error);
-			throw new Error('Error getting existing posts');
-		}
-
-		const existingUrls = data.map((post) => post.url);
-		return existingUrls;
-	}
-
-	const sitesToSearch = ['reddit.com', 'quora.com'];
+export function initTools(db: any, testmode: boolean = false) {
 	const multiSearchTool = tool(
-		async (input: { queries: string[] }): Promise<string> => {
-			console.log('multiSearchTool - input', input);
-			const searchQueries = input.queries
-				.map((query) => {
-					return sitesToSearch.map((site) => `site:${site} ${query}`);
-				})
-				.flat();
-
-			const results = await Promise.all(
-				searchQueries.map(async (query) => {
-					console.log('multiSearchTool - searching for', query);
-					const search = new TavilySearchResults({
-						maxResults: 10
-					});
-
-					return await search.invoke(query);
-				})
+		async (input: { projectId: string; queries: string[] }): Promise<string> => {
+			const results = await multiSearch(
+				db,
+				input.projectId,
+				input.queries,
+				['reddit.com', 'quora.com'],
+				testmode
 			);
-
-			const flattenedResults = results
-				.map((result) => {
-					return JSON.parse(result);
-				})
-				.flat() as SearchResult[];
-			console.log('multiSearchTool - all results', flattenedResults.length);
-
-			const sortedResults = flattenedResults.sort((a, b) => b.score - a.score);
-
-			const existing = await existingPosts(sortedResults.map((result) => result.url));
-
-			let newResults = sortedResults.filter((result) => {
-				return !existing.includes(result.url);
-			});
-
-			console.log('multiSearchTool - new results', newResults.length);
-
-			newResults = newResults.map((result) => {
-				return {
-					url: result.url,
-					title: result.title
-				};
-			});
-
-			return JSON.stringify(newResults);
+			return JSON.stringify(results);
 		},
 		{
 			name: 'multiQuerySearch',
 			description: 'Search for multiple queries and return aggregated results',
 			schema: z.object({
-				queries: z.array(z.string())
+				projectId: z.string().describe('The id of the project'),
+				queries: z.array(z.string()).describe('The queries to search for')
 			})
 		}
 	);
@@ -140,14 +88,20 @@ export function initTools(db: any) {
 				relevance: input.relevance
 				// published_at: input.publishedAt
 			};
-			const { error } = await db.from('community_posts').insert(insert);
-			if (error) {
-				console.error('Error saving community post', error);
-				throw new Error('Error saving community post');
+
+			if (testmode) {
+				console.log('test mode - skipping insert');
+			} else {
+				const { error } = await db.from('community_posts').insert(insert);
+				if (error) {
+					const errorMessage = `Error saving community post: ${error.message}`;
+					console.error(errorMessage);
+					return errorMessage;
+				}
 			}
 			return 'Community post saved';
 		}
 	});
 
-	return [multiSearchTool, getAppInfoTool, saveCommunityPost];
+	return { multiSearchTool, getAppInfoTool, saveCommunityPost };
 }
